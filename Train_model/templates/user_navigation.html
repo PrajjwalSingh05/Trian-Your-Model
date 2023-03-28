@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+		integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+		integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+		integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link rel="stylesheet" href="{% static 'Css/user_navigation.css' %}">
+	<title></title>
+
+
+</head>
+
+<body>
+	<div class="row">
+		<div class="col-4">
+			<img class="pic" src="{% static 'images/logo.jpg' %}">
+		</div>
+		<div class="col-6 aa">
+			<label class="lab1">Train Your Model</label>
+		</div>
+		<div class="col-2">
+			<nav class="nav">
+				<h4 class="sm-header">Follow us on</h4>
+				<div class="line"></div>
+				<ul class="nav-list">
+				  <li class="nav-item">
+					<a href="#" class="nav-link"><i class="fab fa-facebook-f"></i></a>
+				  </li>
+				  <li class="nav-item">
+					<a href="#" class="nav-link"><i class="fab fa-twitter"></i></a>
+				  </li>
+				  <li class="nav-item">
+					<a href="#" class="nav-link"><i class="fab fa-google-plus-g"></i></a>
+				  </li>
+				  <li class="nav-item">
+					<a href="#" class="nav-link"><i class="fab fa-dribbble"></i></a>
+				  </li>
+				  <li class="nav-item">
+					<a href="#" class="nav-link"><i class="fab fa-linkedin-in"></i></a>
+				  </li>
+				</ul>
+			  </nav>
+		</div>
+	</div>
+	<div class="menu-bar">
+
+		<ul>
+			<li class="active"><a href><i class="fa fa-user"></i>Home</a></li>
+			<li><a href><i class="fa fa-home" aria-hidden="true"></i>cUSTOM Regression</a>
+				<div class="sub-menu-1">
+					<ul>
+						<!-- <li><a href="#">Mission</a></li> -->
+						<li><a href="{% url 'random_forest_regression' %}">Random Forest Regressin</a></li>
+						<li><a href="{% url 'random_forest_regression' %}">Random Forest Regressin</a></li>
+						<li><a href="{% url 'random_forest_regression' %}">Random Forest Regressin</a></li>
+						<li><a href="{% url 'random_forest_regression' %}">Random Forest Regressin</a></li>
+						<li><a href="{% url 'random_forest_regression' %}">Random Forest Regressin</a></li>
+						<li><a href="{% url 'random_forest_regression' %}">Random Forest Regressin</a></li>
+						<li><a href="{% url 'random_forest_regression' %}">Random Forest Regressin</a></li>
+						<li><a href="{% url 'random_forest_regression' %}">Random Forest Regressin</a></li>
+						<li><a href="{% url 'random_forest_regression' %}">Random Forest Regressin</a></li>
+						<li><a href="{% url 'random_forest_regression' %}">Random Forest Regressin</a></li>
+						<li><a href="{% url 'random_forest_regression' %}">Random Forest Regressin</a></li>
+						<li><a href="{% url 'extratreeregression' %}">Extratreeregression</a></li>
+						</ul>
+						</div>
+		
+		
+
+	</li>
+	<li><a href><i class="fa fa-home" aria-hidden="true"></i>Custom Classification</a>
+		<div class="sub-menu-1">
+			<ul>
+				
+
+				<li><a href="{% url 'random_forest_classification' %}">Random Forest Classifier</a></li>
+			    <li><a href="{% url 'Extratreeclassification' %}">ExtraTreeClassfier</a></li>
+				</ul>
+				</div>
+
+
+	</li>
+	<li><a href="{% url 'default_regression' %}"><i class="fa fa-home" aria-hidden="true"></i>Default Regression</a></li>
+	<li><a href="{% url 'default_classification' %}"><i class="fa fa-home" aria-hidden="true"></i>Defualt Classification</a></li>
+	<li><a href><i class="fa fa-home" aria-hidden="true"></i>Download Model</a>
+		<div class="sub-menu-1">
+			<ul>
+				
+
+				<li><a href="{% url 'download_random_forest_regressor' %}">Random Forest Reggressor</a></li>
+			    <li><a href="{% url 'Extratreeclassification' %}">ExtraTreeClassfier</a></li>
+				</ul>
+				</div>
+	</li>
+	<li><a href="{% url 'rough_regression' %}"><i class="fa fa-home" aria-hidden="true"></i>Regression</a></li>
+	<li><a href="{% url 'logout' %}"><i class="fa fa-home" aria-hidden="true"></i>logut</a></li>
+	</ul>
+	</div>
+</body>
+
+</html>

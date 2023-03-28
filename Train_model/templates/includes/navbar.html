@@ -1,0 +1,107 @@
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2796e6;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">TYM</a>
+        <a class="navbar-brand" href="#">Train Your Model</a>
+        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+        aria-expanded="false" aria-label="Toggle navigation"></button>
+        <div class="collapse navbar-collapse" id="collapsibleNavId">
+            
+            
+            {% if user.is_authenticated %}
+            {% if user.username == 'admin' %}
+            <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/" aria-current="page">Home <span class="visually-hidden">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'admin:index' %}" aria-current="page">Dashboard <span class="visually-hidden">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'interface_download_dataset' %}" aria-current="page">Download Dataset <span class="visually-hidden">(current)</span></a>
+                </li>
+            </ul>
+            {% else %}
+            <ul class="navbar-nav me-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/" aria-current="page">Home <span class="visually-hidden">(current)</span></a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Regression</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownId">
+                        <a class="dropdown-item" href="{% url 'random_forest_regression' %}">Random Forest Regression</a>
+                        <a class="dropdown-item" href="{% url 'extratreeregression' %}">Extra Tree Regressor</a>
+                        <a class="dropdown-item" href="{% url 'interface_Knn_regresso' %}">Knn Regressor</a>
+                        <a class="dropdown-item" href="{% url 'interface_svm' %}">SVM Regressor</a>
+                        <a class="dropdown-item" href="{% url 'interface_gradientboosting_regressor' %}">Gradient Boosting </a>
+                        <a class="dropdown-item" href="{% url 'interface_decisiontree_regressor' %}">Decision Tree </a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Classification</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownId">
+                        <a class="dropdown-item" href="{% url 'random_forest_classification' %}">Random Forest</a>
+                        <a class="dropdown-item" href="{% url 'interface_logistic_regression' %}">Logistic Regression</a>
+                        <a class="dropdown-item" href="{% url 'Extratreeclassification'%}">ExtraTreeClassificatin</a>
+                        <a class="dropdown-item" href="{% url 'interface_svc' %}">SVC </a>
+                        <a class="dropdown-item" href="{% url 'interface_knn_classifier' %}">Knn </a>
+                        <a class="dropdown-item" href="{% url 'interface_gradientboosting_classifier' %}">Gradientboosting Classifier </a>
+                        <a class="dropdown-item" href="{% url 'interface_decisiontree_classifier' %}">Decision Tree Classifier </a>
+                    </div>
+                </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'default_regression' %}" aria-current="page">Default Regression <span class="visually-hidden">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'default_classification' %}" aria-current="page">Default Classification <span class="visually-hidden">(current)</span></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download Regression</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownId">
+                            <a class="dropdown-item" href="{% url 'download_random_forest_regressor' %}">Random Forest</a>
+                            <a class="dropdown-item" href="{% url 'interface_download_extreetree_regression' %}">Extra Tree Regression</a>
+                            <a class="dropdown-item" href="{% url 'interface_download_knn_regression' %}">KNN</a>
+                            <a class="dropdown-item" href="{% url 'interface_download_logistic_regression' %}">Logistic Regression</a>
+                            <a class="dropdown-item" href="{% url 'interface_download_svr' %}">SVM</a>
+                            
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'user_download_dataset' %}" aria-current="page">Download Dataset <span class="visually-hidden">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'user_trained_model' %}" aria-current="page">Trained Model <span class="visually-hidden">(current)</span></a>
+                    </li>
+                </ul>
+            {% endif %}
+            <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'logout' %}" aria-current="page">logout <span class="visually-hidden">(current)</span></a>
+                </li>
+            </ul>
+            {% else %}
+            <center>
+
+                <ul class="nav nav-pills" style="margin-left: 20rem; color:black">
+                    <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link text-dark">Features</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link text-dark" >Pricing</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link text-dark">FAQs</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link text-dark">About</a></li>
+                </ul>
+            </center>
+            <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}" aria-current="page">Login <span class="visually-hidden">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}" aria-current="page">SignUp <span class="visually-hidden">(current)</span></a>
+                </li>
+            </ul>
+            {% endif %}
+            
+            
+            
+        </div>
+    </div>
+</nav>

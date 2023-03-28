@@ -1,0 +1,283 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<title></title>
+{% load static %}
+	<style>
+	.pic{
+		height: 200px;
+		width: 100%;
+	}
+	.lab1{
+		font-size: 40px;
+		font-weight: bold;
+		font-family: calibery;
+		margin-top: 52px;
+	}
+	.itag{
+		font-size: 40px;
+		margin-top: 60px;
+		padding-left: 20px;
+	}
+	.navi{
+		background:pink;
+		height: 50px;
+	}
+	.ull{
+		float: right;
+	}
+	.lii{
+		display: inline-block;
+		margin-top: 10px;
+	}
+	.aaa{
+		text-decoration: none;
+		color: black;
+		font-weight: bold;
+		font-size: 20px;
+		margin-right: 20px;
+	}
+	.aaa:hover{
+		background:cyan;
+		box-shadow: 0 0 5px 11px cyan;
+		border-radius: 20px;
+	}
+	.lab2{
+		font-size: 30px;
+		font-weight: bold;
+		font-family: calibery;
+		margin-left: 20px;
+	}
+</style>
+</head>
+<body>
+<div class="row">
+	<div class="col-4">
+		<img class="pic" src="{% static 'images/cc.jpg' %}">
+	</div>
+	<div class="col-6 aa">
+		<label class="lab1">Room Rental Services Lucknow</label>
+	</div>
+	<div class="col-2">
+		<a href="https://web.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp itag" style="color:rgb(0,255,0);"></i></a>
+		<a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram itag" style="color:red;"></i></a>
+		<a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f itag" style="color: blue;"></i></a>
+	</div>
+</div>
+<nav class="navi">
+	<label class="lab2">Welcome</label>
+	<ul class="ull">
+		<li class="lii"><a class="aaa" href="">Home</a></li>
+		<li class="lii"><a class="aaa" href="">User's</a></li>
+		<li class="lii"><a class="aaa" href="">Reggression</a></li>
+		<li class="lii"><a class="aaa" href="">Room's</a></li>
+		<li class="lii"><a class="aaa" href="">Booking</a></li>
+		<li class="lii"><a class="aaa" href="">Feedback</a></li>
+		<li class="lii"><a class="aaa" href="">Change Password</a></li>
+		<li class="lii"><a class="aaa" href="{% url 'logout' %}">Logout</a></li>
+	</ul>
+</nav>
+</nav>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<title></title>
+{% load static %}
+	<style>
+	.pic{
+		height: 200px;
+		width: 100%;
+	}
+	.lab1{
+		font-size: 40px;
+		font-weight: bold;
+		font-family: calibery;
+		margin-top: 52px;
+	}
+	.itag{
+		font-size: 40px;
+		margin-top: 60px;
+		padding-left: 20px;
+	}
+	.navi{
+		background:cyan;
+		height: 50px;
+	}
+	.ull{
+		float: right;
+	}
+	.lii{
+		display: inline-block;
+		margin-top: 10px;
+	}
+	.aaa{
+		text-decoration: none;
+		color: black;
+		font-weight: bold;
+		font-size: 20px;
+		margin-right: 20px;
+	}
+	.aaa:hover{
+		background:yellow;
+		box-shadow: 0 0 5px 11px yellow;
+		border-radius: 20px;
+	}
+	.lab2{
+		font-size: 30px;
+		font-weight: bold;
+		font-family: calibery;
+		margin-left: 20px;
+	}
+	/* editing */
+	.dropdown-menu {
+  width: 100%;
+}
+	.dropdown-menu li {
+            position: relative;
+        }
+        
+        .dropdown-menu .submenu {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: -7px;
+        }
+        
+        .dropdown-menu>li:hover>.submenu {
+            display: block;
+        }
+        
+        .dropdown-menu .submenu-left {
+            right: 100%;
+            left: auto;
+        }
+        
+        @media only screen and (max-width:800px) {
+            .dropdown-menu .submenu {
+                left: 25%;
+                top: 0px;
+            }
+            .dropdown-menu .multi-menu {
+                left: 95%;
+            }
+            .dropdown-menu .submenu-left {
+                left: 50%;
+            }
+        }
+    </style>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll('.dropdown-menu').forEach(function(element) {
+                element.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            })
+
+            if (window.innerWidth < 992) {
+
+                document.querySelectorAll('.dropdown-menu a').forEach(function(element) {
+                    element.addEventListener('click', function(e) {
+
+                        let nextEl = this.nextElementSibling;
+                        if (nextEl && nextEl.classList.contains('submenu')) {
+                            e.preventDefault();
+                            if (nextEl.style.display == 'block') {
+                                nextEl.style.display = 'none';
+                            } else {
+                                nextEl.style.display = 'block';
+                            }
+
+                        }
+                    });
+                })
+            }
+
+        });
+    </script>
+</style>
+</head>
+<body>
+<div class="row">
+	<div class="col-4">
+		<img class="pic" src="{% static 'images/cc.jpg' %}">
+	</div>
+	<div class="col-6 aa">
+		<label class="lab1">Train Your Model </label>
+	</div>
+	<div class="col-2">
+		<a href="https://web.whatsapp.com/" target="_blank"><i class="fab fa-whatsapp itag" style="color:rgb(0,255,0);"></i></a>
+		<a href="https://www.instagram.com/" target="_blank"><i class="fab fa-instagram itag" style="color:red;"></i></a>
+		<a href="https://www.facebook.com/" target="_blank"><i class="fab fa-facebook-f itag" style="color: blue;"></i></a>
+	</div>
+</div>
+<!-- <div class="container-fluid"> -->
+	<div class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<a href="" class="navbar-brand">Welcome</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="nav">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a href="" class="nav-link">Home</a>
+				</li>
+					<li class="nav-item">
+						<a href="{% url 'login' %}" class="nav-link">Login</a>
+					</li>
+					<li class="nav-item">
+						<a href="" class="nav-link">Contact Us</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a href="" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">More Items</a>
+						<ul class="dropdown-menu">
+							<li><a href="" class="dropdown-item">Item 1</a></li>
+							<li><a href="" class="dropdown-item">Item 2 &raquo;</a>
+								<ul class="dropdown-menu submenu">
+									<li><a href="" class="dropdown-item">SubItem 1</a></li>
+									<li><a href="" class="dropdown-item">SubItem 2 &raquo;</a>
+										<ul class="dropdown-menu submenu multi-menu">
+											<li><a href="" class="dropdown-item">Multilevel 1</a></li>
+											<li><a href="" class="dropdown-item">Multilevel 2</a></li>
+										</ul>
+									</li>
+									<li><a href="" class="dropdown-item">SubItem 3</a></li>
+								</ul>
+							</li>
+							<li><a href="" class="dropdown-item">Item 3</a></li>
+						</ul>
+					</li>
+				</ul>
+				<!-- <ul class="navbar-nav ms-auto">
+					<li class="nav-item">
+						<a href="" class="nav-link">More Item</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a href="" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Dropdown Right</a>
+						<ul class="dropdown-menu">
+							<li><a href="" class="dropdown-item">DropdownItem 1</a></li>
+							<li><a href="" class="dropdown-item">DropdownItem 2 &raquo;</a>
+								<ul class="dropdown-menu submenu submenu-left">
+									<li><a href="" class="dropdown-item">SubmenuItem 1</a></li>
+									<li><a href="" class="dropdown-item">SubmenuItem 2</a></li>
+									<li><a href="" class="dropdown-item">SubmenuItem 3</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul> -->
+			</div>
+		</div>
+	<!-- </div> -->
+</div>
+
+</body>
+</html>
+
+

@@ -1,0 +1,59 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block css %}
+<!-- CSS -->
+{% endblock %}
+
+{% block content %}
+<h2>Default Classification</h2>
+    <form  method="post" enctype="multipart/form-data">
+      <div>
+        <label for="">Enter The Prediction Column</label>
+        <input type="text" name="predcol" id="" placeholder="Enter Prediction COlumn Name" required>
+      </div>
+      <div>
+        <label for="">Enter Number Of Input Column</label>
+        <input type="number" name="size1" id="" placeholder="Enter Prediction COlumn Name" required>
+      </div>
+      <div>
+        <label for="">Model To Be Used </label>
+        <select class="form-control" name="mtype" required>
+          <option value="RandomForestClassifier">RandomForestClassifier</option>
+          <option value="ExtraTreeClassifier">ExtraTreeClassifier</option>
+      </select>
+      </div>
+        {% csrf_token %}
+        <input type="file" name="datafile">
+        <input type="submit" value="Upload">
+        
+      </form>
+      <div style="overflow: scroll; max-height: 500px;">
+        <table border="5px">
+          {{ data|safe }}
+          <!-- <h1>Next</h1> -->
+          {{ xdata|safe }}
+          <!-- <h1>Next</h1> -->
+          <!-- <p>Listing the value</p> -->
+          
+          <!-- <p> Doing By poop</p> -->
+          {% for item in listing %}
+         
+          <tr>
+
+           <td> {{ item.i|safe }}</td><br>
+          
+          <td>{{ item.columns|safe }}</td><br>
+          
+        <td>{{ item.parameter|safe }}</td><br>
+        </tr>
+          {% endfor %}
+
+        </table>
+      </div>
+      <!-- Conttent -->
+    {% endblock %}
+
+    {% block js %}
+    <!-- javascript -->
+    {% endblock %}

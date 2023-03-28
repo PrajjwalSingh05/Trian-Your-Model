@@ -1,0 +1,69 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% block css %}
+    
+<style>
+    .col{
+        border: 2px solid blue;
+        margin:2%
+
+    }
+    h1{
+    font-size: 64px;
+    color: #1A73E8;
+    line-height: 1em;
+}
+.small{
+    max-width: 500px;
+    margin: 0.8em 0;
+    font-size: 28px;
+    text-align: left;
+}
+video{
+    width: 31rem;
+    height: 25rem;
+}
+a.button
+{background: #4285F4;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 20px;
+    padding: 18px 50px 16px;
+    display: inline-block;
+    font-family: 'BoingSemiBold', Helvetica, Arial, sans-serif;
+    transition: background-color 0.25s ease-out;
+}
+
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+   
+                <h1>Train Your Model</h1>
+                <h2 class="small">Train a computer to recognize your own images, sounds, & poses.</h2>
+                    <p>A fast, easy way to create machine learning models for your sites, apps, and more – no expertise or coding required.</p>
+                    <div>
+                        <a class="button" href="{% url 'login' %}" style="margin-top: 30px;"><!---->Get Started<!----></a>
+                    </div>
+            
+
+        
+        
+        </div>
+        <div class="col">
+            <!-- <h1>EMBEDDING A VIDEO</h1> -->
+            <video src="{% static 'images/prediction.mp4' %}" class="vdeo"ntitle="machine Leanring" frameborder="0" autoplay="" loop="" muted="" allowfullscreen></video>
+        </div>
+        
+    </div>
+</div>
+    {{user.is_authenticated}}
+    {{user.username}}
+
+{% endblock %}
+{% block js %}
+    
+{% endblock %}
+    

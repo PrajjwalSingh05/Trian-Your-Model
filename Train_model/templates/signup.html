@@ -1,0 +1,58 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block css %}
+<!-- CSS -->
+<link rel="stylesheet" href="{% static 'Css/signup.css' %}" />
+{% endblock %}
+
+{% block content %}
+<div class="login-card">
+  <img src="https://i.pinimg.com/originals/0a/5f/ea/0a5feae400fc816c4ca2aca8bd67a168.jpg" />
+  <h2>Sign Up</h2>
+  <h3>Enter your credentials</h3>
+  <form class="login-form" method="post">
+    {% csrf_token %}
+    <!-- First name -->
+    <div class="username">
+      <input autocomplete="off" spellcheck="false" class="control" type="text" placeholder="Firstname" name="uname" value="Pra"/>
+      <div id="spinner" class="spinner"></div>
+    </div>
+    <!-- LAst name -->
+    <div class="username">
+      <input autocomplete="off" spellcheck="false" class="control" type="text" placeholder="Lastname"  name="lname" value="jjwal"/>
+      <div id="spinner" class="spinner"></div>
+    </div>
+    <!--  Email  -->
+    <div class="username">
+      <input autocomplete="off" spellcheck="false" class="control" type="email" placeholder="Email"        value="joe@gmail.com" name="emailid" />
+      <div id="spinner" class="spinner"></div>
+    </div>
+    <!-- gender -->
+    <!-- <div class="username">
+          <input
+            autocomplete="off"
+            spellcheck="false"
+            class="control"
+            type="radio"
+            placeholder="Email"
+            value="joe@gmail.com"
+          /> -->
+    <!-- <div id="spinner" class="spinner"></div>
+        </div> -->
+    <input spellcheck="false" class="control" id="password" type="password" placeholder="Password" onkeyup="handleChange()" name="passwrd"/>
+    <div id="bars">
+      <div></div>
+    </div>
+    <div class="strength" id="strength"></div>
+    <!-- <button class="control" type="button">JOIN NOW</button> -->
+    <input type="submit" value="Submit">
+  </form>
+</div>
+<!-- Conttent -->
+{% endblock %}
+
+{% block js %}
+<!-- java -->
+<script type="text/javascript" src="{% static 'js/signup.js'  %}"></script>
+{% endblock %}

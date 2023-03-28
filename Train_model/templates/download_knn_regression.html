@@ -1,0 +1,266 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block css %}
+<style>
+    /* Creating Loader */
+    [hidden] {
+	display: none !important;
+}
+
+
+select,
+.select,
+input {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+}
+.select {
+	position: relative;
+}
+
+.select > input {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.select__dropdown {
+	position: absolute;
+	z-index: 1;
+	list-style: none;
+	margin: 0;
+	padding: 1px;
+	background: Field;
+	color: FieldText;
+	font-family: sans-serif;
+	font-size: small;
+	font: -moz-field;
+	border: 1px solid ThreeDShadow;
+	border-top: 0;
+	left: 0;
+	right: 0;
+	max-height: 10em;
+	overflow-y: auto;
+}
+.select__dropdown:empty {
+	display: none;
+}
+
+.select__dropdown [role="option"],
+.select__dropdown strong {
+	padding: 0.2em 0.4em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	cursor: default;
+}
+.select__dropdown [role="option"].select--selected,
+.select__dropdown [role="option"]:hover {
+	background: rgba(128,128,128,.2);
+	color: inherit;
+}
+.select__dropdown [role="option"].select--has-focus {
+	background: Highlight;
+	color: HighlightText;
+}
+.select__dropdown [role="option"][aria-disabled="true"] {
+	background: transparent;
+	color: GrayText;
+}
+.select__dropdown ul {
+	margin: 0;
+	padding: 0;
+}
+.select__dropdown ul [role="option"] {
+	padding-left: 2em;
+}
+
+.select__values {
+	display: inline;
+	padding: 0;
+	margin: 0;
+}
+.select__values li  {
+	display: inline-block;
+	margin: 0.1em 0.2em;
+	margin-inline-start: 0;
+	cursor: default;
+	background-color: red;
+}
+.select__values li:first-child {
+	/* display: inline-block;
+	margin: 0.1em 0.2em;
+	margin-inline-start: 0;
+	cursor: default; */
+    margin-left: 20%;
+	background-color: blue;
+}
+.select__value {
+	padding: 0 0.2em;
+	background: rgba(128,128,128,.2);
+	color: inherit;
+	border: 1px solid ThreeDShadow;
+	border-radius: 0.3em;
+}
+
+/* Self */
+.label_heading{
+    font-size: medium;
+    font-weight: bold;
+    text-transform: capitalize;
+    margin-left: 20%;
+    margin-top: 2%;
+}
+input{
+    height: 30%;
+    width: 50%;
+    padding: 0.5%;
+    margin-left: 20%;
+}
+.big_container{
+    display: inline;
+}
+
+</style>	
+<!-- CSS -->
+{% endblock %}
+
+{% block content %}
+<h2>Download KNN</h2>
+</div>
+
+
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div>
+        <label for=""  class="label_heading">Input Prediction column</label>
+        <input type="text" placeholder="Enter the prediction column" name="predcol" class="inp_col">
+    </div>
+    
+    <div>
+        <label for="" class="label_heading">Input Number of columns</label>
+        <input type="number" placeholder="Enter the prediction column" name="size1" class="inp_col">
+    </div>
+<div>
+
+<label class="label_heading">weights</label>
+<select  name="weights" class="inp_col">
+        <option value="uniform" class="inp_col">uniform</option>
+        <option value="distance" class="inp_col">Distance</option>
+   
+        
+    </select>
+</div>  
+<div>
+
+<!-- <label class="label_heading">Multi Class</label>
+<select multiple data-select name="multi_class" class="inp_col">
+     <optgroup label="Alaskan/Hawaiian Time Zone"> 
+        <option value="auto" class="inp_col">auto</option>
+        <option value="multinomial" class="inp_col">multinomial</option>
+        <option value="ovr" class="inp_col">ovr</option>
+        
+        
+    </select>
+</div> -->
+<div>
+    
+    <label class="label_heading">Algorithm</label>    
+    <select  name="algorithm">
+        <!-- <optgroup label="Alaskan/Hawaiian Time Zone"> -->
+            <option value="auto">Auto</option>
+            <option value="ball_tree">Ball Tree</option>
+            <option value="kd_tree">kd Tree</option>
+            <option value="brute">Brute</option>  
+              
+    </select>
+</div>
+<div>
+    <label class="label_heading"> N Nighbors:N Neighbors Value: <span id="ranged">5</span></label>
+    <input type="number" min="0" max="200" value="5" onchange="showValuedepth(this.value)" name="kvalue">
+</div>
+
+<!-- <div>
+    <label class="label_heading"> Max Iter :Max Iter Value: <span id="rangesp">100</span></label>
+<input type="range" min="50" max="500" value="5" onchange="showValuesplit(this.value)" name="sample_split">
+</div> -->
+<!-- <div>
+    <label class="label_heading"> N Estimator  :Slider Value: <span id="rangen">100</span></label>
+    <input type="range" min="100" max="1000" value="50" onchange="showValuen(this.value)" name="n_estimator">
+</div> -->
+<div>
+    <label for="" class="label_heading">Upload file</label>
+    <input type="file" name="datafile">
+    <input type="submit" value="Upload">
+</div>
+<!-- <input type="submit" value="submit"> -->
+</form>
+<div style="overflow: scroll; max-height: 500px;">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover	table-borderless table-primaryalign-middle">
+          <thead class="table-light">
+              <caption>Table Name</caption>
+              <tr>
+                  {% if download == 1 %}
+                  <h4>Chosen Paameter are -:</h4>
+                  <span>{{chosenparameter|safe }}</span>
+         
+                <th>S.no</th>
+                <th>R2 score without para</th>
+                <th>R2 score with para</th>
+                <th>Mae without</th>
+                <th>Mae with</th>
+                <th>Column</th>
+                <th>parameter</th>
+              
+            </tr>
+        </thead>
+        {% endif %}
+        <tbody class="table-group-divider">
+                {% for item in listing %}
+                <tr class="table-primary" >
+                <td scope="row">{{ item.i|safe }}</td>
+                <td>{{ item.result|safe }}</td>
+                <td>{{ item.result_parameter|safe }}</td>
+                <td>{{ item.mae|safe }}</td>
+                <td>{{ item.mae_parameter|safe }}</td>
+                <td>{{ item.columns|safe }}</td>
+                <td>{{ item.parameter|safe }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot>
+              
+            </tfoot>
+        </table>
+      </div>
+        </div>
+    </div>
+    {% if download == 1 %}
+    <a href="{% url 'download_model' %}">
+
+        <button type="button">Download</button>
+    </a>
+{% endif %}
+    </body>
+    <!-- Conttent -->
+    {% endblock %}
+
+    {% block js %}
+    <script src="{% static 'js/random_forest_classification.js' %}" type="module"></script>
+<script>
+    function showValuedepth(newValue) {
+        document.getElementById("ranged").innerHTML = newValue;
+      }
+    function showValuesplit(newValue) {
+        document.getElementById("rangesp").innerHTML = newValue;
+      }
+    function showValuen(newValue) {
+        document.getElementById("rangen").innerHTML = newValue;
+      }
+</script>
+    <!-- java -->
+    {% endblock %}

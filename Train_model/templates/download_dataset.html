@@ -1,0 +1,191 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block css %}
+<!-- CSS -->
+{% endblock %}
+
+{% block content %}
+<div class="table-responsive">
+    <center>
+
+        <h1>Download Dataset</h1>
+    </center>
+    <table class="table table-striped table-hover	table-borderless table-primaryalign-middle">
+        <thead class="table-light">
+            <caption>Table Name</caption>
+            <tr>
+             
+
+                <th>S.no</th>
+                <th>Dataset Name</th>
+                <th>Pages</th>
+                <th>Status</th>
+                <th>Retive</th>
+                <th>Delete</th>
+               
+
+            </tr>
+        </thead>
+ 
+        <tbody class="table-group-divider">
+        
+            <tr class="table-primary">
+                <td scope="row">1</td>
+                <td scope="row">Mobile Data</td>
+                <td scope="row"><input type="number" name="pagenumber" id="fmobile" step="10"></td>
+                <td scope="row"><a href="{% url 'mobilephone_flipkart' %}" id="fmobilelink"    class="btn btn-danger btn-sm">Extract Data</a></td>
+                <td scope="row"><a href="{% url 'retrivemobilephone_flipkart' %}" id="fmobilelink"    class="btn btn-danger btn-sm">Retrive</a></td>
+                <td scope="row"><a href="{% url 'delete_mobilephone_flipkart' %}" id="fmobilelink"    class="btn btn-danger btn-sm">Delter</a></td>
+            </tr>
+            <tr class="table-primary">
+                <td scope="row">1</td>
+                <td scope="row">Laptop Data</td>
+                <td scope="row"><input type="number" name="pagenumber" id="flaptop"></td>
+                <td scope="row"><a href="{% url 'laptop_flipkart' %}" step="10"  id="flaptoplink"    class="btn btn-danger btn-sm">Extract Data</a></td></td>
+                <td scope="row"><a href="{% url 'retrivelaptop_flipkart' %}" step="10"  id="flaptoplink"    class="btn btn-danger btn-sm">Retrive Dataset</a></td>
+                <td scope="row"><a href="{% url 'delete_laptop_flipkart' %}" step="10"  id="flaptoplink"    class="btn btn-danger btn-sm">Delete Data</a></td>
+
+            </tr>
+            <tr>
+                <td scope="row">1</td>
+                <td scope="row">Telivision Data</td>
+                <td scope="row"><input type="number" name="pagenumber" id="ftelivision"></td>
+                <td scope="row"><a href= "{% url 'interface_television_flipkart' %}" step="10"  id="ftelivisionlink"    class="btn btn-danger btn-sm">Extract Data</a></td>
+                <td scope="row"><a href="{% url 'retrive_television_flipkart' %}" step="10"  id="ftelivisionlink"    class="btn btn-danger btn-sm">Retrive Dataset</a></td>
+                <td scope="row"><a href="{% url 'delete_television_flipkart' %}" step="10"  id="ftelivisionlink"    class="btn btn-danger btn-sm">Delete Dataset</a></td>
+            </tr>
+            <tr>
+                <td scope="row">4</td>
+                <td scope="row">Earphone Data</td>
+                <td scope="row"><input type="number" name="pagenumber" id="fearphone" ></td>
+                <td scope="row"><a href= "{% url 'earphone_flipkart' %}" step="10"  id="fearphonelink"    class="btn btn-danger btn-sm">Extract Data</a></td>
+                <td scope="row"><a href="{% url 'retrive_earphone_flipkart' %}" step="10"  id="fearphonelink"    class="btn btn-danger btn-sm">Retrive Dataset</a></td>
+                <td scope="row"><a href="{% url 'delete_earphone_flipkart' %}" step="10"  id="fearphonelink"    class="btn btn-danger btn-sm">Delete Dataset</a></td>
+            </tr>
+            <tr>
+                <td scope="row">5</td>
+                <td scope="row">Bike Data</td>
+                <td scope="row"><input type="number" name="pagenumber" id="fbike"></td>
+                <td scope="row"><a href= "{% url 'bike_flipkart' %}" step="10"  id="fbikelink"    class="btn btn-danger btn-sm">Extract Data</a></td>
+                <td scope="row"><a href="{% url 'retrive_bike_flipkart' %}" step="10"  id="fbikelink"    class="btn btn-danger btn-sm">Retrive Dataset</a></td>
+                <td scope="row"><a href="{% url 'delete_bike_flipkart' %}" step="10"  id="fbikelink"    class="btn btn-danger btn-sm">Delete Dataset</a></td>
+            </tr>
+            <tr>
+                <td scope="row">5</td>
+                <td scope="row">Washing Data</td>
+                <td scope="row"><input type="number" name="pagenumber" id="fwashingmachine"></td>
+                <td scope="row"><a href= "{% url 'washing_machine_flipkart' %}" step="10"  id="fwashingmachinelink"    class="btn btn-danger btn-sm">Extract Data</a></td>
+                <td scope="row"><a href="{% url 'retrive_washing_machine_flipkart' %}" step="10"  id="fwashingmachinelink"    class="btn btn-danger btn-sm">Retrive Dataset</a></td>
+                <td scope="row"><a href="{% url 'delete_washing_machine_flipkart' %}" step="10"  id="fwashingmachinelink"    class="btn btn-danger btn-sm">Delete Dataset</a></td>
+                
+            </tr>
+
+        </tbody>
+        <tfoot>
+
+        </tfoot>
+    </table>
+</div>
+</div>
+    <!-- Conttent -->
+    {% endblock %}
+
+    {% block js %}
+    <script>
+        // on page ready
+        // FOr Mobile
+        document.addEventListener("DOMContentLoaded", function(event) {
+            let totalPageBox = document.querySelector('#fmobile');
+            let totalRow = 10;
+            let url = `{% url 'mobilephone_flipkart' %}?page=${totalRow}`;
+            totalPageBox.addEventListener('change', (e) => {
+                totalRow = e.target.value;
+                console.log(totalRow)
+                url = `{% url 'mobilephone_flipkart' %}?page=${totalRow}`;
+                document.querySelector('#fmobilelink').setAttribute('href', url);
+            });
+            document.querySelector('#fmobilelink').setAttribute('href', url);
+            console.log(url)
+           
+        });
+  // For Laptop      
+
+
+        document.addEventListener("DOMContentLoaded", function(event) {
+            let totalPageBox = document.querySelector('#flaptop');
+            let totalRow = 10;
+            let url = `{% url 'laptop_flipkart' %}?page=${totalRow}`;
+            totalPageBox.addEventListener('change', (e) => {
+                totalRow = e.target.value;
+                console.log(totalRow)
+                url = `{% url 'laptop_flipkart' %}?page=${totalRow}`;
+                document.querySelector('#flaptoplink').setAttribute('href', url);
+            });
+            document.querySelector('#flaptoplink').setAttribute('href', url);
+            console.log(url)
+           
+        });
+// for Telivison
+        document.addEventListener("DOMContentLoaded", function(event) {
+            let totalPageBox = document.querySelector('#ftelivision');
+            let totalRow = 10;
+            let url = `{% url 'interface_television_flipkart' %}?page=${totalRow}`;
+            totalPageBox.addEventListener('change', (e) => {
+                totalRow = e.target.value;
+                console.log(totalRow)
+                url = `{% url 'interface_television_flipkart' %}?page=${totalRow}`;
+                document.querySelector('#ftelivisionlink').setAttribute('href', url);
+            });
+            document.querySelector('#ftelivisionlink').setAttribute('href', url);
+            console.log(url)
+           
+        });
+        // *************************************************************Earphone*****************************************
+        document.addEventListener("DOMContentLoaded", function(event) {
+            let totalPageBox = document.querySelector('#fearphone');
+            let totalRow = 10;
+            let url = `{% url 'earphone_flipkart' %}?page=${totalRow}`;
+            totalPageBox.addEventListener('change', (e) => {
+                totalRow = e.target.value;
+                console.log(totalRow)
+                url = `{% url 'earphone_flipkart' %}?page=${totalRow}`;
+                document.querySelector('#fearphonelink').setAttribute('href', url);
+            });
+            document.querySelector('#fearphonelink').setAttribute('href', url);
+            console.log(url)
+           
+        });
+        // *************************************************************Bike*****************************************
+        document.addEventListener("DOMContentLoaded", function(event) {
+            let totalPageBox = document.querySelector('#fbike');
+            let totalRow = 10;
+            let url = `{% url 'bike_flipkart' %}?page=${totalRow}`;
+            totalPageBox.addEventListener('change', (e) => {
+                totalRow = e.target.value;
+                console.log(totalRow)
+                url = `{% url 'bike_flipkart' %}?page=${totalRow}`;
+                document.querySelector('#fbikelink').setAttribute('href', url);
+            });
+            document.querySelector('#fbikelink').setAttribute('href', url);
+            console.log(url)
+           
+        });
+        // *************************************************************Washing Machine*****************************************
+
+        document.addEventListener("DOMContentLoaded", function(event) {
+            let totalPageBox = document.querySelector('#fwashingmachine');
+            let totalRow = 10;
+            let url = `{% url 'washing_machine_flipkart' %}?page=${totalRow}`;
+            totalPageBox.addEventListener('change', (e) => {
+                totalRow = e.target.value;
+                console.log(totalRow)
+                url = `{% url 'washing_machine_flipkart' %}?page=${totalRow}`;
+                document.querySelector('#fwashingmachinelink').setAttribute('href', url);
+            });
+            document.querySelector('#fwashingmachinelink').setAttribute('href', url);
+            console.log(url)
+           
+        });
+    </script>
+    {% endblock %}

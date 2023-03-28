@@ -1,0 +1,135 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'Css/random_forest_classifier.css' %}">
+<!-- CSS -->
+{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    <div class="main_headling">
+
+        <h2>Random Forest Classifier</h2>
+    </div>
+    {% csrf_token %}
+    <div>
+        <label for="" class="label_heading">Input Prediction column</label>
+        <input type="text" placeholder="Enter the prediction column" name="predcol">
+    </div>
+
+    <div>
+        <label for="" class="label_heading">Input Number of columns</label>
+        <input type="number" placeholder="Enter the prediction column" name="size1">
+    </div>
+    <div>
+
+        <label class="label_heading">Choose criteion</label>
+        <select multiple data-select name="criteion">
+            <!-- <optgroup label="Alaskan/Hawaiian Time Zone"> -->
+            <option value="gini">gini</option>
+            <option value="entropy">Entropy</option>
+            <option value="log_loss">log loss</option>
+
+            <!-- </optgroup> -->
+
+        </select>
+    </div>
+    <div>
+
+        <label class="label_heading">Choose max feature</label>
+        <select multiple data-select name="maxfeature">
+            <!-- <optgroup label="Alaskan/Hawaiian Time Zone"> -->
+            <option value="sqrt">sqrt</option>
+            <option value="log2">log2</option>
+            <option value="log_loss">log loss</option>
+
+            <!-- </optgroup> -->
+
+        </select>
+    </div>
+    <div>
+        <label class="label_heading"> Max DepthSlider Value: <span id="ranged">50</span></label>
+        <input type="range" min="2" max="100" value="50" onchange="showValuedepth(this.value)" name="slidervalue">
+    </div>
+    <div>
+        <label class="label_heading"> Sample Split :Slider Value: <span id="rangesp">50</span></label>
+        <input type="range" min="3" max="50" value="4" onchange="showValuesplit(this.value)" name="sample_split">
+    </div>
+    <div>
+        <label class="label_heading"> N Estimator :Slider Value: <span id="rangen">50</span></label>
+        <input type="range" min="100" max="1000" value="50" onchange="showValuen(this.value)" name="n_estimator">
+    </div>
+    <div>
+        <label for="" class="label_heading">Upload file</label>
+        <input type="file" name="datafile">
+        <input type="submit" value="Upload">
+    </div>
+    
+    <!-- <input type="submit" value="submit"> -->
+</form>
+<div style="overflow: scroll; max-height: 500px;">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover	table-borderless table-primaryalign-middle">
+          <thead class="table-light">
+              <caption>Table Name</caption>
+              <tr>
+                  {% if download == 1 %}
+         
+                <th>S.no</th>
+                <th>Accuracy score without para</th>
+                <th>Accuracy with para</th>
+                <!-- <th>Mae without</th>
+                <th>Mae with</th> -->
+                <th>Column</th>
+                <th>parameter</th>
+              
+            </tr>
+        </thead>
+        {% endif %}
+        <tbody class="table-group-divider">
+                {% for item in listing %}
+                <tr class="table-primary" >
+                <td scope="row">{{ item.i|safe }}</td>
+                <td>{{ item.accuracypara|safe }}</td>
+                <td>{{ item.accuracy|safe }}</td>
+                <!-- <td>{{ item.accuracy|safe }}</td> -->
+                <!-- <td>{{ item.mae_parameter|safe }}</td> -->
+                <td>{{ item.columns|safe }}</td>
+                <td>{{ item.parameter|safe }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            <tfoot>
+              
+            </tfoot>
+        </table>
+      </div>
+        </div>
+   
+    {% if download == 1 %}
+    <a href="{% url 'download_model' %}">
+
+        <button type="button">Download</button>
+    </a>
+{% endif %}
+</body>
+    <!-- Conttent -->
+    {% endblock %}
+
+    {% block js %}
+    <script src="{% static 'js/random_forest_classification.js' %}" type="module"></script>
+<script>
+    function showValuedepth(newValue) {
+        document.getElementById("ranged").innerHTML = newValue;
+    }
+    function showValuesplit(newValue) {
+        document.getElementById("rangesp").innerHTML = newValue;
+    }
+    function showValuen(newValue) {
+        document.getElementById("rangen").innerHTML = newValue;
+    }
+</script>
+
+    <!-- java -->
+    {% endblock %}
