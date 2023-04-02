@@ -3,13 +3,24 @@ import random
 import joblib
 from .models import TrainedModel
 import math
-def model_saving(model,remaining_url,name):
+import datetime
+from imblearn.over_sampling import SMOTE,RandomOverSampler
+from imblearn.under_sampling import NearMiss,RandomUnderSampler
+def model_saving(model,remaining_url,name,model_name):
     base_url="media/"
     full_url=base_url+remaining_url
     id_generator=random.randint(1000,9999)
     print(f"The Generate did is {id_generator}")
     joblib.dump(model, open(full_url, 'wb'))
-    result=TrainedModel(username=name,location=full_url,modelname=remaining_url,uniqueid=id_generator)
+    utime=current_time = datetime.datetime.now().strftime("%H:%M:%S")
+    udate =datetime.date.today()
+    print("Udate")
+    print("Udate")
+    print("Udate")
+    print("Udate")
+    print("Udate")
+    print("Udate")
+    result=TrainedModel(username=name,location=full_url,modelname=model_name,uniqueid=id_generator,date=udate,time=utime)
     result.save()
     return id_generator
 
@@ -88,9 +99,34 @@ def all_regression(X,y,start,end,parms,model_name):
         # print(Listing)
         return Listing,download_model
 
-def all_classification_model(X,y,start,end,parms,model_name):
+def all_classification_model(X,y,start,end,parms,model_name,sampling="RandomOverSampler"):
         Listing=[]
+        temp=1
+        res2=-9999
         preprocessor=data_preprocessor(X,y)
+        if sampling=="SMOTE":
+                pipeline = Pipeline(steps=[
+                        ('preprocessor', preprocessor),
+                        ('oversampler', SMOTE())
+                         ])
+        elif sampling=="NearMiss":
+                pipeline = Pipeline(steps=[
+                        ('preprocessor', preprocessor),
+                        ('oversampler', NearMiss())
+                         ])
+        elif sampling=="RandomOverSampler":
+                 pipeline = Pipeline(steps=[
+                ('preprocessor', preprocessor),
+                 ('oversampler', RandomOverSampler())
+                                ])
+        elif sampling=="RandomUnderSampler":
+                 pipeline = Pipeline(steps=[
+                ('preprocessor', preprocessor),
+                 ('oversampler', RandomUnderSampler())
+                                ])
+        
+               
+        
         xtrain,xtest,ytrain,ytest=train_test_split(X,y,test_size=0.2,random_state=45)
   
         for i in range(start,end):
@@ -114,12 +150,14 @@ def all_classification_model(X,y,start,end,parms,model_name):
                 # ypred_model=model_selector.predict(xtest)
                 
         #****************************Result Generation ******************************
-                clas_report_parameter,accuracy_parameter=result_evaluator_classfication(model,xtest,ytest)
+                clas_report_parameter,accuracy_parameter=result_evaluator_classfication(model,xtest,ytest,temp)
+                # temp=temp+1
                 
                 print("Confusion Matrix is With Best Perimator:" , accuracy_parameter)
                 # st.write(confusion_matrix(ypred,ytest))
                 print("CLassification Report is With Best Perimator :",clas_report_parameter)
-                clas_report,accuracy=result_evaluator_classfication(model_selector,xtest,ytest)
+                clas_report,accuracy=result_evaluator_classfication(model_selector,xtest,ytest,temp,hyper="no")
+                temp=temp+1
                 print("Confusion Matrix is Without Best Perimator:" , accuracy)
                 # st.write(confusion_matrix(ypred,ytest))
                 print("CLassification Report is  Without Best Perimator:",clas_report)
@@ -154,7 +192,10 @@ def all_classification_model(X,y,start,end,parms,model_name):
                 print(";isting")
                 print(";isting")
                 print(Listing)
-        return Listing
+                if math.floor(res2)<math.floor(accuracy_parameter):
+                        download_model=model
+                        res2=accuracy_parameter
+        return Listing ,download_model
 
 def creating_hyper_paramerter(parms,column):
                 print("inside hyper")

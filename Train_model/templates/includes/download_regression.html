@@ -1,0 +1,65 @@
+<div style="overflow: scroll; max-height: 500px;">
+    <div class="pipeline-table">
+       
+        <h2>Pipeline Summary</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Step Name</th>
+              <th>Step Type</th>
+              <th>Step Parameters</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for step_name, step_obj in model.steps %}
+            <tr>
+              <td>{{  step_name }}</td>
+              <td>{{  step_obj }}</td>
+            
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    <table>
+        <!-- {{ data|safe }} -->
+        
+        <!-- <p>Listing the value</p> -->
+        <!-- <p> Doing By Loop</p> -->
+        {% for item in listing %}
+        
+        <!-- <p>Iternation Number</p>
+        {{ item.i|safe }}<br>
+        <p>R2 Score Without Best Parameter</p>
+        {{ item.result|safe }}<br>
+        <p>R2 Score With Best Parameter</p>
+        {{ item.result_parameter|safe }}<br>
+
+
+        <p>R2  Mean Absoulte Error Without Best Parameter</p>
+        {{ item.mae|safe }}<br>
+        <p>R2 Mean Absoulte Error  With Best Parameter</p>
+        {{ item.mae_parameter|safe }}<br>
+
+
+        <p>Column To be Used</p>
+        {{ item.columns|safe }}<br>
+        <p>Parameter to be used</p>
+        {{ item.parameter|safe }}<br>
+        {% endfor %}
+ -->
+      </table>
+    </div>
+    {% if download == 1 %}
+    <center>
+
+        <h2 class="idgen">Genertaed id is :{{ id_generator |safe }}</h2>
+    </center>
+    <h2>Downloading model is </h2>
+    {% endif %}
+    <center>
+
+        {% if download == 1 %}
+        <a class="button" href="{% url 'download_model' id_generator %}" style="margin-top: 30px;"><!---->Download Model<!----></a>
+    </center>
+{% endif %}

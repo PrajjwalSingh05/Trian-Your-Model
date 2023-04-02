@@ -29,6 +29,8 @@
                 <th>Id</th>
                 <!-- <th>Location</th> -->
                 <th>Model Name</th>
+                <th>Date</th>
+                <th>TIme</th>
                 <th>Downloaad</th>
                 <th>Delete</th>
            
@@ -43,6 +45,8 @@
                 <td scope="row ml - 5">{{i.uniqueid}}</td>
                 <!-- <td scope="row">{{i.location}}</td> -->
                 <td scope="row">{{i.modelname}}</td>
+                <td scope="row">{{i.date}}</td>
+                <td scope="row">{{i.time}}</td>
                 <td><a href="{% url 'download_model' i.uniqueid %}" class="btn btn-danger btn-sm">Download</a></td>
                 <td><a href="{% url 'delete_model' i.uniqueid %}" class="btn btn-danger btn-sm">Delete</a></td>
                 <!-- <td scope="row"><input type="number" name="pagenumber" id="fmobile" step="10"></td>     -->

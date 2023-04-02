@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    /*
+Author: https://codeconvey.com/
+*/
+
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,700);
+
+
+a {
+	color: #4f4d4d;
+	text-decoration: none;
+}
+
+a:hover, a:focus {
+	color: #000;
+}
+
+*, *:after, *:before { -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+
+a, button {
+	outline: none;
+}
+.clearfix:before,
+.clearfix:after {
+	content: " ";
+	display: table;
+}
+ 
+.clearfix:after {
+	clear: both;
+}
+
+/* To Navigation Style */
+.cctop {
+	background:#08cbd2;	
+	width: 100%;
+	text-transform: uppercase;
+	font-weight: 700;
+	font-size: 0.75em;
+	line-height: 3.2;
+}
+
+.cctop a {
+	display: inline-block;
+	padding: 0 1.5em;
+	text-decoration: none;
+	letter-spacing: 1px;
+}
+
+.cctop span.right {
+	float: right;
+}
+
+.cctop span.right a {
+	display: block;
+	float: left;
+}
+
+/* Header Style */
+
+.ccheader {
+	margin: 0 auto;
+	padding: 2em;
+	text-align: center;
+}
+
+.ccheader h1 {
+	font-size: 2.625em;
+    font-weight: 300;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.ccheader h1 span {
+	display: block;
+	padding: 0 0 0.6em 0.1em;
+	font-size: 60%;
+	opacity: 0.7;
+}
+
+
+
+/* Demo Buttons Style */
+.codeconvey-demo {
+	padding-top: 1em;
+	font-size: 0.8em;
+}
+
+.codeconvey-demo a {
+	display: inline-block;
+	margin: 0.5em;
+	padding: 0.7em 1.1em;
+	outline: none;
+	border: 2px solid #fff;
+	color: #fff;
+	text-decoration: none;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-weight: 700;
+}
+
+.codeconvey-demo a:hover,
+.codeconvey-demo a.current-demo,
+.codeconvey-demo a.current-demo:hover {
+	border-color: #333;
+	color: #333;
+}
+
+/* Wrapper Style */
+
+.wrapper{
+	margin:0 auto;	
+	padding-left:12%;
+	padding-right:12%;
+}
+
+section{ float:left; width:100%;}
+
+.opt{ 
+background: url(../images/bg.jpg) repeat-x;
+padding:3%;
+}
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,600);
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('../fonts/fontawesome-webfont.eot?v=4.0.3');
+  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.0.3') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff?v=4.0.3') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=4.0.3') format('truetype'), url('../fonts/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+.cctabs {
+    width: 100%;
+    margin: 100px auto;
+}
+.cctabs input[type="radio"] {
+    opacity: 0;
+}
+.cctabs .fa{
+	margin-right:10px;	
+}
+.cctabs label {
+    color: #000;
+    cursor: pointer;
+    float: left;
+    margin-right: 2px;
+    padding: 0.5% 2%;
+	font-size:16px;
+	font-weight:bold;
+}
+.cctabs label:hover {
+    background: -webkit-linear-gradient(#777, #666);
+}
+.cctabs input:checked + label {
+    background: #fff;
+    color: #ebb704;
+	border-top:solid 2px #ebb704;
+}
+.cctabs input:nth-of-type(1):checked ~ .panels .panel:first-child, .cctabs input:nth-of-type(2):checked ~ .panels .panel:nth-child(2), .cctabs input:nth-of-type(3):checked ~ .panels .panel:nth-child(3), .cctabs input:nth-of-type(4):checked ~ .panels .panel:last-child {
+    opacity: 1;
+    -webkit-transition: .3s;
+	/*position:relative;*/
+	z-index:999;
+}
+.cctabs .panels {
+    float: left;
+    clear: both;
+    position: relative;
+    width: 100%;
+    background: #fff;
+}
+.cctabs .panel {
+    width: 100%;
+    opacity: 0;
+    position: absolute;
+    background: #fff;
+    padding: 4%;
+    box-sizing: border-box;
+}
+.cctabs .panel h2 {
+    margin: 0;
+    font-family: Arial;
+}
+
+.cctabs .panel i{
+	color:#ebb704;
+	cursor:pointer;	
+}
+.cctabs .panel i:hover{
+	color:#f4cc42;
+}
+
+.cctabs .headline h1 {
+    font-size: 30px;
+    font-weight: bold;
+    letter-spacing: 0.6px;
+    padding-bottom: 0;
+    text-align: center;
+    text-rendering: optimizespeed;
+	margin: 10px 0;
+}
+
+.cctabs .headline hr {
+    background: none repeat scroll 0 0 #ebb704;
+    border: 2px solid;
+    color: #ebb704;
+    margin-bottom: 0;
+    margin-top: 0;
+    width: 30px;
+}
+
+.cctabs .headline .lead {
+    font-family: "Lato",sans-serif;
+    font-weight: 300;
+    line-height: 1.9;
+    margin: 5px 0;
+    text-align: center;
+}
+#map-canvas {
+    height: 366px;
+    width: 462px;
+}
+
+
+#cc-contact input[type="text"], 
+#cc-contact input[type="email"],
+#cc-contact input[type="tel"],
+#cc-contact input[type="password"],
+#cc-contact textarea{
+	width:100%;
+	border:1px solid #ebb704;
+	margin:0 0 5px;
+	padding:10px;
+	font-family: "Lato",sans-serif;
+	font-size:14px;
+}
+
+#cc-contact textarea {
+	height:147px;
+	max-width:100%;
+}
+
+#cc-contact button[type="submit"] {
+	cursor:pointer;
+	width:100%;
+	border:none;
+	background:#ebb704;
+	color:#FFF;
+	margin:0 0 5px;
+	padding:10px;
+	font-size:15px;
+}
+
+#cc-contact button[type="submit"]:hover {
+	background:#f4cc42;
+	-webkit-transition:background 0.3s ease-in-out;
+	-moz-transition:background 0.3s ease-in-out;
+	transition:background-color 0.3s ease-in-out;
+}
+
+
+
+
+
+/* GRID*/
+.grid {
+    display: block;
+    margin-left: -10px;
+}
+.cc-text-center{
+	text-align:center;
+}
+.cc-mt-20{
+	margin-top:50px;	
+}
+.unit-2,
+.unit-3,
+.unit-4 {
+    float: left;
+    border-left: 10px solid transparent;
+    box-sizing: border-box;
+    background-clip: padding-box;
+}
+.unit-1{
+	width:100%;
+	float:left;	
+}
+.unit-2 {
+    width: 50%;
+}
+
+.unit-3 {
+    width: 33.3%;
+}
+
+.unit-4 {
+    width: 25%;
+}
+</style>
+<body>
+    <div class="container"> 
+        <!-- Top Navigation -->
+       
+        <div class="wrapper">
+          <div class="cctabs">
+            <input checked id="one" name="tabs" type="radio">
+            <label for="one"><i class="fa fa-pencil-square-o"></i> Content</label>
+            <input id="two" name="tabs" type="radio" value="Two">
+            <label for="two"><i class="fa fa-magic"></i> Services</label>
+            <input id="three" name="tabs" type="radio">
+            <label for="three"><i class="fa fa-plus-square"></i> Forms</label>
+            <input id="four" name="tabs" type="radio">
+            <label for="four"><i class="fa fa-envelope"></i> Contact</label>
+            <div class="panels">
+              <div class="panel">
+                <h2>This is heading</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel leo sem. Sed nec quam sit amet lorem volutpat ullamcorper ut sed massa. Sed vel felis velit. Nullam et turpis sed dui auctor vehicula quis a dui.</p>
+                <p>Aliquam vitae leo et sapien volutpat accumsan quis eget turpis. Etiam ac metus vitae purus semper pretium. Curabitur id nisl nisl. Cras ut massa sed dolor ullamcorper consequat ut sed dolor.</p>
+                <p>Nam sodales, mi eu convallis adipiscing, ligula justo consectetur tellus, tincidunt vestibulum tortor elit a augue. Ut elementum ultricies orci, vel luctus neque varius in. Phasellus turpis nunc, eleifend ac fringilla at, malesuada in eros.<a href="#">Read more ...</a></p>
+                <div class="cc-mt-20"></div>
+                <div class="grid cc-text-center">
+                  <div class="unit-3"> <i class="fa fa-lightbulb-o fa-4x"></i>
+                    <h3>Awesome Tabs</h3>
+                    <p>Awesome in design and ready to used and customize as you need to fit into your design.</p>
+                    <a href="#">Read more ...</a> </div>
+                  <div class="unit-3"> <i class="fa fa-laptop fa-4x"></i>
+                    <h3>Responisve Tabs Menu</h3>
+                    <p>These tabs are full responsive and work well on all kind of devices.</p>
+                    <a href="#">Read more ...</a> </div>
+                  <div class="unit-3"> <i class="fa fa-leaf fa-4x"></i>
+                    <h3>Superb Design Layout</h3>
+                    <p>Let's get to know more about these CSS Tabs Menu like how you can build step by step.</p>
+                    <a href="#">Read more ...</a> </div>
+                </div>
+              </div>
+              <div class="panel">
+                <div class="headline">
+                  <h1>What we offer ?</h1>
+                  <hr>
+                  <p class="lead">We provide best solution for your business</p>
+                </div>
+                <p>Nam sodales, mi eu convallis adipiscing, ligula justo consectetur tellus, tincidunt vestibulum tortor elit a augue. Ut elementum ultricies orci, vel luctus neque varius in. Phasellus turpis nunc, eleifend ac fringilla at, malesuada in eros.</p>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel leo sem. Sed nec quam sit amet lorem volutpat ullamcorper ut sed massa. Sed vel felis velit. Nullam et turpis sed dui auctor vehicula quis a dui.</p>
+                <p>Aliquam vitae leo et sapien volutpat accumsan quis eget turpis. Etiam ac metus vitae purus semper pretium. Curabitur id nisl nisl. Cras ut massa sed dolor ullamcorper consequat ut sed dolor.</p>
+              </div>
+              <div class="panel">
+                <div class="unit-2">
+                  <h4>Contact Us From</h4>
+                  <form id="cc-contact" action="" method="post">
+                    <input placeholder="your name" type="text" tabindex="1" autofocus>
+                    <input placeholder="Email Address" type="email" tabindex="2" required>
+                    <input placeholder="Phone Number" type="tel" tabindex="3" required>
+                    <input placeholder="Webite" type="text" tabindex="4" required>
+                    <textarea placeholder="Type your Message Here...." tabindex="5" required></textarea>
+                    <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+                  </form>
+                </div>
+                <div class="unit-2">
+                  <h4>Registratoin From</h4>
+                  <form id="cc-contact" action="" method="post">
+                    <input placeholder="username" type="text" tabindex="1" required autofocus>
+                    <input placeholder="Email Address" type="email" tabindex="1" required autofocus>
+                    <input placeholder="Password" type="password" tabindex="2" required>
+                    <button name="submit" type="submit" >Register</button>
+                  </form>
+                  <h4>Login From</h4>
+                  <form id="cc-contact" action="" method="post">
+                    <input placeholder="Email Address" type="email" tabindex="1" required autofocus>
+                    <input placeholder="Password" type="password" tabindex="2" required>
+                    <button name="submit" type="submit" >Login</button>
+                  </form>
+                </div>
+              </div>
+              <div class="panel">
+                <div class="unit-2">
+                  <form id="cc-contact" action="" method="post">
+                    <input placeholder="your name" type="text" tabindex="1" autofocus>
+                    <input placeholder="Email Address" type="email" tabindex="2" required>
+                    <input placeholder="Phone Number" type="tel" tabindex="3" required>
+                    <input placeholder="Webite" type="text" tabindex="4" required>
+                    <textarea placeholder="Type your Message Here...." tabindex="5" required></textarea>
+                    <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+                  </form>
+                </div>
+                <div class="unit-2">
+                  <div id="map-canvas"></div>
+                </div>
+                <div class="unit-1 cc-text-center cc-mt-20">
+                  <div class="unit-3"> <i class="fa fa-map-marker fa-2x"></i>
+                    <p>Post Code 45600, USA NY</p>
+                  </div>
+                  <div class="unit-3"> <i class="fa fa-phone fa-2x"></i>
+                    <p> <strong>Phone:</strong> (+55) 555 5555 <br>
+                      <strong>Mobile:</strong> (+33) 333 5555 </p>
+                  </div>
+                  <div class="unit-3"> <i class="fa fa-envelope-o fa-2x"></i>
+                    <p> <strong>Email:</strong> <a href="mailto:info@codeconvey.com">info@codeconvey.com</a> <br>
+                      <strong>Skype:</strong> skypeID </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+</body>
+</html>

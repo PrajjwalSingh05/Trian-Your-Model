@@ -135,6 +135,25 @@ table {
       .pipeline-table {
         margin-top: 20px;
       }
+      .idgen{
+        margin-top: 5rem;
+    margin-bottom: 2rem;
+    }
+    .inputfile{
+        margin-top: 1rem;
+    width: auto;
+    margin-bottom: 2rem;
+    }
+    a.button {
+    background: #4285F4;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 20px;
+    padding: 18px 50px 16px;
+    display: inline-block;
+    font-family: 'BoingSemiBold', Helvetica, Arial, sans-serif;
+    transition: background-color 0.25s ease-out;
+    }
 </style>	
 
 {% endblock %}
@@ -199,76 +218,15 @@ table {
     <label class="label_heading"> N Estimator  :Slider Value: <span id="rangen">100</span></label>
 <input type="number" min="0" max="1000" value="50" onchange="showValuen(this.value)" name="n_estimator">
 </div>
-<input type="text" name="pipelineval" value="{{ model |safe }}">
-<input type="text" name="pipeline" value="{{ model |safe }}">
+
 <div>
-    <label for="" class="label_heading">Upload file</label>
-    <input type="file" name="datafile">
-    <input type="submit" value="Upload">
+    <label for="formFileLg" class="form-label label_heading">Large file input example</label>
+    <input class="form-control form-control inputfile" id="formFileLg" type="file" name="datafile"/>
+    <input type="submit" value="Submit" id="upload"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 </div>
         <!-- <input type="submit" value="submit"> -->
     </form>
-        <div style="overflow: scroll; max-height: 500px;">
-            <div class="pipeline-table">
-               
-                <h2>Pipeline Summary</h2>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Step Name</th>
-                      <th>Step Type</th>
-                      <th>Step Parameters</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% for step_name, step_obj in model.steps %}
-                    <tr>
-                      <td>{{  step_name }}</td>
-                      <td>{{  step_obj }}</td>
-                    
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-                </table>
-              </div>
-            <table>
-                <!-- {{ data|safe }} -->
-                
-                <!-- <p>Listing the value</p> -->
-                <!-- <p> Doing By Loop</p> -->
-                {% for item in listing %}
-                
-                <!-- <p>Iternation Number</p>
-                {{ item.i|safe }}<br>
-                <p>R2 Score Without Best Parameter</p>
-                {{ item.result|safe }}<br>
-                <p>R2 Score With Best Parameter</p>
-                {{ item.result_parameter|safe }}<br>
-        
-        
-                <p>R2  Mean Absoulte Error Without Best Parameter</p>
-                {{ item.mae|safe }}<br>
-                <p>R2 Mean Absoulte Error  With Best Parameter</p>
-                {{ item.mae_parameter|safe }}<br>
-        
-        
-                <p>Column To be Used</p>
-                {{ item.columns|safe }}<br>
-                <p>Parameter to be used</p>
-                {{ item.parameter|safe }}<br>
-                {% endfor %}
-         -->
-              </table>
-            </div>
-            {% if download == 1 %}
-            <p>Downloading model is </p>
-         
-      <a href="{% url 'download_model' %}">
-
-          <button type="button">Download</button>
-      </a>
-  {% endif %}
-
+       {% include "includes/download_regression.html" %}
 
     <!-- Conttent -->
     {% endblock %}
@@ -286,5 +244,13 @@ function showValuesplit(newValue) {
 function showValuen(newValue) {
     document.getElementById("rangen").innerHTML = newValue;
   }
+  $(document).ready(function() {
+    $('upload').click(function() {
+        $('#staticBackdrop').modal('show');
+        // submit the form
+        $(this).closest('form').submit();
+    });
+});
+    
   </script>
 {% endblock %}

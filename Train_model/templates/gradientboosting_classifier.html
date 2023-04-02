@@ -2,138 +2,7 @@
 {% load static %}
 
 {% block css %}
-<style>
-    /* Creating Loader */
-    [hidden] {
-        display: none !important;
-    }
-
-
-    select,
-    .select,
-    input {
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .select {
-        position: relative;
-    }
-
-    .select>input {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .select__dropdown {
-        position: absolute;
-        z-index: 1;
-        list-style: none;
-        margin: 0;
-        padding: 1px;
-        background: Field;
-        color: FieldText;
-        font-family: sans-serif;
-        font-size: small;
-        font: -moz-field;
-        border: 1px solid ThreeDShadow;
-        border-top: 0;
-        left: 0;
-        right: 0;
-        max-height: 10em;
-        overflow-y: auto;
-    }
-
-    .select__dropdown:empty {
-        display: none;
-    }
-
-    .select__dropdown [role="option"],
-    .select__dropdown strong {
-        padding: 0.2em 0.4em;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        cursor: default;
-    }
-
-    .select__dropdown [role="option"].select--selected,
-    .select__dropdown [role="option"]:hover {
-        background: rgba(128, 128, 128, .2);
-        color: inherit;
-    }
-
-    .select__dropdown [role="option"].select--has-focus {
-        background: Highlight;
-        color: HighlightText;
-    }
-
-    .select__dropdown [role="option"][aria-disabled="true"] {
-        background: transparent;
-        color: GrayText;
-    }
-
-    .select__dropdown ul {
-        margin: 0;
-        padding: 0;
-    }
-
-    .select__dropdown ul [role="option"] {
-        padding-left: 2em;
-    }
-
-    .select__values {
-        display: inline;
-        padding: 0;
-        margin: 0;
-    }
-
-    .select__values li {
-        display: inline-block;
-        margin: 0.1em 0.2em;
-        margin-inline-start: 0;
-        cursor: default;
-        background-color: red;
-    }
-
-    .select__values li:first-child {
-        /* display: inline-block;
-	margin: 0.1em 0.2em;
-	margin-inline-start: 0;
-	cursor: default; */
-        margin-left: 20%;
-        background-color: blue;
-    }
-
-    .select__value {
-        padding: 0 0.2em;
-        background: rgba(128, 128, 128, .2);
-        color: inherit;
-        border: 1px solid ThreeDShadow;
-        border-radius: 0.3em;
-    }
-
-    /* Self */
-    .label_heading {
-        font-size: medium;
-        font-weight: bold;
-        text-transform: capitalize;
-        margin-left: 20%;
-        margin-top: 2%;
-    }
-
-    input {
-        height: 30%;
-        width: 50%;
-        padding: 0.5%;
-        margin-left: 20%;
-    }
-
-    .big_container {
-        display: inline;
-    }
-</style>
+<link rel="stylesheet" href="{% static 'Css/basicstyle.css' %}">
 <!-- CSS -->
 {% endblock %}
 
@@ -145,22 +14,7 @@
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <div class="container">
-      <center>
-
-          <div class="row-3">
-              <div class="col-sm-6" style="background-color:yellow;">
-                <label for="" style="display:inline"class="label_heading" >Test</label>
-                <input type="number" placeholder="Enter the prediction column" name="predcol"  style="height:100%;display:inline"class="inp_col">
-            </div>
-            <div class="col-sm-6" style="background-color:pink;">
-                <label for="" style="display:inline" >Random</label>
-                <input type="number" placeholder="Enter the prediction column" name="predcol" style="height:100%;display:inline" class="inp_col">
-                
-            </div>
-        </div>
-    </div>
-</center>
+ 
 
 
     
@@ -173,6 +27,14 @@
     <div>
         <label for="" class="label_heading">Input Number of columns</label>
         <input type="number" placeholder="Enter the prediction column" name="size1" class="inp_col">
+    </div>
+    <div>
+        <label for="" class="label_heading">Test Size</label>
+        <input type="number" placeholder="Enter the Test Size" value="0.4" name="ptestsize" class="inp_col">
+    </div>
+    <div>
+        <label for="" class="label_heading">Random State</label>
+        <input type="number" placeholder="Enter the Ramdom state" value="32" name="randomstate" class="inp_col">
     </div>
     <div>
 
@@ -237,9 +99,9 @@
         <input type="range" min="0" max="100" value="15" onchange="showValuedepth(this.value)" name="maxdepthvalue">
     </div>
     <div>
-        <label for="" class="label_heading">Upload file</label>
-        <input type="file" name="datafile">
-        <input type="submit" value="Upload">
+        <label for="formFileLg" class="form-label label_heading">Large file input example</label>
+        <input class="form-control form-control inputfile " id="formFileLg" type="file" name="datafile" />
+        <input type="submit" value="Submit" id="upload"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">
     </div>
     <!-- <input type="submit" value="submit"> -->
 </form>
@@ -265,6 +127,13 @@
     function showValuedepth(newValue) {
         document.getElementById("rangedepth").innerHTML = newValue;
     }
+    $(document).ready(function() {
+                    $('upload').click(function() {
+                        $('#staticBackdrop').modal('show');
+                        // submit the form
+                        $(this).closest('form').submit();
+                    });
+                });
 </script>
 <!-- java -->
 {% endblock %}

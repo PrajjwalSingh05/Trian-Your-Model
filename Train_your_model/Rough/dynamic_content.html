@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins&displ ay=swap');
+
+
+.accordion {
+    width: 350px;
+    height: 80vh;
+}
+
+.tab {
+    width: 100%;
+    position: relative;
+}
+
+.tab__button {
+    background: cadetblue;
+    width: 100%;
+    border: none;
+    text-align: start;
+    padding: 10px 10px;
+    cursor: pointer;
+    /* color: rgba(255, 255, 255, 0.616); */
+    font-size: 17px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.179);
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+.tab__button::before, .tab__panel::before{
+    content: '';
+    position: absolute;
+    width: 30%;
+    height: 100%;background: #373B44;
+    background: -webkit-linear-gradient(to right, #4286f4, #373B44);
+    background: linear-gradient(to right, #4286f4, #373B44);
+    top: 0;
+    right: 0;   
+    z-index: -1;
+    filter: blur(30px);
+}
+
+.tab__button::after  {
+    content: '\f0d7';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 700;
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translate(0, -50%);
+    color: rgba(255, 255, 255, 0.616);
+    transition: transform 0.8s;
+}
+
+.tab__button-active::after {
+    transform: translate(0, -50%) rotate(-180deg);
+}
+
+.tab__panel {
+    width: 95%;
+    margin: 10px auto;
+    /* background: #1b243c4f; */
+    z-index: -1;
+    /* color: rgba(255, 255, 255, 0.616); */
+    border-radius: 5px;
+    padding: 0px 20px 0px 20px;
+    height: 0;
+    overflow: hidden;
+    transition: height 0.8s, padding 0.8s;
+}
+
+.tab__panel::before {
+    background: -webkit-linear-gradient(to right, #4286f475, #373B44);
+    background: linear-gradient(to right, #4286f469, #373B44);
+}
+
+.tab__panel-active {
+    transition: height 0.8s, padding 0.8s;
+    padding: 20px 20px 10px 20px;
+}
+
+.tab__panel p {
+    word-break: break-all;
+}
+table{
+    width: 35rem;
+    display: inline-flex;
+    margin: 1rem;
+}
+</style>
+<body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <table border="2">
+
+        
+        
+                <th>
+                <div class="tab">
+                        <button class="tab__button">Regression Modek</button>
+                        <div class="tab__panel">
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum incidunt iure pariatur vitae
+                                molestiae eaque repudiandae iste nostrum suscipit iusto.</p>
+                                
+                            </div>
+                        </div>
+                    </th>
+
+            <th>
+
+                
+                <div class="tab">
+                <button class="tab__button">Accordion Two</button>
+                <div class="tab__panel">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum incidunt iure pariatur vitae
+                        molestiae eaque repudiandae iste nostrum suscipit iusto.</p>
+                    </div>
+                </th>
+                </div>
+                <th>
+
+                    <div class="tab">
+                        <button class="tab__button">Accordion Three</button>
+                        <div class="tab__panel">
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum incidunt iure pariatur vitae
+                                molestiae eaque repudiandae iste nostrum suscipit iusto. Lorem ipsum dolor, sit amet consectetur
+                                adipisicing elit. Impedit, nostrum?</p>
+                            </div>
+                        </div>
+                    </th>
+                </div>
+            </div>
+            
+        </table>
+    <table border="2">
+
+        
+        
+                <th>
+                <div class="tab">
+                        <button class="tab__button">Regression Modek</button>
+                        <div class="tab__panel">
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum incidunt iure pariatur vitae
+                                molestiae eaque repudiandae iste nostrum suscipit iusto.</p>
+                                
+                            </div>
+                        </div>
+                    </th>
+
+            <th>
+
+                
+                <div class="tab">
+                <button class="tab__button">Accordion Two</button>
+                <div class="tab__panel">
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum incidunt iure pariatur vitae
+                        molestiae eaque repudiandae iste nostrum suscipit iusto.</p>
+                    </div>
+                </th>
+                </div>
+                <th>
+
+                    <div class="tab">
+                        <button class="tab__button">Accordion Three</button>
+                        <div class="tab__panel">
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum incidunt iure pariatur vitae
+                                molestiae eaque repudiandae iste nostrum suscipit iusto. Lorem ipsum dolor, sit amet consectetur
+                                adipisicing elit. Impedit, nostrum?</p>
+                            </div>
+                        </div>
+                    </th>
+                </div>
+            </div>
+            
+        </table>
+</body>
+<script>
+            const tabButtons = document.querySelectorAll('.tab__button');
+        
+
+        tabButtons.forEach((e) => {
+            e.addEventListener("click", (e) => {
+                if (!e.target.classList.contains('tab__button-active')) {
+                    e.target.classList.add("tab__button-active");
+                    e.target.nextElementSibling.style.height = e.target.nextElementSibling.firstElementChild.clientHeight + 60 + "px";
+                    e.target.nextElementSibling.classList.add("tab__panel-active");
+                } else {
+                    e.target.classList.remove("tab__button-active");
+                    e.target.nextElementSibling.style.height = "0px";
+                    e.target.nextElementSibling.classList.remove('tab__panel-active');
+                }
+            });
+        });
+</script>
+</html>

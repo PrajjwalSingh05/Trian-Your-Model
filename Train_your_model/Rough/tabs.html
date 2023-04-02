@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tabs</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <style>
+
+.container {
+  width: 80vmin;
+  position: absolute;
+  transform: translateX(-50%);
+  left: 50%;
+  top: 120px;
+  background-color: #ffffff;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+h3 {
+  background-color: #e4e9fd;
+  text-align: center;
+  padding: 15px 0;
+  cursor: pointer;
+  font-weight: 600;
+}
+.tab-content {
+  background-color: #ffffff;
+  padding: 50px 40px;
+}
+.tab-content h4 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #000224;
+  font-weight: 600;
+}
+.tab-content p {
+  text-align: justify;
+  line-height: 1.9;
+  letter-spacing: 0.4px;
+  color: #202238;
+}
+.tab-content div {
+  display: none;
+}
+.tab-content .active {
+  display: block;
+}
+.tabs .active {
+  background-color: #ffffff;
+  color: #4d5bf9;
+}
+  </style>
+  <body>
+    <div class="container">
+      <div class="tabs">
+        <h3 class="active">Tab 1</h3>
+        <h3>Tab 2</h3>
+        <h3>Tab 3</h3>
+      </div>
+      <div class="tab-content">
+        <div class="active">
+          <h4>First Title</h4>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore
+            explicabo cum dolores hic possimus aut corrupti quisquam aperiam
+            quia veniam inventore officiis nam error sunt libero, commodi
+            architecto reiciendis qui fuga, itaque delectus quidem sequi.
+            Impedit natus culpa nihil aperiam adipisci aliquam error, suscipit
+            odio? Error sed esse perspiciatis quasi velit, ratione odit
+            architecto? Explicabo pariatur.
+          </p>
+        </div>
+
+        <div>
+          <h4>Second Title</h4>
+          <p>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Deleniti,
+            fugiat ab? Accusamus sed a iusto? Placeat incidunt repudiandae vero
+            magnam nihil tempore quasi earum illum totam aut delectus aliquam
+            pariatur, iste, qui provident quo voluptatem neque facere id
+            laudantium aliquid numquam nisi accusantium. Inventore reiciendis
+            nulla, iste perferendis.
+          </p>
+        </div>
+
+        <div>
+          <h4>Third Title</h4>
+          <p>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quaerat
+            autem accusantium voluptate debitis ipsa animi aliquid dolore?
+            Suscipit consequatur architecto ullam perferendis praesentium sed
+            aliquid voluptatem quibusdam laborum, doloremque aut atque debitis
+            et laudantium qui veniam eligendi accusamus ipsam optio, assumenda
+            aliquam ipsum dolorem similique?
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--Script-->
+    <script >
+        let tabs = document.querySelectorAll(".tabs h3");
+let tabContents = document.querySelectorAll(".tab-content div");
+tabs.forEach((tab, index) => {
+  tab.addEventListener("click", () => {
+    tabContents.forEach((content) => {
+      content.classList.remove("active");
+    });
+    tabs.forEach((tab) => {
+      tab.classList.remove("active");
+    });
+    tabContents[index].classList.add("active");
+    tabs[index].classList.add("active");
+  });
+});
+    </script>
+  </body>
+</html>

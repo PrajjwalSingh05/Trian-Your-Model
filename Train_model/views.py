@@ -19,7 +19,8 @@ import random
 import pandas as pd
 def admin_home(request):
     return render(request,"admin_home.html")
-
+def feature(request):
+    return render(request,"feature.html")
 def index(request):
     return render(request,"index.html")
 def logout(request):
@@ -183,6 +184,7 @@ def random_forest_classification(request):
     parms={}
     Listing=[]
     download_status=0
+    id_generator=0
     error=""
     df = pd.DataFrame()
     ucriterion=["criterion"]
@@ -218,7 +220,7 @@ def random_forest_classification(request):
                         max_depth.append(i)
         for i in range(1,n_estimator_value,5):
                         n_estimator.append(i)
-        for i in range(1,sample_split_value,1):
+        for i in range(2,sample_split_value,1):
                         sample_split.append(i)
         creating_hyper_paramerter(parms,ucriterion)
         creating_hyper_paramerter(parms,umaxfeature)
@@ -239,7 +241,12 @@ def random_forest_classification(request):
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
                 model_name=RandomForestClassifier()
-                Listing=all_classification_model(X,y,1,end,parms,model_name)
+                Listing,model=all_classification_model(X,y,1,end,parms,model_name)
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+              
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+                # id_generator=model_saving(model,remaining_url,request.user.username)
                 # Listing=random_forest_classifier(X,y,1,end,parms)
                 download_status=1
             else:
@@ -248,12 +255,13 @@ def random_forest_classification(request):
               print(ep)
 
         # print()
-    d={'data': df.to_html(),"listing":Listing,"download":download_status}
+    d={'data': df.to_html(),"listing":Listing,"download":download_status,"id_generator":id_generator}
     return render(request,"random_forest_clasification.html",d)
 def interface_svc(request):
     parms={}
     Listing=[]
     download_status=0
+    id_generator=0
     error=""
     df = pd.DataFrame()
     ukernal=["kernel"]
@@ -311,7 +319,12 @@ def interface_svc(request):
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
                 model_name=SVC()
-                Listing=all_classification_model(X,y,1,end,parms,model_name)
+                # Listing=all_classification_model(X,y,1,end,parms,model_name)
+                Listing,model=all_classification_model(X,y,1,end,parms,model_name)
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+              
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
             
                 download_status=1
             else:
@@ -320,10 +333,11 @@ def interface_svc(request):
               print(ep)
         # print()
         
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status}
+    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status,"id_generator":id_generator}
     return render(request,"interface_svc.html",d)
 def interface_gradientboosting_classifier(request):
     parms={}
+    id_generator=0
     Listing=[]
     download_status=0
     error=""
@@ -390,12 +404,15 @@ def interface_gradientboosting_classifier(request):
         # print(df.head())
             X=df.drop(columns=pred_col)
             le=LabelEncoder()
-            y=le.fit_transform(df[pred_col]) 
+            y=le.fit_transform(df[pred_col])    
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
                 model_name=GradientBoostingClassifier()
-                Listing=all_classification_model(X,y,1,end,parms,model_name)
-               
+                Listing,model=all_classification_model(X,y,1,end,parms,model_name)
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+                
                 download_status=1
             else:
                     error="Max Column Exceed"
@@ -403,7 +420,7 @@ def interface_gradientboosting_classifier(request):
               print(ep)
               error="Wrong Prediction Columns"
         # print()
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status}
+    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status,"id_generator":id_generator}
     
      
     return render (request,"gradientboosting_classifier.html",d)
@@ -411,6 +428,7 @@ def interface_decisiontree_classifier(request):
     parms={}
     Listing=[]
     download_status=0
+    id_generator=0
     error=""
     df = pd.DataFrame()
     ucriterion=["criterion"]
@@ -479,19 +497,24 @@ def interface_decisiontree_classifier(request):
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
                 model_name=DecisionTreeClassifier()
-                Listing=all_classification_model(X,y,1,end,parms,model_name)    
+                Listing,model=all_classification_model(X,y,1,end,parms,model_name)
+                
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)    
                 download_status=1
             else:
                     error="Max Column Exceed"
         except Exception as ep:
               print(ep)
         # print()
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status}
+    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status,"id_generator":id_generator}
     return render(request,"decisiontree_classifier.html",d)
 def interface_knn_classifier(request):
     parms={}
     Listing=[]
     download_status=0
+    id_generator=0
     error=""
     df = pd.DataFrame()
     uweights=["weights"]
@@ -536,7 +559,7 @@ def interface_knn_classifier(request):
         creating_hyper_paramerter(parms,un_neighbors)
         # creating_hyper_paramerter(parms,uc)
         # creating_hyper_paramerter(parms,sample_split)
-        # print(type(parms))
+        # print(type(par-ms))
         parms=dict(parms)
         # print(type(parms))
         print("inside view",parms)
@@ -550,14 +573,18 @@ def interface_knn_classifier(request):
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
                 model_name=KNeighborsClassifier()
-                Listing=all_classification_model(X,y,1,end,parms,model_name)
+                Listing,model=all_classification_model(X,y,1,end,parms,model_name)
+                
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
                 # Listing=knn_classfier(X,y,1,end,parms)
                 download_status=1
             else:
                     error="Max Column Exceed"
         except Exception as ep:
               print(ep)
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status, "chosenparameter":parms}
+    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status, "chosenparameter":parms,"id_generator":id_generator}
     return render(request,"knn_classifier.html",d)
 
 def extratreeregression(request):
@@ -678,7 +705,7 @@ def random_forest_regression(request):
                         max_depth.append(i)
         for i in range(1,n_estimator_value,5):
                         n_estimator.append(i)
-        for i in range(1,sample_split_value,1):
+        for i in range(2,sample_split_value,1):
                         sample_split.append(i)
         creating_hyper_paramerter(parms,ucriterion)
         creating_hyper_paramerter(parms,umaxfeature)
@@ -702,7 +729,8 @@ def random_forest_regression(request):
                 model_name=RandomForestRegressor()
                 Listing,model=all_regression(X,y,1,end,parms,model_name)
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
-                id_generator=model_saving(model,remaining_url,request.user.username)
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
                 # Listing=random_forest_regression2(X,y,1,end,parms)
                 download_status=1
                 print("doownload status 1")
@@ -792,7 +820,8 @@ def interface_svm(request):
                 model_name=SVR()
                 Listing,model=all_regression(X,y,1,end,parms,model_name)
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
-                id_generator=model_saving(model,remaining_url,request.user.username)
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
                 download_status=1
             else:
                 error="Max Column Exceed"
@@ -889,7 +918,11 @@ def interface_gradientboosting_regressor(request):
                 
                 # print(f"model name will be {(str(model_name))[1:-2]+request.user.username[:3]+str(pred_col[:3])+str(end)+str(request.user.id)}")            
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
-                id_generator=model_saving(model,remaining_url,request.user.username)
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                print("model name is",savemodelname)
+                print("model name is",savemodelname)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+
                 # print(type(remaining_url))
                 # base_url="media/"
                 # full_url=base_url+remaining_url
@@ -992,8 +1025,9 @@ def interface_decisiontree_regressor(request):
                 model_name=DecisionTreeRegressor()
                 Listing,model=all_regression(X,y,1,end,parms,model_name)
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
-                id_generator=model_saving(model,remaining_url,request.user.username)
-                # Listing=decisiontree_regressor(X,y,1,end,parms)
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+                Listing,model=all_regression(X,y,1,end,parms,model_name)
                 download_status=1
             else:
                 error="Max Column Exceed"
@@ -1031,6 +1065,7 @@ def user_trained_model(request):
 
 def interface_download_random_forest_regressor(request):
     download_status=0
+    id_generator=0
     parameter_list=[]
     Listing=[]
     error=""
@@ -1065,7 +1100,6 @@ def interface_download_random_forest_regressor(request):
         parameter_list.append( sample_split_value)
         parameter_list.append(n_estimator_value)
         parameter_list.append(maxdepth_value)
-       
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
         # print(df.head())
@@ -1076,14 +1110,19 @@ def interface_download_random_forest_regressor(request):
             y=df[pred_col]
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
-             Listing=download_random_forest_regressor(X,y,parameter_list)
-             request.session['trp'] = str(Listing)
-             request.session['tp'] = 20
-             print(Listing)
+                model_name=RandomForestRegressor()
+                Listing,model=download_random_forest_regressor(X,y,parameter_list)
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+           
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+
+            
+                print(Listing)
              
             #  request.session['trp'] = Listing
 
-             download_status=1
+                download_status=1
             
             else:
                 error="Max Column Exceed"
@@ -1096,13 +1135,14 @@ def interface_download_random_forest_regressor(request):
             print(ep)
             print(ep)
         # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status,"model":Listing}
+    d={'data': df.to_html(),"error":error ,"download":download_status,"result":Listing,"id_generator":id_generator}
       
     return render (request,"download_random_forest_regressor.html",d)
 
 def interface_download_logistic_regression(request):
     download_status=0
     parameter_list=[]
+    id_generator=0
     Listing=[]
     error=""
     df = pd.DataFrame()
@@ -1150,11 +1190,18 @@ def interface_download_logistic_regression(request):
             y=df[pred_col]
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
-             Listing=download_logistic_regresion(X,y,parameter_list)
-             print(Listing)
+            #  Listing=download_logistic_regresion(X,y,parameter_list)
+                model_name=LogisticRegression()
+                Listing,model=download_random_forest_regressor(X,y,parameter_list)
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+           
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+
+            #  print(Listing)
             #  request.session['trp'] = Listing
 
-             download_status=1
+                download_status=1
             
             else:
                 error="Max Column Exceed"
@@ -1167,7 +1214,7 @@ def interface_download_logistic_regression(request):
             print(ep)
             print(ep)
         # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status}
+    d={'data': df.to_html(),"error":error ,"download":download_status,"id_generator":id_generator,"result":Listing}
     return render(request,"download_logistic_regression.html",d)
 
 def interface_download_extreetree_regression(request):
@@ -1247,6 +1294,7 @@ def interface_download_extreetree_regression(request):
 def interface_download_svr(request):
     download_status=0
     parameter_list=[]
+    id_generator=0
     Listing=[]
     error=""
     df = pd.DataFrame()
@@ -1291,18 +1339,18 @@ def interface_download_svr(request):
             y=df[pred_col]
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
-             Listing=download_svr_regression(X,y,parameter_list)
-            #  pkl_data = pickle.dumps(Listing,"pra1")
-             print("type")
-             print("type")
-             print(type(Listing))
-             print(Listing)
-             print("type")
-             print("type")
-             print(type(Listing))
-            #  request.session['trp'] = Listing
+            #  Listing=download_svr_regression(X,y,parameter_list)
+                model_name=SVR()
+                Listing,model=download_svr_regression(X,y,parameter_list)
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+           
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
 
-             download_status=1
+    
+             
+
+                download_status=1
             
             else:
                 error="Max Column Exceed"
@@ -1315,11 +1363,301 @@ def interface_download_svr(request):
             print(ep)
             print(ep)
         # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status, "model":Listing}
+    d={'data': df.to_html(),"error":error ,"download":download_status, "result":Listing,"id_generator":id_generator}
 
     return render(request,"download_svr_regression.html",d)
 def interface_download_knn_regression(request):
     download_status=0
+    id_generator=0
+    parameter_list=[]
+    Listing=[]
+    error=""
+    df = pd.DataFrame()
+    # sample_split=["min_samples_split"]
+    if request.method == 'POST':
+        # print(type(parms))
+      
+        print("inside post methid of randomforest class")
+        print("inside post methid of randomforest class")
+        print("inside post methid of randomforest class")
+
+        pred_col=request.POST["predcol"]
+        end=request.POST["size1"]
+        end=int(end)
+        uweight=request.POST["weights"] #mnot
+       
+        ualgorith=request.POST["algorithm"]
+        # solver_list=request.POST["solver"]
+        # ucriteion=request.POST["criteion"]
+        kvalue= int(request.POST['kvalue'])
+  
+       
+        datafi=request.FILES['datafile']
+        print(pred_col,end)
+   
+        parameter_list.append( end)
+        parameter_list.append(uweight)
+        parameter_list.append(ualgorith)
+        parameter_list.append(kvalue)
+        # parameter_list.append(sample_split_value)
+        # parameter_list.append(maxdepth_value)
+       
+        # **************************Data Reading****************
+        df=pd.read_csv(datafi)
+        # print(df.head())
+        try:
+
+            X=df.drop(columns=pred_col)
+            # y=le.fit_transform(df[pred_col]) 
+            y=df[pred_col]
+            maxcol=df.shape[1]-2
+            if parameter_checkup(end,maxcol,X,y):
+                Listing,model=download_knn_regression(X,y,parameter_list)
+                model_name=KNeighborsRegressor()
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+             
+     
+
+                download_status=1
+            
+            else:
+                error="Max Column Exceed"
+
+        except Exception as ep:
+            error="Wrong Prediction Columns"
+            print("etro")
+            print(ep)
+            print(ep)
+            print(ep)
+            print(ep)
+        # print()
+    d={'data': df.to_html(),"error":error ,"download":download_status, "result":Listing,"id_generator":id_generator}
+    return render(request,"download_knn_regression.html",d)
+def interface_download_decsiontree_regression(request):
+    download_status=0
+    id_generator=0
+    parameter_list=[]
+    Listing=[]
+    error=""
+    df = pd.DataFrame()
+    # sample_split=["min_samples_split"]
+    if request.method == 'POST':
+        # print(type(parms))
+      
+        print("inside post methid of randomforest class")
+        print("inside post methid of randomforest class")
+        print("inside post methid of randomforest class")
+
+        pred_col=request.POST["predcol"]
+        end=request.POST["size1"]
+        end=int(end)
+        uspliter=request.POST["splitter"] #mnot
+       
+        ucriterion=request.POST["criterion"]
+        umaxfeature=request.POST["max_features"]
+        # solver_list=request.POST["solver"]
+        # ucriteion=request.POST["criteion"]
+        uminsamplevalue= int(request.POST['minsamplevalue'])
+        umaxdepthvalue= int(request.POST['maxdepthvalue'])
+  
+       
+        datafi=request.FILES['datafile']
+        print(pred_col,end)
+   
+        parameter_list.append( end)
+        parameter_list.append(uspliter)
+        parameter_list.append(ucriterion)
+        parameter_list.append(umaxfeature)
+        parameter_list.append(uminsamplevalue)
+        parameter_list.append(umaxdepthvalue)
+        # parameter_list.append(sample_split_value)
+        # parameter_list.append(maxdepth_value)
+       
+        # **************************Data Reading****************
+        df=pd.read_csv(datafi)
+        # print(df.head())
+        try:
+
+            X=df.drop(columns=pred_col)
+            # y=le.fit_transform(df[pred_col]) 
+            y=df[pred_col]
+            maxcol=df.shape[1]-2
+            if parameter_checkup(end,maxcol,X,y):
+                Listing,model=download_decision_regression(X,y,parameter_list)
+                model_name=KNeighborsRegressor()
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+             
+     
+
+                download_status=1
+            
+            else:
+                error="Max Column Exceed"
+
+        except Exception as ep:
+            error="Wrong Prediction Columns"
+            print("etro")
+            print(ep)
+            print(ep)
+            print(ep)
+            print(ep)
+        # print()
+    d={'data': df.to_html(),"error":error ,"download":download_status, "result":Listing,"id_generator":id_generator}
+    return render(request,"download_decisiontree_regression.html",d)
+def interface_download_decsiontree_classfier(request):
+    download_status=0
+    id_generator=0
+    parameter_list=[]
+    Listing=[]
+    error=""
+    df = pd.DataFrame()
+    # sample_split=["min_samples_split"]
+    if request.method == 'POST':
+        # print(type(parms))
+      
+        print("inside post methid of randomforest class")
+        print("inside post methid of randomforest class")
+        print("inside post methid of randomforest class")
+
+        pred_col=request.POST["predcol"]
+        end=request.POST["size1"]
+        end=int(end)
+        uspliter=request.POST["splitter"] #mnot
+       
+        ucriterion=request.POST["criterion"]
+        umaxfeature=request.POST["max_features"]
+        # solver_list=request.POST["solver"]
+        # ucriteion=request.POST["criteion"]
+        uminsamplevalue= int(request.POST['minsamplevalue'])
+        umaxdepthvalue= int(request.POST['maxdepthvalue'])
+  
+       
+        datafi=request.FILES['datafile']
+        print(pred_col,end)
+   
+        parameter_list.append( end)
+        parameter_list.append(uspliter)
+        parameter_list.append(ucriterion)
+        parameter_list.append(umaxfeature)
+        parameter_list.append(uminsamplevalue)
+        parameter_list.append(umaxdepthvalue)
+        # parameter_list.append(sample_split_value)
+        # parameter_list.append(maxdepth_value)
+       
+        # **************************Data Reading****************
+        df=pd.read_csv(datafi)
+        # print(df.head())
+        try:
+
+            X=df.drop(columns=pred_col)
+            le=LabelEncoder()
+            y=le.fit_transform(df[pred_col]) 
+            maxcol=df.shape[1]-2
+            if parameter_checkup(end,maxcol,X,y):
+                Listing,model= download_decision_classfier(X,y,parameter_list)
+                model_name=KNeighborsRegressor()
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+             
+     
+
+                download_status=1
+            
+            else:
+                error="Max Column Exceed"
+
+        except Exception as ep:
+            error="Wrong Prediction Columns"
+            print("etro")
+            print(ep)
+            print(ep)
+            print(ep)
+            print(ep)
+        # print()
+    d={'data': df.to_html(),"error":error ,"download":download_status, "listing":Listing,"id_generator":id_generator}
+    return render(request,"download_decisiontree_classfier.html",d)
+def interface_download_randomforest_classification(request):
+    download_status=0
+    id_generator=0
+    parameter_list=[]
+    Listing=[]
+    error=""
+    df = pd.DataFrame()
+    ucriterion=["criterion"]
+    umaxfeature=["max_features"]
+    max_depth=["max_depth"]
+    n_estimator=["n_estimators"]
+    sample_split=["min_samples_split"]
+    if request.method == 'POST':
+      
+        pred_col=request.POST["predcol"]
+        end=int(request.POST["size1"])
+        maxdepth_value=request.POST["slidervalue"] #mnot
+        maxdepth_value=int(maxdepth_value)
+        sample_split_value=request.POST["sample_split"]
+        sample_split_value=int(sample_split_value)
+        n_estimator_value=request.POST["n_estimator"]
+        n_estimator_value=int(n_estimator_value)
+        end=int(end)
+        # ucriteion=request.POST["criteion"]
+        criterion_list= request.POST['criteion']
+        maxfeature_list= request.POST['maxfeature']
+        datafi=request.FILES['datafile']
+        print(pred_col,end)
+   
+        parameter_list.append( end)
+        parameter_list.append(criterion_list)
+        parameter_list.append(maxfeature_list)
+        parameter_list.append( sample_split_value)
+        parameter_list.append(n_estimator_value)
+        parameter_list.append(maxdepth_value)
+       
+        # **************************Data Reading****************
+        df=pd.read_csv(datafi)
+        # print(df.head())
+        try:
+
+            X=df.drop(columns=pred_col)
+            le=LabelEncoder()
+            y=le.fit_transform(df[pred_col]) 
+            maxcol=df.shape[1]-2
+            if parameter_checkup(end,maxcol,X,y):
+                model_name=RandomForestRegressor()
+                Listing,model=download_random_forest_classification(X,y,parameter_list)
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+           
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+
+            
+                print(Listing)
+             
+            #  request.session['trp'] = Listing
+
+                download_status=1
+            
+            else:
+                error="Max Column Exceed"
+
+        except Exception as ep:
+            error="Wrong Prediction Columns"
+            print("etro")
+            print(ep)
+            print(ep)
+            print(ep)
+            print(ep)
+        # print()
+    d={'data': df.to_html(),"error":error ,"download":download_status,"listing":Listing,"id_generator":id_generator}
+    return render(request,"download_random_forest_classification.html",d)
+
+def interface_download_knn_classfier(request):
+    download_status=0
+    id_generator=0
     parameter_list=[]
     Listing=[]
     error=""
@@ -1361,22 +1699,17 @@ def interface_download_knn_regression(request):
         try:
 
             X=df.drop(columns=pred_col)
-            # y=le.fit_transform(df[pred_col]) 
-            y=df[pred_col]
+            le=LabelEncoder()
+            y=le.fit_transform(df[pred_col]) 
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
-             Listing=download_knn_regression(X,y,parameter_list)
-            #  pkl_data = pickle.dumps(Listing,"pra1")
-             print("type")
-             print("type")
-             print(type(Listing))
-             print(Listing)
-             print("type")
-             print("type")
-             print(type(Listing))
-            #  request.session['trp'] = Listing
+                Listing,model=download_knn_classfier(X,y,parameter_list)
+                model_name=KNeighborsRegressor()
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
 
-             download_status=1
+                download_status=1
             
             else:
                 error="Max Column Exceed"
@@ -1389,21 +1722,175 @@ def interface_download_knn_regression(request):
             print(ep)
             print(ep)
         # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status, "model":Listing}
-    return render(request,"download_knn_regression.html",d)
-def rough_regression(request):
-     return render(request,"rough_regression.html")
+    d={'data': df.to_html(),"error":error ,"download":download_status, "listing":Listing,"id_generator":id_generator}
+    return render(request,"download_knn_classfier.html",d)
+
+
+
+def interface_download_logistic_classfier(request):
+    download_status=0
+    parameter_list=[]
+    id_generator=0
+    Listing=[]
+    error=""
+    df = pd.DataFrame()
+    # upenalty=["penalty"]
+    # umulti_class=["multi_class"]
+    # usolver=["solver"]
+    # ucvalue=["cvalue"]
+    # sample_split=["min_samples_split"]
+    if request.method == 'POST':
+        # print(type(parms))
+      
+        print("inside post methid of randomforest class")
+        print("inside post methid of randomforest class")
+        print("inside post methid of randomforest class")
+
+        pred_col=request.POST["predcol"]
+        end=int(request.POST["size1"])
+
+        penalty_list=request.POST["penalty"] #mnot
+       
+        umulti_class_list=request.POST["multi_class"]
+       
+        solver_list=request.POST["solver"]
+       
+        # ucriteion=request.POST["criteion"]
+        c_value= int(request.POST['cvalue'])
+       
+        datafi=request.FILES['datafile']
+        print(pred_col,end)
+   
+        parameter_list.append( end)
+        parameter_list.append(penalty_list)
+        parameter_list.append(umulti_class_list)
+        parameter_list.append( solver_list)
+        parameter_list.append(c_value)
+        # parameter_list.append(maxdepth_value)
+       
+        # **************************Data Reading****************
+        df=pd.read_csv(datafi)
+        # print(df.head())
+        try:
+
+            X=df.drop(columns=pred_col)
+            le=LabelEncoder()
+            y=le.fit_transform(df[pred_col]) 
+            maxcol=df.shape[1]-2
+            if parameter_checkup(end,maxcol,X,y):
+            #  Listing=download_logistic_regresion(X,y,parameter_list)
+                model_name=LogisticRegression()
+                Listing,model=download_logistic_classifier(X,y,parameter_list)
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+           
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+
+            #  print(Listing)
+            #  request.session['trp'] = Listing
+
+                download_status=1
+            
+            else:
+                error="Max Column Exceed"
+
+        except Exception as ep:
+            error="Wrong Prediction Columns"
+            print("etro")
+            print(ep)
+            print(ep)
+            print(ep)
+            print(ep)
+        # print()
+    d={'data': df.to_html(),"error":error ,"download":download_status,"id_generator":id_generator,"listing":Listing}
+    return render(request,"download_logistic_classfier.html",d)
+     
+def interface_download_svc(request):
+    download_status=0
+    parameter_list=[]
+    id_generator=0
+    Listing=[]
+    error=""
+    df = pd.DataFrame()
+    # sample_split=["min_samples_split"]
+    if request.method == 'POST':
+        # print(type(parms))
+      
+        print("inside post methid of randomforest class")
+        print("inside post methid of randomforest class")
+        print("inside post methid of randomforest class")
+
+        pred_col=request.POST["predcol"]
+        end=request.POST["size1"]
+        end=int(end)
+        ukernal=request.POST["kernal"] #mnot
+       
+        ugamma=request.POST["gamma"]
+       
+        # solver_list=request.POST["solver"]
+       
+        # ucriteion=request.POST["criteion"]
+        degreevalue= int(request.POST['degreevalue'])
+  
+       
+        datafi=request.FILES['datafile']
+        print(pred_col,end)
+   
+        parameter_list.append( end)
+        parameter_list.append(ukernal)
+        parameter_list.append(ugamma)
+        parameter_list.append(degreevalue)
+        # parameter_list.append(sample_split_value)
+        # parameter_list.append(maxdepth_value)
+       
+        # **************************Data Reading****************
+        df=pd.read_csv(datafi)
+        # print(df.head())
+        try:
+
+            X=df.drop(columns=pred_col)
+            le=LabelEncoder()
+            y=le.fit_transform(df[pred_col]) 
+            maxcol=df.shape[1]-2
+            if parameter_checkup(end,maxcol,X,y):
+            #  Listing=download_svr_regression(X,y,parameter_list)
+                model_name=SVR()
+                Listing,model=download_svc_classfier(X,y,parameter_list)
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+           
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+                download_status=1
+            
+            else:
+                error="Max Column Exceed"
+
+        except Exception as ep:
+            error="Wrong Prediction Columns"
+            print("etro")
+            print(ep)
+            print(ep)
+            print(ep)
+            print(ep)
+        # print()
+    d={'data': df.to_html(),"error":error ,"download":download_status, "listing":Listing,"id_generator":id_generator}
+
+    return render(request,"download_svc_classfier.html",d)
+
 
 def download_model(request,id):
         print("****************************")
         print("download model id")
         print(id)
-        data=TrainedModel.objects.filter(username=request.user.username,uniqueid=id).values_list('modelname', flat=True)
+        data=TrainedModel.objects.filter(username=request.user.username,uniqueid=id).values_list('location', flat=True)
         print(f"the username is {request.user.username}")
         print("Printing Trained Model")
-        base_url="D:/machine learning/Project/Website/Train_your_model/media/"
+        print(f"The data is {data}")
+        print(f"The data at 0 is {data[0]}")
+        # base_url="D:/machine learning/Project/Website/Train_your_model/media/"
         remaining_url=data[0]
-        file_path = base_url+remaining_url
+        print(remaining_url)
+        file_path = remaining_url
         print(f"The full path is {file_path}")
         with open(file_path, 'rb') as fh:
             response = HttpResponse(fh.read(), content_type="application/force-download")
@@ -1420,6 +1907,7 @@ def delete_model(request,id):
 def interface_logistic_regression(request):
     parms={}
     Listing=[]
+    id_generator=0
     download_status=0
     error=""
     df = pd.DataFrame()
@@ -1474,14 +1962,18 @@ def interface_logistic_regression(request):
             y=le.fit_transform(df[pred_col]) 
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
-                Listing=logistic_regression(X,y,1,end,parms)
+                model_name=LogisticRegression()
+                Listing,model=all_classification_model(X,y,1,end,parms,model_name)
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
                 download_status=1
             else:
                     error="Max Column Exceed"
         except Exception as ep:
               print(ep)
         # print()
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status, "chosendparameter":parms}
+    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status, "chosendparameter":parms,"id_generator":id_generator}
     return render(request,"Logistic_regression.html",d)
 
 def interface_Knn_regressor(request):
@@ -1554,7 +2046,8 @@ def interface_Knn_regressor(request):
                 print(parms)
                 Listing,model=all_regression(X,y,1,end,parms,model_name)
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
-                id_generator=model_saving(model,remaining_url,request.user.username)
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
                 download_status=1
             else:
                     error="Max Column Exceed"

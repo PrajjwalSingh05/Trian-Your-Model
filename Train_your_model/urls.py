@@ -25,6 +25,7 @@ urlpatterns = [
     path("",index,name="index"),
     path("login",login,name="login"),
     path("logout",logout,name="logout"),
+    path("feature",feature,name="feature"),
     path("admin_home",admin_home,name="admin_home"),
     path("user_home",user_home,name="user_home"),
     path("signup",signup,name="signup"),
@@ -50,9 +51,16 @@ urlpatterns = [
     path("interface_download_extreetree_regression",interface_download_extreetree_regression,name="interface_download_extreetree_regression"),
     path("interface_download_knn_regression",interface_download_knn_regression,name="interface_download_knn_regression"),
     path("interface_download_svr",interface_download_svr,name="interface_download_svr"),
+    path("interface_download_decsiontree_regression",interface_download_decsiontree_regression,name="interface_download_decsiontree_regression"),
+    path("interface_download_decsiontree_classfier",interface_download_decsiontree_classfier,name="interface_download_decsiontree_classfier"),
+    path("interface_download_randomforest_classification",interface_download_randomforest_classification,name="interface_download_randomforest_classification"),
+    path("interface_download_knn_classfier",interface_download_knn_classfier,name="interface_download_knn_classfier"),
+    path("interface_download_logistic_classfier",interface_download_logistic_classfier,name="interface_download_logistic_classfier"),
+
+    path("interface_download_svc",interface_download_svc,name="interface_download_svc"),
     # path("page_reg",page_reg,name="page_reg"),
     # rough
-    path("rough_regression",rough_regression,name="rough_regression"),
+    # path("rough_regression",rough_regression,name="rough_regression"),
     path("download_model/<int:id>",download_model,name="download_model"),
     path("delete_model/<int:id>",delete_model,name="delete_model"),
 

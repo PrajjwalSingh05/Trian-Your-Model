@@ -34,6 +34,31 @@ a.button
     transition: background-color 0.25s ease-out;
 }
 
+/* Adiing css */
+.block-holder {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 30px;
+}
+p {
+    margin: 0 0 1em 0;
+    line-height: 1.6em;
+    font-size: 18px;
+    font-family: 'Google Sans', Helvetica, Arial, sans-serif;
+}
+.block{
+    width: calc(100% / 14 * 4);
+}
+h2 {
+    font-family: 'BoingSemiBold', Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-size: 48px;
+    margin: 70px 0;
+    text-align: center;
+}
+
 </style>
 {% endblock %}
 {% block content %}
@@ -57,6 +82,43 @@ a.button
             <video src="{% static 'images/prediction.mp4' %}" class="vdeo"ntitle="machine Leanring" frameborder="0" autoplay="" loop="" muted="" allowfullscreen></video>
         </div>
         
+    </div>
+</div>
+<div>
+    <h2>How I Use It</h2>
+</div>
+<div class="block-holder">
+    <div class="block">
+        <div class="block-img illustration">
+            <img height="200px" src="{% static 'images/gather.svg'%}" alt="Illustration of example cats">
+        </div>
+        <div class="block-copy">
+            <h3 class="numeral"><!----><span class="numeral-no">1</span> Gather<!----></h3>
+            <p><!---->Gather and group your examples into classes, or categories, that you want the computer to learn.<!----></p>
+`               
+        </div>
+    </div>
+
+    <div class="block">
+        <div class="block-img illustration">
+            <img height="200px" src="{% static 'images/train.svg'  %}" alt="Illustration of button being clicked that reads Train Model">
+        </div>
+        <div class="block-copy">
+            <h3 class="numeral"><!----><span class="numeral-no">2</span> Train<!----></h3>
+            <p><!---->Train your model, then instantly test it out to see whether it can correctly classify new examples.<!----></p>
+           
+        </div>
+    </div>
+
+    <div class="block">
+        <div class="block-img illustration">
+            <img height="200px" class="fullwidth" src="{% static 'images/project.svg' %}" alt="Illustration of a desktop and mobile web browser containing a sample teachable machine project">
+        </div>
+        <div class="block-copy">
+        <h3 class="numeral"><!----><span class="numeral-no">3</span> Export<!----></h3>
+            <p><!---->Export your model for your projects: sites, apps, and more. You can download your model or host it online.<!----></p>
+
+        </div>
     </div>
 </div>
     {{user.is_authenticated}}

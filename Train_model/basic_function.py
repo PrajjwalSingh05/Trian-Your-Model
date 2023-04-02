@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from joblib import load
 from PIL import Image
-
+import seaborn as sns
 import streamlit as st
 import numpy as np
 from PIL import Image
@@ -63,11 +63,25 @@ def result_evaluator_regressor(model,xtest,ytest):
          r2score=r2_score(ytest,ypred_model)
          mse=mean_absolute_error(ytest,ypred_model)
          return (round(r2score,2))*100,mse
-def result_evaluator_classfication(model,xtest,ytest):
+def result_evaluator_classfication(model,xtest,ytest,temp,hyper=""):
          ypred=model.predict(xtest)
+  
+        #   ypred=model.predict(xtest)
+         cmaxt=confusion_matrix(ytest,ypred,labels=[0,1])
          acuracy=accuracy_score(ytest,ypred)
+         fig, ax = plt.subplots(figsize=(5,5))
+         sns_heat=sns.heatmap(cmaxt,cmap="Greens",annot=True, robust=True, cbar=False, square=True, annot_kws={"size": 20}, fmt="d",ax=ax)
+         plt.xlabel("Predicated")
+         plt.ylabel("Actual")
+         plt.title("Confusion Matrix")
+        #  plt.show()
+         if hyper=="no":
+            result_path="media/Confusion Matrix/prajjwalp"+str(temp)
+         else:
+            result_path="media/Confusion Matrix/prajjwal"+str(temp)
+         sns_heat.figure.savefig(result_path,)
          clrep=classification_report(ytest,ypred)
-         return clrep,acuracy
+         return clrep,round((acuracy*100),2)
 
 
 
