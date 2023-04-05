@@ -12,10 +12,10 @@
             {% if user.username == 'admin' %}
             <ul class="navbar-nav me-auto mt-2 mt-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'user_home' %}" aria-current="page">Home <span class="visually-hidden">(current)</span></a>
+                    <a class="nav-link active" href="{% url 'user_home' %}" aria-current="page"><i class="fa-solid fa-house-user"></i>Home <span class="visually-hidden">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'view_user' %}" aria-current="page">User Detail <span class="visually-hidden">(current)</span></a>
+                    <a class="nav-link active" href="{% url 'view_user' %}" aria-current="page"><i class="fa-solid fa-user"></i>User Detail <span class="visually-hidden">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="{% url 'admin:index' %}" aria-current="page">Dashboard <span class="visually-hidden">(current)</span></a>
@@ -68,7 +68,7 @@
                         <a class="nav-link active" href="{% url 'default_classification' %}" aria-current="page"> Classification <span class="visually-hidden">(current)</span></a>
                     </li> -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download Classification</a>
+                        <a class="nav-link dropdown-toggle" href="" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-download"></i>Download Classification</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownId">
                             <a class="dropdown-item" href="{% url 'interface_download_randomforest_classification' %}">Random Forest Classfier</a>
                            
@@ -80,7 +80,7 @@
                         </div>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Download Regression</a>
+                        <a class="nav-link dropdown-toggle" href="" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa-solid fa-download"></i>Download Regression</a>
                         <div class="dropdown-menu" aria-labelledby="dropdownId">
                             <a class="dropdown-item" href="{% url 'download_random_forest_regressor' %}">Random Forest Regression</a>
                             
@@ -95,7 +95,7 @@
                         <a class="nav-link active" href="{% url 'user_download_dataset' %}" aria-current="page"> <i class="fa fa-database"></i> Download Dataset <span class="visually-hidden">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'user_trained_model' %}" aria-current="page"><ion-icon name="save"></ion-icon> Trained Model <span class="visually-hidden">(current)</span></a>
+                        <a class="nav-link active" href="{% url 'user_trained_model' %}" aria-current="page"><i class="fa-sharp fa-solid fa-clock-rotate-left"></i> Trained Model <span class="visually-hidden">(current)</span></a>
                     </li>
                 </ul>
             {% endif %}
@@ -117,7 +117,7 @@
             </center>
             <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}" aria-current="page"> <i class="fa-regular fa-right-to-bracket"></i>Login <span class="visually-hidden">(current)</span></a>
+                    <a class="nav-link" href="{% url 'login' %}" aria-current="page"> <i class="fa-solid fa-right-to-bracket"></i>Login <span class="visually-hidden">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'signup' %}" aria-current="page"><i class="fa-solid fa-user-plus" style="color: #f452be;"></i>SignUp <span class="visually-hidden">(current)</span></a>

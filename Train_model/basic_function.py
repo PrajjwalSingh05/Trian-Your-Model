@@ -63,7 +63,8 @@ def result_evaluator_regressor(model,xtest,ytest):
          ypred_model=model.predict(xtest)
          r2score=r2_score(ytest,ypred_model)
          mse=mean_absolute_error(ytest,ypred_model)
-         return (round(r2score,2))*100,mse
+        #  return (round(r2score,2))*100,mse
+         return round((r2score*100),2),round(mse,2)
 def result_evaluator_classfication(model,xtest,ytest,temp,hyper=""):
          ypred=model.predict(xtest)
   
