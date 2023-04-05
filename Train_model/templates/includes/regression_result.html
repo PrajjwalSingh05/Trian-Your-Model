@@ -51,6 +51,8 @@
                     <td>{{ item.mae_parameter|safe }}</td>
                     <td>{{ item.columns|safe }}</td>
                     <td>{{ item.parameter|safe }}</td>
+                    <td>{{ item.model|safe }}</td>
+                  
                 </tr>
                 {% endfor %}
             </tbody>
@@ -63,6 +65,9 @@
 <center>
 
     {% if download == 1 %}
+    <div class="vn-wisteria" style="text-align: center;">
+        <a href="{% url 'download_model' id_generator %} " class="btn-wrap">Download<i class="fa fa-rocket fa-lg fa-spin"></i></a>
+        </div>
     <a class="button" href="{% url 'download_model' id_generator %}" style="margin-top: 30px;"><!---->Download Model<!----></a>
 </center>
 </div>

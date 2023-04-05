@@ -15,19 +15,27 @@ import joblib
 import os
 import random
 # ***************************************mahine laring*****************
-
 import pandas as pd
+
+# **********************************************************************Admin Home Page***************************************************************
 def admin_home(request):
     return render(request,"admin_home.html")
+# **********************************************************************Feature Page***************************************************************
 def feature(request):
     return render(request,"feature.html")
+def contact_us(request):
+    return render(request,"contact_us.html")
+# **********************************************************************Index  Page***************************************************************
 def index(request):
+# **********************************************************************Index  Page***************************************************************
     return render(request,"index.html")
+# **********************************************************************Logout Page***************************************************************
 def logout(request):
     auth.logout(request)
     return redirect('/')
+# **********************************************************************Login Page***************************************************************
 def login(request):
-    error=""
+
     if request.method=='POST':
         
         u=request.POST['uname']
@@ -36,29 +44,32 @@ def login(request):
         user=auth.authenticate(username=u,password=p)
         try:
             if user.is_staff:
-                print("Inside  ")
+                # print("Inside  ")
                 auth.login(request,user)
                 messages.success(request,"Login Successfull")
                 return redirect('admin_home')
-                error="no"
+            
             elif user is not None:
                 auth.login(request,user)
                 messages.success(request,"Login Successfull")
                 return redirect('user_home')
-                error="not"
+            
             else:
-                error="yes"
+              
                 messages.error(request,"Some error occurred")
         except:
             messages.error(request,"Invalid Login Credentials")
-            error="yes"
-    d={'error':error}
-    return render(request, 'login.html',d)
+         
+    
+    return render(request, 'login.html',)
+
+# **********************************************************************User Home Page***************************************************************
 def user_home(request):
     return render(request,"user_home.html")
-
+# **********************************************************************Default Regression Page***************************************************************
 def default_regression(request):
     Listing=[]
+    id_generator=0
     download_status=0
     error=""
     # request.session['trp'] = 40
@@ -67,125 +78,95 @@ def default_regression(request):
     if request.method == 'POST' :
         print("using post method")
         pred_col=request.POST["predcol"]
-        model_type=request.POST["mtype"]
+       
+        model_type= request.POST.getlist('mtype')
         end=int(request.POST["size1"])
-        # end=int(end)
-        # print(type(end))
+      
         u=request.FILES['datafile']
         df=pd.read_csv(u)
+        print("model list")
+        print("model list")
+        print(model_type)
         maxcol=df.shape[1]-2
-        # print(df.head())
+        model_name="DefaultRegression"
+        for model in model_type:
+            model_name=model_name+"-"+model[:5]
+        print("model name is ")
+        print("model name is ")
+        print("model name is ",model_name)
+             
         try:
             X=df.drop(columns=pred_col)
             y=df[pred_col]
             if parameter_checkup(end,maxcol,X,y):
-                print("Paramter")
-                print("Paramter")
-                print("Paramter")
-                print(maxcol,end)
-                Listing=default_model_regression(X,y,1,end,model_type)
-                download_status=0
-            else:
+                Listing,model=default_model_regression(X,y,1,end,model_type)
 
-                error="Max Column Exceed"
+                remaining_url=(str(model_name))+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name))+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+                print(remaining_url,savemodelname)
+                download_status=1
+            else:
+               
+                messages.error(request,"Max Column Exceed")
+
         except Exception as ep:
-            error="Wrong Prediction Columns"
-        # y=le.fit_transform(df[pred_col]) 
-    d={'data': df.to_html(),"listing":Listing ,"error":error,"download":download_status}
-    
+            messages.error(request,ep)
+            print(ep)
+       
+    d={'data': df.to_html(),"listing":Listing ,"download":download_status,"id_generator":id_generator}
     return render(request,"default_regression.html",d)
+
+# **********************************************************************Default Classification Page***************************************************************
 def default_classification(request):
     Listing=[]
-    
+    download_status=0
+    id_generator=0
     error=""
     # Listing=pd.DataFrame()
     df = pd.DataFrame()
     if request.method == 'POST' :
         print("using post method")
         pred_col=request.POST["predcol"]
-        model_type=request.POST["mtype"]
+        model_type= request.POST.getlist('mtype')
         end=request.POST["size1"]
         end=int(end)
         u=request.FILES['datafile']
         df=pd.read_csv(u)
         # print(df.head())
-        X=df.drop(columns=pred_col)
-
-        le=LabelEncoder()
-        y=le.fit_transform(df[pred_col]) 
-        Listing=default_model_classifier(X,y,1,end,model_type)
+        try:
         
+            X=df.drop(columns=pred_col)
+            model_name="DefaultRegression"
+            for model in model_type:
+                 model_name=model_name+"-"+model[:5]
+            le=LabelEncoder()
+            y=le.fit_transform(df[pred_col])    
+            maxcol=df.shape[1]-2
+            if parameter_checkup(end,maxcol,X,y):
+                
+                Listing,model=default_model_classifier(X,y,1,end,model_type)
+                remaining_url=(str(model_name))+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name))+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+                download_status=1
+            else:
+                   messages.error(request,"Max Column Exceed")
+        except Exception as ep:
+              print(ep)
+              messages.error(request,ep)
+        # print()
+    d={'data': df.to_html(),"listing":Listing,"download":download_status,"id_generator":id_generator}
     
-    d={'data': df.to_html(),"listing":Listing}
-    print("listing")    
-    print("listing")    
-    # print(Listing)    
+  
     return render(request,"default_classification.html",d)
-def Extratreeclassification(request):
-    parms={}
-    Listing=[]
-    error=""
-    df = pd.DataFrame()
-    ucriterion=["criterion"]
-    umaxfeature=["max_features"]
-    max_depth=["max_depth"]
-    n_estimator=["n_estimators"]
-    sample_split=["min_samples_split"]
-    if request.method == 'POST':
-        # print(type(parms))
-        print(type(parms))
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        pred_col=request.POST["predcol"]
-        end=request.POST["size1"]
-        maxdepth_value=request.POST.get("slidervalue")
-        maxdepth_value=int(maxdepth_value)
-        sample_split_value=request.POST.get("sample_split")
-        sample_split_value=int(sample_split_value)
-        # n_estimator_value=request.POST.get("n_estimator")
-        # n_estimator_value=int(n_estimator_value)
-        end=int(end)
-        # ucriteion=request.POST["criteion"]
-        criterion_list= request.POST.getlist('criteion')
-        maxfeature_list= request.POST.getlist('maxfeature')
-        datafi=request.FILES['datafile']
-        print(pred_col,end)
-        print(ucriterion,"slider value is:",)
-        # *********************Creating Parameter************************
-        ucriterion=ucriterion+criterion_list
-        umaxfeature=umaxfeature+maxfeature_list
-        for i in range(1,maxdepth_value,5):
-                        max_depth.append(i)
-        # for i in range(1,n_estimator_value,5):
-        #                 n_estimator.append(i)
-        for i in range(1,sample_split_value,1):
-                        sample_split.append(i)
-        creating_hyper_paramerter(parms,ucriterion)
-        creating_hyper_paramerter(parms,umaxfeature)
-        creating_hyper_paramerter(parms,max_depth)
-        creating_hyper_paramerter(parms,n_estimator)
-        creating_hyper_paramerter(parms,sample_split)
-        print(type(parms))
-        parms=dict(parms)
-        print(type(parms))
-        print("inside view",parms)
-        # **************************Data Reading****************
-        df=pd.read_csv(datafi)
-        # print(df.head())
-        X=df.drop(columns=pred_col)
 
-        le=LabelEncoder()
-        y=le.fit_transform(df[pred_col]) 
-        Listing=random_forest_classifier(X,y,1,end,parms)
-    d={'data': df.to_html(),"listing":Listing}
-    return render(request,"Extratreeclassification.html",d)
+# **********************************************************************Random FOrest Classfication Page***************************************************************
 def random_forest_classification(request):
     parms={}
     Listing=[]
     download_status=0
     id_generator=0
-    error=""
     df = pd.DataFrame()
     ucriterion=["criterion"]
     umaxfeature=["max_features"]
@@ -193,11 +174,7 @@ def random_forest_classification(request):
     n_estimator=["n_estimators"]
     sample_split=["min_samples_split"]
     if request.method == 'POST':
-        # print(type(parms))
-        print(type(parms))
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
+    
         pred_col=request.POST["predcol"]
         end=request.POST["size1"]
         maxdepth_value=request.POST.get("slidervalue")
@@ -207,140 +184,127 @@ def random_forest_classification(request):
         n_estimator_value=request.POST.get("n_estimator")
         n_estimator_value=int(n_estimator_value)
         end=int(end)
-        # ucriteion=request.POST["criteion"]
+    
         criterion_list= request.POST.getlist('criteion')
         maxfeature_list= request.POST.getlist('maxfeature')
+        sampling_list= request.POST.getlist('sampling')
         datafi=request.FILES['datafile']
-        print(pred_col,end)
-        print(ucriterion,"slider value is:",)
+      
         # *********************Creating Parameter************************
         ucriterion=ucriterion+criterion_list
         umaxfeature=umaxfeature+maxfeature_list
         for i in range(1,maxdepth_value,5):
-                        max_depth.append(i)
+                  max_depth.append(i)
         for i in range(1,n_estimator_value,5):
-                        n_estimator.append(i)
+                    n_estimator.append(i)
         for i in range(2,sample_split_value,1):
-                        sample_split.append(i)
+                   sample_split.append(i)
+        # **************************************************************Appending Parameter****************************************************
         creating_hyper_paramerter(parms,ucriterion)
         creating_hyper_paramerter(parms,umaxfeature)
         creating_hyper_paramerter(parms,max_depth)
         creating_hyper_paramerter(parms,n_estimator)
         creating_hyper_paramerter(parms,sample_split)
-        print(type(parms))
         parms=dict(parms)
-        print(type(parms))
-        print("inside view",parms)
+        
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
         try:
-        # print(df.head())
+        
             X=df.drop(columns=pred_col)
             le=LabelEncoder()
             y=le.fit_transform(df[pred_col]) 
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
                 model_name=RandomForestClassifier()
-                Listing,model=all_classification_model(X,y,1,end,parms,model_name)
+                Listing,model=all_classification_model(X,y,1,end,parms,model_name,sampling_list)
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
               
                 savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
-                # id_generator=model_saving(model,remaining_url,request.user.username)
-                # Listing=random_forest_classifier(X,y,1,end,parms)
+               
                 download_status=1
             else:
-                    error="Max Column Exceed"
+                    
+                    messages.error(request, 'Max Column Exceed')
         except Exception as ep:
               print(ep)
-
-        # print()
+              messages.error(request, ep)
     d={'data': df.to_html(),"listing":Listing,"download":download_status,"id_generator":id_generator}
     return render(request,"random_forest_clasification.html",d)
+
+# **********************************************************************Interface SVC Page***************************************************************
 def interface_svc(request):
     parms={}
     Listing=[]
     download_status=0
     id_generator=0
-    error=""
+   
     df = pd.DataFrame()
     ukernal=["kernel"]
     ugamma=["gamma"]
     udegree=["degree"]
-    # n_estimator=["n_estimators"]
-    # sample_split=["min_samples_split"]
+  
     if request.method == 'POST':
-        # print(type(parms))
-        print(type(parms))
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
+    #    ******************************Getting Data From User**************************
         pred_col=request.POST["predcol"]
         end=int(request.POST["size1"])
         degree_value=request.POST.get("degreevalue")
         degree_value=int(degree_value)
-        # sample_split_value=request.POST.get("sample_split")
-        # sample_split_value=int(sample_split_value)
-        # n_estimator_value=request.POST.get("n_estimator")
-        # n_estimator_value=int(n_estimator_value)
-        # end=int(end)
-        # ucriteion=request.POST["criteion"]
+      
         kernal_list= request.POST.getlist('kernal')
         gamma_list= request.POST.getlist('gamma')
+        sampling_list= request.POST.getlist('sampling')
         datafi=request.FILES['datafile']
         print(pred_col,end)
-        # print(ucriterion,"slider value is:",)
+        #
         # *********************Creating Parameter************************
         ukernal=ukernal+kernal_list
         ugamma=ugamma+gamma_list
-        # for i in range(1,maxdepth_value,5):
-        #                 max_depth.append(i)
-        # for i in range(1,n_estimator_value,5):
-        #                 n_estimator.append(i)
+    
         for i in range(1,degree_value,1):
-                        udegree.append(i)
+                 udegree.append(i)
+
+        # **************************************************************Appending Parameter****************************************************
         creating_hyper_paramerter(parms,ugamma)
         creating_hyper_paramerter(parms,ukernal)
         creating_hyper_paramerter(parms,udegree)
-        # creating_hyper_paramerter(parms,n_estimator)
-        # creating_hyper_paramerter(parms,sample_split)
-        print(type(parms))
+        
+       
         parms=dict(parms)
-        print(type(parms))
-        print("inside view",parms)
+        
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
-        # print(df.head())
+        #
         try:
-        # print(df.head())
+    
             X=df.drop(columns=pred_col)
             le=LabelEncoder()
             y=le.fit_transform(df[pred_col]) 
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
                 model_name=SVC()
-                # Listing=all_classification_model(X,y,1,end,parms,model_name)
-                Listing,model=all_classification_model(X,y,1,end,parms,model_name)
+            
+                Listing,model=all_classification_model(X,y,1,end,parms,model_name,sampling_list)
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
-              
                 savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
-            
                 download_status=1
             else:
-                    error="Max Column Exceed"
+                    messages.error(request,"Max Column Exceed")
         except Exception as ep:
               print(ep)
-        # print()
-        
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status,"id_generator":id_generator}
+              messages.error(request,ep)
+    d={'data': df.to_html(),"listing":Listing, "download":download_status,"id_generator":id_generator}
     return render(request,"interface_svc.html",d)
+
+# **********************************************************************Interface Gradient Boosting Page***************************************************************
 def interface_gradientboosting_classifier(request):
     parms={}
     id_generator=0
     Listing=[]
     download_status=0
-    error=""
+
     df = pd.DataFrame()
     ucriterion=["criterion"]
     ulearning_rate=["learning_rate"]
@@ -350,11 +314,8 @@ def interface_gradientboosting_classifier(request):
     n_estimator=["n_estimators"]
     sample_split=["min_samples_split"]
     if request.method == 'POST':
-        # print(type(parms))
-        print(type(parms))
-        print("inside post methid of  Gradient boosting class")
-        print("inside post methid of  Gradient boosting class")
-        print("inside post methid of Gradient boosting  class")
+    # **************************Getting Data From User****************
+        
         pred_col=request.POST["predcol"]
         end=int(request.POST["size1"])
         learing_rate_value=request.POST.get("learingvalue")
@@ -365,27 +326,27 @@ def interface_gradientboosting_classifier(request):
         sample_split_value=int(sample_split_value)
         n_estimator_value=request.POST.get("nestimatorsvalue")
         n_estimator_value=int(n_estimator_value)
-        # end=int(end)
-        # ucriteion=request.POST["criteion"]
+    
         criterion_list= request.POST.getlist('criteion')
         maxfeature_list= request.POST.getlist('max_features')
         loss_list= request.POST.getlist('loss')
+        sampling_list= request.POST.getlist('sampling')
         datafi=request.FILES['datafile']
-        print(pred_col,end)
-        print(ucriterion,"slider value is:",)
+       
         # *********************Creating Parameter************************
         ucriterion=ucriterion+criterion_list
         umaxfeature=umaxfeature+maxfeature_list
         uloss=uloss+loss_list      
         for i in range(1,maxdepth_value,5):
-                        max_depth.append(i)
+                     max_depth.append(i)
         for i in range(1,n_estimator_value,5):
-                        n_estimator.append(i)
+                     n_estimator.append(i)
         for i in range(1,sample_split_value,1):
-                        sample_split.append(i)
-       
+                     sample_split.append(i)
         for i in np.arange(1,learing_rate_value,0.2):
               ulearning_rate.append(round(i,1))
+
+        # **************************************************************Appending Parameter****************************************************
         creating_hyper_paramerter(parms,ucriterion)
         creating_hyper_paramerter(parms,umaxfeature)
         creating_hyper_paramerter(parms,max_depth)
@@ -393,72 +354,65 @@ def interface_gradientboosting_classifier(request):
         creating_hyper_paramerter(parms,sample_split)
         creating_hyper_paramerter(parms,ulearning_rate)
         creating_hyper_paramerter(parms,uloss)
-        print(type(parms))
+    
         parms=dict(parms)
-        print(type(parms))
-        print("inside view",parms)
+      
+ 
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
-        # print(df.head())
+    
         try:
-        # print(df.head())
+        
             X=df.drop(columns=pred_col)
             le=LabelEncoder()
             y=le.fit_transform(df[pred_col])    
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
                 model_name=GradientBoostingClassifier()
-                Listing,model=all_classification_model(X,y,1,end,parms,model_name)
+                Listing,model=all_classification_model(X,y,1,end,parms,model_name,sampling_list)
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
                 savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
-                
                 download_status=1
             else:
-                    error="Max Column Exceed"
+                   messages.error(request,"Max Column Exceed")
         except Exception as ep:
               print(ep)
-              error="Wrong Prediction Columns"
+              messages.error(request,ep)
         # print()
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status,"id_generator":id_generator}
+    d={'data': df.to_html(),"listing":Listing,"download":download_status,"id_generator":id_generator}
     
      
     return render (request,"gradientboosting_classifier.html",d)
+#  ****************************************************************Interface Decision Tree  Classfier Page***************************************************************
 def interface_decisiontree_classifier(request):
     parms={}
     Listing=[]
     download_status=0
     id_generator=0
-    error=""
+
     df = pd.DataFrame()
     ucriterion=["criterion"]
  
     usplitter=["splitter"]
     umaxfeature=["max_features"]
     max_depth=["max_depth"]
-    # n_estimator=["n_estimators"]
+   
     sample_split=["min_samples_split"]
     if request.method == 'POST':
-        # print(type(parms))
-        print(type(parms))
-        print("inside post methid of  Gradient boosting class")
-        print("inside post methid of  Gradient boosting class")
-        print("inside post methid of Gradient boosting  class")
+    # **************************Getting Data From User****************
         pred_col=request.POST["predcol"]
         end=int(request.POST["size1"])
-        # learing_rate_value=request.POST.get("learingvalue")
-        # learing_rate_value=float(learing_rate_value)
+        
         maxdepth_value=request.POST.get("maxdepthvalue")
         maxdepth_value=int(maxdepth_value)
         sample_split_value=request.POST.get("minsamplevalue")
         sample_split_value=int(sample_split_value)
-        # n_estimator_value=request.POST.get("nestimatorsvalue")
-        # n_estimator_value=int(n_estimator_value)
-        # end=int(end)
-        # ucriteion=request.POST["criteion"]
+      
         criterion_list= request.POST.getlist('criteion')
         maxfeature_list= request.POST.getlist('max_features')
         splitter_list= request.POST.getlist('splitter')
+        sampling_list= request.POST.getlist('sampling')
         datafi=request.FILES['datafile']
         print(pred_col,end)
         print(ucriterion,"slider value is:",)
@@ -467,20 +421,17 @@ def interface_decisiontree_classifier(request):
         umaxfeature=umaxfeature+maxfeature_list
         usplitter=usplitter+splitter_list      
         for i in range(1,maxdepth_value,5):
-                        max_depth.append(i)
-        # for i in range(1,n_estimator_value,5):
-        #                 n_estimator.append(i)
+                      max_depth.append(i)
+      
         for i in range(1,sample_split_value,1):
-                        sample_split.append(i)
-       
-        # for i in np.arange(1,learing_rate_value,0.2):
-        #       ulearning_rate.append(round(i,1))
+                     sample_split.append(i)
+        # **************************************************************Appending Parameter****************************************************
         creating_hyper_paramerter(parms,ucriterion)
         creating_hyper_paramerter(parms,umaxfeature)
         creating_hyper_paramerter(parms,max_depth)
-        # creating_hyper_paramerter(parms,n_estimator)
+    
         creating_hyper_paramerter(parms,sample_split)
-        # creating_hyper_paramerter(parms,ulearning_rate)
+     
         creating_hyper_paramerter(parms,usplitter)
         print(type(parms))
         parms=dict(parms)
@@ -488,80 +439,74 @@ def interface_decisiontree_classifier(request):
         print("inside view",parms)
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
-        # print(df.head())
         try:
-        # print(df.head())
             X=df.drop(columns=pred_col)
             le=LabelEncoder()
             y=le.fit_transform(df[pred_col]) 
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
                 model_name=DecisionTreeClassifier()
-                Listing,model=all_classification_model(X,y,1,end,parms,model_name)
+                Listing,model=all_classification_model(X,y,1,end,parms,model_name,sampling_list)
                 
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
                 savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)    
                 download_status=1
             else:
-                    error="Max Column Exceed"
+                 messages.error(request,"Max Column Exceed")
         except Exception as ep:
               print(ep)
-        # print()
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status,"id_generator":id_generator}
+              messages.error(request,ep)
+        #
+    d={'data': df.to_html(),"listing":Listing ,"download":download_status,"id_generator":id_generator}
     return render(request,"decisiontree_classifier.html",d)
+
+#  ****************************************************************Interface KNN  Classfier Page***************************************************************
 def interface_knn_classifier(request):
     parms={}
     Listing=[]
     download_status=0
     id_generator=0
-    error=""
+ 
     df = pd.DataFrame()
     uweights=["weights"]
     un_neighbors=["n_neighbors"]
     ualgorithm=["algorithm"]
-    # umulti_class=["multi_class"]
-    # n_estimator=["n_estimators"]
-    # sample_split=["min_samples_split"]
+   
     if request.method == 'POST':
-        print(type(parms))
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
+    # **************************Getting Data From User****************
         pred_col=request.POST["predcol"]
         end=request.POST["size1"]
         end=int(end)
         weights_list=request.POST.getlist("weights")
         alogorith_list= request.POST.getlist('algorithm')
+        sampling_list= request.POST.getlist('sampling')
+        print("The spling is ")
+        print("The spling is ")
+        print("The spling is ")
+        print(sampling_list)
+        print(type(sampling_list))
         n_neighnour_value=request.POST["kvalue"]
-        # n_neighnour_value2=request.POST.get("sample_split")
-        print("Print nneighbor")
-        print("Print nneighbor")
-        print("Print nneighbor")
+   
+       
         print(n_neighnour_value)
         n_neighnour_value=int(n_neighnour_value)
-        # mullist= request.POST.getlist('multi_class')
-     
+       
         datafi=request.FILES['datafile']
         # *********************Creating Parameter************************
         uweights=uweights+weights_list
         ualgorithm=ualgorithm + alogorith_list
-        # umulti_class=multi_class_list+umulti_class
-        # print(penalty_list,C_value,solver_list,multi_class_list)
+        
         for i in range(1,n_neighnour_value,1):
-                        un_neighbors.append(i)
-        # for i in range(1,n_estimator_value,5):
-        #                 n_estimator.append(i)
-        # for i in range(1,sample_split_value,1):
-        #                 sample_split.append(i)
+                  un_neighbors.append(i)
+        # **************************************************************Appending Parameter****************************************************
         creating_hyper_paramerter(parms,uweights)
         creating_hyper_paramerter(parms,ualgorithm)
         creating_hyper_paramerter(parms,un_neighbors)
-        # creating_hyper_paramerter(parms,uc)
-        # creating_hyper_paramerter(parms,sample_split)
-        # print(type(par-ms))
+      
+        
         parms=dict(parms)
-        # print(type(parms))
+        
         print("inside view",parms)
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
@@ -573,104 +518,27 @@ def interface_knn_classifier(request):
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
                 model_name=KNeighborsClassifier()
-                Listing,model=all_classification_model(X,y,1,end,parms,model_name)
-                
+                Listing,model=all_classification_model(X,y,1,end,parms,model_name,sampling_list)
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
                 savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
-                # Listing=knn_classfier(X,y,1,end,parms)
+               
                 download_status=1
             else:
-                    error="Max Column Exceed"
+                    messages.error(request,"Max Column Exceed")
+                    
         except Exception as ep:
               print(ep)
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status, "chosenparameter":parms,"id_generator":id_generator}
+              messages.error(request,ep)
+    d={'data': df.to_html(),"listing":Listing,"download":download_status, "chosenparameter":parms,"id_generator":id_generator}
     return render(request,"knn_classifier.html",d)
 
-def extratreeregression(request):
-    parms={}
-    Listing=[]
-    error=""
-    df = pd.DataFrame()
-    ucriterion=["criterion"]
-    umaxfeature=["max_features"]
-    max_depth=["max_depth"]
-    # n_estimator=["n_estimators"]
-    sample_split=["min_samples_split"]
-    if request.method == 'POST':
-        # print(type(parms))
-        print(type(parms))
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        pred_col=request.POST["predcol"]
-        end=int(request.POST["size1"])
-        maxdepth_value=request.POST.get("slidervalue")
-        maxdepth_value=int(maxdepth_value)
-        sample_split_value=request.POST.get("sample_split")
-        sample_split_value=int(sample_split_value)
-        # n_estimator_value=request.POST.get("n_estimator")
-        # n_estimator_value=int(n_estimator_value)
-        # end=int(end)
-        # ucriteion=request.POST["criteion"]
-        criterion_list= request.POST.getlist('criteion')
-        maxfeature_list= request.POST.getlist('maxfeature')
-        datafi=request.FILES['datafile']
-        print(pred_col,end)
-        print(ucriterion,"slider value is:",)
-        # *********************Creating Parameter************************
-        ucriterion=ucriterion+criterion_list
-        umaxfeature=umaxfeature+maxfeature_list
-        for i in range(1,maxdepth_value,5):
-                        max_depth.append(i)
-        # for i in range(1,n_estimator_value,5):
-        #                 n_estimator.append(i)
-        for i in range(1,sample_split_value,1):
-                        sample_split.append(i)
-        creating_hyper_paramerter(parms,ucriterion)
-        creating_hyper_paramerter(parms,umaxfeature)
-        creating_hyper_paramerter(parms,max_depth)
-        # creating_hyper_paramerter(parms,n_estimator)
-        creating_hyper_paramerter(parms,sample_split)
-        print(type(parms))
-        parms=dict(parms)
-        print(type(parms))
-        print("inside view",parms)
-        # **************************Data Reading****************
-        try:
-            df=pd.read_csv(datafi)
-        except Exception as ep:
-            error="wrong File"
-        maxcol=df.shape[1]-2
-        # print(df.head())
-        try:
-            X=df.drop(columns=pred_col)
-            # y=le.fit_transform(df[pred_col]) 
-            y=df[pred_col]
-            if parameter_checkup(end,maxcol,X,y):
-                model_name=ExtraTreeRegressor()
-                Listing=all_regression(X,y,1,end,parms,model_name)
-            else:
-                error="Max Column Exceed"
-        except Exception as ep:
-            print("exception")
-            print("exception")
-            print("exception")
-            print("exception")
-            print("exception")
-            print(parms)
-            print(ep)
-            error="Wrong Prediction Columns"
-
-        # print()
-    d={'data': df.to_html(),"listing":Listing,"error":error}
-    return  render(request,"Extratreeregression.html",d)
+# ****************************************************************Interface Random Regressor Page***************************************************************
 def random_forest_regression(request):
     parms={}
     Listing=[]
     id_generator=0
     download_status=0
-    error=""
     df = pd.DataFrame()
     ucriterion=["criterion"]
     umaxfeature=["max_features"]
@@ -678,11 +546,8 @@ def random_forest_regression(request):
     n_estimator=["n_estimators"]
     sample_split=["min_samples_split"]
     if request.method == 'POST':
-        # print(type(parms))
-        print(type(parms))
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
+    #    ***************Getting Parameter from User***************
+   
         pred_col=request.POST["predcol"]
         end=int(request.POST["size1"])
         maxdepth_value=request.POST.get("slidervalue")
@@ -691,22 +556,22 @@ def random_forest_regression(request):
         sample_split_value=int(sample_split_value)
         n_estimator_value=request.POST.get("n_estimator")
         n_estimator_value=int(n_estimator_value)
-        # end=int(end)
-        # ucriteion=request.POST["criteion"]
+      
         criterion_list= request.POST.getlist('criteion')
         maxfeature_list= request.POST.getlist('maxfeature')
         datafi=request.FILES['datafile']
-        print(pred_col,end)
-        print(ucriterion,"slider value is:",)
+      
         # *********************Creating Parameter************************
         ucriterion=ucriterion+criterion_list
         umaxfeature=umaxfeature+maxfeature_list
         for i in range(1,maxdepth_value,5):
-                        max_depth.append(i)
+                      max_depth.append(i)
         for i in range(1,n_estimator_value,5):
                         n_estimator.append(i)
         for i in range(2,sample_split_value,1):
-                        sample_split.append(i)
+                     sample_split.append(i)
+
+        # **************************************************************Appending Parameter****************************************************
         creating_hyper_paramerter(parms,ucriterion)
         creating_hyper_paramerter(parms,umaxfeature)
         creating_hyper_paramerter(parms,max_depth)
@@ -722,7 +587,7 @@ def random_forest_regression(request):
         try:
 
             X=df.drop(columns=pred_col)
-            # y=le.fit_transform(df[pred_col]) 
+            
             y=df[pred_col]
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
@@ -733,90 +598,66 @@ def random_forest_regression(request):
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
                 # Listing=random_forest_regression2(X,y,1,end,parms)
                 download_status=1
-                print("doownload status 1")
-                print("doownload status 1")
-                print("doownload status 1")
-                print("doownload status 1")
-                print("doownload status 1")
+              
             else:
-                error="Max Column Exceed"
+               
+                messages.error(request,"Max Column Exceed")
 
         except Exception as ep:
-            error="Wrong Prediction Columns"
-            error="Wrong Prediction Columns"
-            error="Wrong Prediction Columns"
-            error="Wrong Prediction Columns"
-            error="Wrong Prediction Columns"
+           
             print(ep)
-        # print()
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status,"id_generator":id_generator}
+        
+    d={'data': df.to_html(),"listing":Listing ,"download":download_status,"id_generator":id_generator}
     
-    #     # print()
-    # d={'data': df.to_html(),"listing":Listing}
+    
     return render(request,"random_forest_regression.html",d)
 # Create your views here.
+# ************************************************************Interface SVM Regressor Page***************************************************************
 def interface_svm(request):
     parms={}
     id_generator=0
     Listing=[]
     download_status=0
-    error=""
+ 
     df = pd.DataFrame()
     ukernal=["kernel"]
     ugamma=["gamma"]
     udegree=["degree"]
-    # n_estimator=["n_estimators"]
-    # sample_split=["min_samples_split"]
+    
     if request.method == 'POST':
-        # print(type(parms))
-        print(type(parms))
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
+    #    ***************Getting Parameter from User***************
         pred_col=request.POST["predcol"]
         end=int(request.POST["size1"])
         degree_value=request.POST.get("degreevalue")
         degree_value=int(degree_value)
-        # sample_split_value=request.POST.get("sample_split")
-        # sample_split_value=int(sample_split_value)
-        # n_estimator_value=request.POST.get("n_estimator")
-        # n_estimator_value=int(n_estimator_value)
-        # end=int(end)
-        # ucriteion=request.POST["criteion"]
+      
         kernal_list= request.POST.getlist('kernal')
         gamma_list= request.POST.getlist('gamma')
         datafi=request.FILES['datafile']
         print(pred_col,end)
-        # print(ucriterion,"slider value is:",)
+        
         # *********************Creating Parameter************************
         ukernal=ukernal+kernal_list
         ugamma=ugamma+gamma_list
-        # for i in range(1,maxdepth_value,5):
-        #                 max_depth.append(i)
-        # for i in range(1,n_estimator_value,5):
-        #                 n_estimator.append(i)
+   
         for i in range(1,degree_value,1):
-                        udegree.append(i)
+                    udegree.append(i)
+
+        # **************************************************************Appending Parameter****************************************************
         creating_hyper_paramerter(parms,ugamma)
         creating_hyper_paramerter(parms,ukernal)
-        creating_hyper_paramerter(parms,udegree)
-        # creating_hyper_paramerter(parms,n_estimator)
-        # creating_hyper_paramerter(parms,sample_split)
-        print(type(parms))
-        parms=dict(parms)
-        print(type(parms))
-        print("inside view",parms)
+        creating_hyper_paramerter(parms,udegree)        
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
-        # print(df.head())
+     
         try:
 
             X=df.drop(columns=pred_col)
-            # y=le.fit_transform(df[pred_col]) 
+            
             y=df[pred_col]
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
-            #  Listing=svm_regression(X,y,1,end,parms)
+       
                 model_name=SVR()
                 Listing,model=all_regression(X,y,1,end,parms,model_name)
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
@@ -824,21 +665,22 @@ def interface_svm(request):
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
                 download_status=1
             else:
-                error="Max Column Exceed"
+               
+                messages.error(request,"Max Column Exceed")
 
         except Exception as ep:
-            error="Wrong Prediction Columns"
+            messages.error(request,ep)
             print(ep)
-        # print()
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status,"id_generator":id_generator}
+       
+    d={'data': df.to_html(),"listing":Listing ,"download":download_status,"id_generator":id_generator,}
     return render(request,"interface_svm.html",d)
-
+# *********************************************************Gradient Boosting Regressor****************************************************
 def interface_gradientboosting_regressor(request):
     parms={}
     Listing=[]
     download_status=0
     id_generator=0
-    error=""
+    
     df = pd.DataFrame()
     ucriterion=["criterion"]
     ulearning_rate=["learning_rate"]
@@ -848,11 +690,7 @@ def interface_gradientboosting_regressor(request):
     n_estimator=["n_estimators"]
     sample_split=["min_samples_split"]
     if request.method == 'POST':
-        # print(type(parms))
-        print(type(parms))
-        print("inside post methid of  Gradient boosting class")
-        print("inside post methid of  Gradient boosting class")
-        print("inside post methid of Gradient boosting  class")
+    #    ***************Getting Parameter from User***************
         pred_col=request.POST["predcol"]
         end=int(request.POST["size1"])
         learing_rate_value=request.POST.get("learingvalue")
@@ -863,27 +701,27 @@ def interface_gradientboosting_regressor(request):
         sample_split_value=int(sample_split_value)
         n_estimator_value=request.POST.get("nestimatorsvalue")
         n_estimator_value=int(n_estimator_value)
-        # end=int(end)
-        # ucriteion=request.POST["criteion"]
+       
         criterion_list= request.POST.getlist('criteion')
         maxfeature_list= request.POST.getlist('max_features')
         loss_list= request.POST.getlist('loss')
         datafi=request.FILES['datafile']
-        print(pred_col,end)
-        print(ucriterion,"slider value is:",)
+    
         # *********************Creating Parameter************************
         ucriterion=ucriterion+criterion_list
         umaxfeature=umaxfeature+maxfeature_list
         uloss=uloss+loss_list      
         for i in range(1,maxdepth_value,5):
-                        max_depth.append(i)
+                 max_depth.append(i)
         for i in range(1,n_estimator_value,5):
-                        n_estimator.append(i)
+                   n_estimator.append(i)
         for i in range(2,sample_split_value,1):
-                        sample_split.append(i)
+                     sample_split.append(i)
        
         for i in np.arange(1,learing_rate_value,0.2):
               ulearning_rate.append(round(i,1))
+
+        # **************************************************************Appending Parameter****************************************************
         creating_hyper_paramerter(parms,ucriterion)
         creating_hyper_paramerter(parms,umaxfeature)
         creating_hyper_paramerter(parms,max_depth)
@@ -891,13 +729,13 @@ def interface_gradientboosting_regressor(request):
         creating_hyper_paramerter(parms,sample_split)
         creating_hyper_paramerter(parms,ulearning_rate)
         creating_hyper_paramerter(parms,uloss)
-        print(type(parms))
+        
         parms=dict(parms)
-        print(type(parms))
-        print("inside view",parms)
+      
+       
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
-        # print(df.head())
+       
         try:
 
             X=df.drop(columns=pred_col)
@@ -907,55 +745,33 @@ def interface_gradientboosting_regressor(request):
             if parameter_checkup(end,maxcol,X,y):
                 model_name=GradientBoostingRegressor()
                 Listing,model=all_regression(X,y,1,end,parms,model_name)
-                # print(type(model))
-                # print("model is",model)     
-                # print("************************************")
-                # print(datafi)
-                # print(f"The User id is {(request.user.id)}")
-                # print(f"The User id is {(request.user.username)}")
-                # print(f"The User id is {model_name}")
-                # print(f"The User id is{pred_col[:3]}")
-                
-                # print(f"model name will be {(str(model_name))[1:-2]+request.user.username[:3]+str(pred_col[:3])+str(end)+str(request.user.id)}")            
+            
+                          
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
                 savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
-                print("model name is",savemodelname)
-                print("model name is",savemodelname)
+            
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
-
-                # print(type(remaining_url))
-                # base_url="media/"
-                # full_url=base_url+remaining_url
-                # print(type(full_url))
-                # id_generator=random.randint(1000,9999)
-                # print(id_generator)
-                # # pickle.dump(model, open(full_url, 'wb'))
-                # joblib.dump(model, open(full_url, 'wb'))
-                # # *******************Saving in database************************
-                # result=TrainedModel(username=request.user.username,location=full_url,modelname=remaining_url,uniqueid=id_generator)
-                # result.save()
-                print("WOKING IN PICKLE")
-                # print("WOKING IN JOBLIB")
-                # print("WOKING IN JOBLIB")
-            #  Listing=gradientboosting_regression(X,y,1,end,parms)
                 download_status=1
             else:
-                error="Max Column Exceed"
+                
+                messages.error(request,"Max Column Exceed")
 
         except Exception as ep:
-            error="Wrong Prediction Columns"
+           
+            messages.error(request,ep)
             print(ep)
         # print()
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status, "id_generator":id_generator}
+    d={'data': df.to_html(),"listing":Listing,"download":download_status, "id_generator":id_generator}
     
      
     return render (request,"gradientboosting_regressor.html",d)
+# ********************************************************Decision Tree Regressor****************************************************
 def interface_decisiontree_regressor(request):
     parms={}
     Listing=[]
     id_generator=0
     download_status=0
-    error=""
+   
     df = pd.DataFrame()
     ucriterion=["criterion"]
  
@@ -965,23 +781,14 @@ def interface_decisiontree_regressor(request):
     # n_estimator=["n_estimators"]
     sample_split=["min_samples_split"]
     if request.method == 'POST':
-        # print(type(parms))
-        print(type(parms))
-        print("inside post methid of  Gradient boosting class")
-        print("inside post methid of  Gradient boosting class")
-        print("inside post methid of Gradient boosting  class")
+    #    ***************Getting Parameter from User***************
         pred_col=request.POST["predcol"]
         end=int(request.POST["size1"])
-        # learing_rate_value=request.POST.get("learingvalue")
-        # learing_rate_value=float(learing_rate_value)
+      
         maxdepth_value=request.POST.get("maxdepthvalue")
         maxdepth_value=int(maxdepth_value)
         sample_split_value=request.POST.get("minsamplevalue")
         sample_split_value=int(sample_split_value)
-        # n_estimator_value=request.POST.get("nestimatorsvalue")
-        # n_estimator_value=int(n_estimator_value)
-        # end=int(end)
-        # ucriteion=request.POST["criteion"]
         criterion_list= request.POST.getlist('criteion')
         maxfeature_list= request.POST.getlist('max_features')
         splitter_list= request.POST.getlist('splitter')
@@ -993,20 +800,18 @@ def interface_decisiontree_regressor(request):
         umaxfeature=umaxfeature+maxfeature_list
         usplitter=usplitter+splitter_list      
         for i in range(1,maxdepth_value,5):
-                        max_depth.append(i)
-        # for i in range(1,n_estimator_value,5):
-        #                 n_estimator.append(i)
+                    max_depth.append(i)
+        
         for i in range(1,sample_split_value,1):
-                        sample_split.append(i)
+                sample_split.append(i)
        
-        # for i in np.arange(1,learing_rate_value,0.2):
-        #       ulearning_rate.append(round(i,1))
+        # **************************************************************Appending Parameter****************************************************
         creating_hyper_paramerter(parms,ucriterion)
         creating_hyper_paramerter(parms,umaxfeature)
         creating_hyper_paramerter(parms,max_depth)
-        # creating_hyper_paramerter(parms,n_estimator)
+      
         creating_hyper_paramerter(parms,sample_split)
-        # creating_hyper_paramerter(parms,ulearning_rate)
+        
         creating_hyper_paramerter(parms,usplitter)
         print(type(parms))
         parms=dict(parms)
@@ -1014,11 +819,11 @@ def interface_decisiontree_regressor(request):
         print("inside view",parms)
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
-        # print(df.head())
+       
         try:
 
             X=df.drop(columns=pred_col)
-            # y=le.fit_transform(df[pred_col]) 
+           
             y=df[pred_col]
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
@@ -1035,8 +840,73 @@ def interface_decisiontree_regressor(request):
         except Exception as ep:
             error="Wrong Prediction Columns"
         # print()
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status, "id_generator":id_generator}
+    d={'data': df.to_html(),"listing":Listing,"download":download_status, "id_generator":id_generator}
     return render(request,"decisiontree_regressor.html",d)
+
+# ******************************************************************KNN Regressor***********************************************
+def interface_Knn_regressor(request):
+    parms={}
+    Listing=[]
+    id_generator=0
+    download_status=0
+    error=""
+    df = pd.DataFrame()
+    uweights=["weights"]
+    un_neighbors=["n_neighbors"]
+    ualgorithm=["algorithm"]
+   
+    if request.method == 'POST':
+#   ******************************Getting Data from form**************************
+        pred_col=request.POST["predcol"]
+        end=request.POST["size1"]
+        end=int(end)
+        weights_list=request.POST.getlist("weights")
+        alogorith_list= request.POST.getlist('algorithm')
+        n_neighnour_value=request.POST["kvalue"]
+   
+        n_neighnour_value=int(n_neighnour_value)
+        #
+     
+        datafi=request.FILES['datafile']
+        # *********************Creating Parameter************************
+        uweights=uweights+weights_list
+        ualgorithm=ualgorithm + alogorith_list
+        
+        for i in range(1,n_neighnour_value,1):
+                     un_neighbors.append(i)
+       
+        creating_hyper_paramerter(parms,uweights)
+        creating_hyper_paramerter(parms,ualgorithm)
+        creating_hyper_paramerter(parms,un_neighbors)
+    
+        parms=dict(parms)
+        
+        print("inside view",parms)
+        # **************************Data Reading****************
+        df=pd.read_csv(datafi)
+        try:
+
+            X=df.drop(columns=pred_col)
+         
+            y=df[pred_col]
+            maxcol=df.shape[1]-2
+            if parameter_checkup(end,maxcol,X,y):
+                model_name=KNeighborsRegressor()
+               
+                Listing,model=all_regression(X,y,1,end,parms,model_name)
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+                download_status=1
+            else:
+                   messages.error(request,"Max Column Exceed")
+
+        except Exception as ep:
+              messages.error(request,ep)
+
+        # print()
+    d={'data': df.to_html(),"listing":Listing ,"download":download_status, "chosenparameter":parms,"id_generator":id_generator}
+    return render(request,"knn_regressor.html",d)
 def signup(request):
     if request.method == 'POST':
         first_name=request.POST['uname']
@@ -1055,20 +925,31 @@ def signup(request):
             error="yes"
     print("no in if condiotn")
     return render(request,"signup.html")
+# ******************************************************************User Profile***********************************************
+def view_user(request):
+    data=Signup.objects.all()
+    print(data)
+    d={'data': data}
+    return render(request,"view_user.html",d)
+def delete_user(request,id):
+    data=User.objects.get(id=id)
+    data.delete()
+    return redirect('view_user')
+# ****************************************************************User Trained Model****************************************************
 def user_trained_model(request):
-     data=TrainedModel.objects.filter(username=request.user.username)
+     data=TrainedModel.objects.filter(username=request.user.username).order_by("-date","-time").values()
      print(f"the username is {request.user.username}")
      print("Printing Trained Model")
-    #  print(data)
+     print(data)
      d={'data': data}
      return render(request,"user_trained_model.html",d)
-
+# /******************************************************* download Random Forest Regressor****************************************/
 def interface_download_random_forest_regressor(request):
     download_status=0
     id_generator=0
     parameter_list=[]
     Listing=[]
-    error=""
+    
     df = pd.DataFrame()
     ucriterion=["criterion"]
     umaxfeature=["max_features"]
@@ -1076,9 +957,7 @@ def interface_download_random_forest_regressor(request):
     n_estimator=["n_estimators"]
     sample_split=["min_samples_split"]
     if request.method == 'POST':
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
+    #   ******************************Getting Data from form**************************
         pred_col=request.POST["predcol"]
         end=int(request.POST["size1"])
         maxdepth_value=request.POST["slidervalue"] #mnot
@@ -1088,11 +967,10 @@ def interface_download_random_forest_regressor(request):
         n_estimator_value=request.POST["n_estimator"]
         n_estimator_value=int(n_estimator_value)
         end=int(end)
-        # ucriteion=request.POST["criteion"]
         criterion_list= request.POST['criteion']
         maxfeature_list= request.POST['maxfeature']
         datafi=request.FILES['datafile']
-        print(pred_col,end)
+# *********************Creating Parameter************************
    
         parameter_list.append( end)
         parameter_list.append(criterion_list)
@@ -1102,11 +980,11 @@ def interface_download_random_forest_regressor(request):
         parameter_list.append(maxdepth_value)
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
-        # print(df.head())
+        
         try:
 
             X=df.drop(columns=pred_col)
-            # y=le.fit_transform(df[pred_col]) 
+    
             y=df[pred_col]
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
@@ -1117,28 +995,20 @@ def interface_download_random_forest_regressor(request):
            
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
 
-            
-                print(Listing)
-             
-            #  request.session['trp'] = Listing
-
                 download_status=1
             
             else:
-                error="Max Column Exceed"
+                messages.error(request,"Max Column Exceed")
+             
 
         except Exception as ep:
-            error="Wrong Prediction Columns"
-            print("etro")
+            messages.error(request,ep)
             print(ep)
-            print(ep)
-            print(ep)
-            print(ep)
-        # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status,"result":Listing,"id_generator":id_generator}
+       
+    d={'data': df.to_html(),"download":download_status,"result":Listing,"id_generator":id_generator}
       
     return render (request,"download_random_forest_regressor.html",d)
-
+# ******************************************************************************************************************
 def interface_download_logistic_regression(request):
     download_status=0
     parameter_list=[]
@@ -1146,11 +1016,7 @@ def interface_download_logistic_regression(request):
     Listing=[]
     error=""
     df = pd.DataFrame()
-    # upenalty=["penalty"]
-    # umulti_class=["multi_class"]
-    # usolver=["solver"]
-    # ucvalue=["cvalue"]
-    # sample_split=["min_samples_split"]
+   
     if request.method == 'POST':
         # print(type(parms))
       
@@ -1217,95 +1083,19 @@ def interface_download_logistic_regression(request):
     d={'data': df.to_html(),"error":error ,"download":download_status,"id_generator":id_generator,"result":Listing}
     return render(request,"download_logistic_regression.html",d)
 
-def interface_download_extreetree_regression(request):
-    download_status=0
-    parameter_list=[]
-    Listing=[]
-    error=""
-    df = pd.DataFrame()
-    # sample_split=["min_samples_split"]
-    if request.method == 'POST':
-        # print(type(parms))
-      
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
+# ***********************************************************************Download SVR Regression*******************************************************************
 
-        pred_col=request.POST["predcol"]
-        end=request.POST["size1"]
-        end=int(end)
-        criteion_list=request.POST["criteion"] #mnot
-       
-        maxfeature_list=request.POST["maxfeature"]
-       
-        # solver_list=request.POST["solver"]
-       
-        # ucriteion=request.POST["criteion"]
-        ndepth_value= int(request.POST['ndepth'])
-        sample_split_value= int(request.POST['sample_split'])
-       
-        datafi=request.FILES['datafile']
-        print(pred_col,end)
-   
-        parameter_list.append( end)
-        parameter_list.append(criteion_list)
-        parameter_list.append(maxfeature_list)
-        parameter_list.append(ndepth_value)
-        parameter_list.append(sample_split_value)
-        # parameter_list.append(maxdepth_value)
-       
-        # **************************Data Reading****************
-        df=pd.read_csv(datafi)
-        # print(df.head())
-        try:
-
-            X=df.drop(columns=pred_col)
-            # y=le.fit_transform(df[pred_col]) 
-            y=df[pred_col]
-            maxcol=df.shape[1]-2
-            if parameter_checkup(end,maxcol,X,y):
-             Listing=download_extratree_regresion(X,y,parameter_list)
-             pkl_data = pickle.dumps(Listing,"pra1")
-             print("type")
-             print("type")
-             print(type(Listing))
-             print(Listing)
-             print("type")
-             print("type")
-             print(type(Listing))
-            #  request.session['trp'] = Listing
-
-             download_status=1
-            
-            else:
-                error="Max Column Exceed"
-
-        except Exception as ep:
-            error="Wrong Prediction Columns"
-            print("etro")
-            print(ep)
-            print(ep)
-            print(ep)
-            print(ep)
-        # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status, "model":Listing}
-      
-    return render(request,"download_extra_tree_regression.html",d)
 def interface_download_svr(request):
     download_status=0
     parameter_list=[]
     id_generator=0
     Listing=[]
-    error=""
-    df = pd.DataFrame()
-    # sample_split=["min_samples_split"]
-    if request.method == 'POST':
-        # print(type(parms))
-      
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
 
+    df = pd.DataFrame()
+ 
+    if request.method == 'POST':
+        
+        # **************************Data Reading****************
         pred_col=request.POST["predcol"]
         end=request.POST["size1"]
         end=int(end)
@@ -1313,21 +1103,17 @@ def interface_download_svr(request):
        
         ugamma=request.POST["gamma"]
        
-        # solver_list=request.POST["solver"]
-       
-        # ucriteion=request.POST["criteion"]
         degreevalue= int(request.POST['degreevalue'])
   
        
         datafi=request.FILES['datafile']
-        print(pred_col,end)
+        # *******************Appending Parameters******************
    
         parameter_list.append( end)
         parameter_list.append(ukernal)
         parameter_list.append(ugamma)
         parameter_list.append(degreevalue)
-        # parameter_list.append(sample_split_value)
-        # parameter_list.append(maxdepth_value)
+       
        
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
@@ -1335,11 +1121,11 @@ def interface_download_svr(request):
         try:
 
             X=df.drop(columns=pred_col)
-            # y=le.fit_transform(df[pred_col]) 
+          
             y=df[pred_col]
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
-            #  Listing=download_svr_regression(X,y,parameter_list)
+           
                 model_name=SVR()
                 Listing,model=download_svr_regression(X,y,parameter_list)
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
@@ -1347,60 +1133,49 @@ def interface_download_svr(request):
            
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
 
-    
-             
-
                 download_status=1
             
             else:
-                error="Max Column Exceed"
+             messages.error(request,"Max Column Exceed")
 
         except Exception as ep:
-            error="Wrong Prediction Columns"
-            print("etro")
-            print(ep)
-            print(ep)
-            print(ep)
+            messages.error(request,ep)
             print(ep)
         # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status, "result":Listing,"id_generator":id_generator}
+    d={'data': df.to_html() ,"download":download_status, "result":Listing,"id_generator":id_generator}
 
     return render(request,"download_svr_regression.html",d)
+
+# ***********************************************************************Download KNN Regression*******************************************************************
 def interface_download_knn_regression(request):
     download_status=0
     id_generator=0
     parameter_list=[]
     Listing=[]
-    error=""
+  
     df = pd.DataFrame()
-    # sample_split=["min_samples_split"]
+    
     if request.method == 'POST':
-        # print(type(parms))
-      
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
+#  **************************Data Reading****************
 
         pred_col=request.POST["predcol"]
         end=request.POST["size1"]
         end=int(end)
-        uweight=request.POST["weights"] #mnot
+        uweight=request.POST["weights"] 
        
         ualgorith=request.POST["algorithm"]
-        # solver_list=request.POST["solver"]
-        # ucriteion=request.POST["criteion"]
+     
         kvalue= int(request.POST['kvalue'])
   
        
         datafi=request.FILES['datafile']
-        print(pred_col,end)
+        # *******************Appending Parameters******************
    
         parameter_list.append( end)
         parameter_list.append(uweight)
         parameter_list.append(ualgorith)
         parameter_list.append(kvalue)
-        # parameter_list.append(sample_split_value)
-        # parameter_list.append(maxdepth_value)
+      
        
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
@@ -1408,7 +1183,7 @@ def interface_download_knn_regression(request):
         try:
 
             X=df.drop(columns=pred_col)
-            # y=le.fit_transform(df[pred_col]) 
+            
             y=df[pred_col]
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
@@ -1418,37 +1193,29 @@ def interface_download_knn_regression(request):
                 savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
              
-     
-
                 download_status=1
             
             else:
-                error="Max Column Exceed"
+               messages .error(request,"Max Column Exceed")
 
         except Exception as ep:
-            error="Wrong Prediction Columns"
-            print("etro")
+            messages.error(request,ep)
             print(ep)
-            print(ep)
-            print(ep)
-            print(ep)
-        # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status, "result":Listing,"id_generator":id_generator}
+        #
+    d={'data': df.to_html(),"download":download_status, "result":Listing,"id_generator":id_generator}
     return render(request,"download_knn_regression.html",d)
+
+# ***********************************************************************Download Decision Tree Regression*******************************************************************
 def interface_download_decsiontree_regression(request):
     download_status=0
     id_generator=0
     parameter_list=[]
+  
     Listing=[]
-    error=""
     df = pd.DataFrame()
-    # sample_split=["min_samples_split"]
+    
     if request.method == 'POST':
-        # print(type(parms))
-      
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
+    # **************************Data Reading****************
 
         pred_col=request.POST["predcol"]
         end=request.POST["size1"]
@@ -1457,31 +1224,29 @@ def interface_download_decsiontree_regression(request):
        
         ucriterion=request.POST["criterion"]
         umaxfeature=request.POST["max_features"]
-        # solver_list=request.POST["solver"]
-        # ucriteion=request.POST["criteion"]
+       
         uminsamplevalue= int(request.POST['minsamplevalue'])
         umaxdepthvalue= int(request.POST['maxdepthvalue'])
   
        
         datafi=request.FILES['datafile']
-        print(pred_col,end)
-   
+        
+        # *******************Appending Parameters******************
         parameter_list.append( end)
         parameter_list.append(uspliter)
         parameter_list.append(ucriterion)
         parameter_list.append(umaxfeature)
         parameter_list.append(uminsamplevalue)
         parameter_list.append(umaxdepthvalue)
-        # parameter_list.append(sample_split_value)
-        # parameter_list.append(maxdepth_value)
+       
        
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
-        # print(df.head())
+       
         try:
 
             X=df.drop(columns=pred_col)
-            # y=le.fit_transform(df[pred_col]) 
+            
             y=df[pred_col]
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
@@ -1490,38 +1255,93 @@ def interface_download_decsiontree_regression(request):
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
                 savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
-             
-     
-
                 download_status=1
             
             else:
-                error="Max Column Exceed"
+                messages.error(request,"Max Column Exceed")
 
         except Exception as ep:
-            error="Wrong Prediction Columns"
-            print("etro")
-            print(ep)
-            print(ep)
-            print(ep)
+            messages.error(request,ep)
             print(ep)
         # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status, "result":Listing,"id_generator":id_generator}
+    d={'data': df.to_html() ,"download":download_status, "result":Listing,"id_generator":id_generator}
     return render(request,"download_decisiontree_regression.html",d)
+
+def interface_download_gradientboosting_regressor(request):
+    download_status=0
+    id_generator=0
+    parameter_list=[]
+  
+    Listing=[]
+    df = pd.DataFrame()
+    
+    if request.method == 'POST':
+        # **************************Data Reading****************
+        pred_col=request.POST["predcol"]
+        end=int(request.POST["size1"])
+        learing_rate_value=float(request.POST["learingvalue"])
+       
+        maxdepth_value=int(request.POST["maxdepthvalue"])
+    
+        sample_split_value=int(request.POST["minsamplevalue"])
+        n_estimator_value=int(request.POST["nestimatorsvalue"])
+        n_estimator_value=int(n_estimator_value)
+       
+        ucriterion= request.POST['criteion']
+        umaxfeature= request.POST['max_features']   
+        uloss= request.POST['loss']
+        datafi=request.FILES['datafile']
+        # *******************Appending Parameters******************
+        parameter_list.append( end)
+        parameter_list.append(uloss)
+        parameter_list.append(ucriterion)
+        parameter_list.append(umaxfeature)
+        parameter_list.append(learing_rate_value)
+        parameter_list.append(n_estimator_value)
+        parameter_list.append(maxdepth_value)
+        parameter_list.append(sample_split_value)
+       
+       
+        # **************************Data Reading****************
+        df=pd.read_csv(datafi)
+       
+        try:
+
+            X=df.drop(columns=pred_col)
+            
+            y=df[pred_col]
+            maxcol=df.shape[1]-2
+            if parameter_checkup(end,maxcol,X,y):
+                Listing,model=download_gradientboosting_regression(X,y,parameter_list)
+                model_name=GradientBoostingRegressor()
+                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
+                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
+                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
+                download_status=1
+            
+            else:
+                messages.error(request,"Max Column Exceed")
+
+        except Exception as ep:
+            messages.error(request,ep)
+            print(ep)
+        # print()
+    d={'data': df.to_html() ,"download":download_status, "result":Listing,"id_generator":id_generator}
+    
+     
+    return render(request,"download_gradientboosting_regression.html",d)
+
+# ***********************************************************************Download Decision Tree Classification*************************************************************
 def interface_download_decsiontree_classfier(request):
     download_status=0
     id_generator=0
     parameter_list=[]
     Listing=[]
-    error=""
+   
     df = pd.DataFrame()
     # sample_split=["min_samples_split"]
     if request.method == 'POST':
-        # print(type(parms))
-      
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
+        # **************************Data Reading****************
 
         pred_col=request.POST["predcol"]
         end=request.POST["size1"]
@@ -1530,27 +1350,26 @@ def interface_download_decsiontree_classfier(request):
        
         ucriterion=request.POST["criterion"]
         umaxfeature=request.POST["max_features"]
-        # solver_list=request.POST["solver"]
-        # ucriteion=request.POST["criteion"]
+        usampling=request.POST["sampling"]
+        
         uminsamplevalue= int(request.POST['minsamplevalue'])
         umaxdepthvalue= int(request.POST['maxdepthvalue'])
   
        
         datafi=request.FILES['datafile']
         print(pred_col,end)
-   
+        # *******************Appending Parameters******************
         parameter_list.append( end)
         parameter_list.append(uspliter)
         parameter_list.append(ucriterion)
         parameter_list.append(umaxfeature)
         parameter_list.append(uminsamplevalue)
         parameter_list.append(umaxdepthvalue)
-        # parameter_list.append(sample_split_value)
-        # parameter_list.append(maxdepth_value)
-       
+        parameter_list.append(usampling)
+        
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
-        # print(df.head())
+    
         try:
 
             X=df.drop(columns=pred_col)
@@ -1569,32 +1388,24 @@ def interface_download_decsiontree_classfier(request):
                 download_status=1
             
             else:
-                error="Max Column Exceed"
+                messages.error(request,"Max Column Exceed")
 
         except Exception as ep:
-            error="Wrong Prediction Columns"
-            print("etro")
-            print(ep)
-            print(ep)
-            print(ep)
+            messages.error(request,ep)
             print(ep)
         # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status, "listing":Listing,"id_generator":id_generator}
+    d={'data': df.to_html() ,"download":download_status, "listing":Listing,"id_generator":id_generator}
     return render(request,"download_decisiontree_classfier.html",d)
 def interface_download_randomforest_classification(request):
     download_status=0
     id_generator=0
     parameter_list=[]
     Listing=[]
-    error=""
+
     df = pd.DataFrame()
-    ucriterion=["criterion"]
-    umaxfeature=["max_features"]
-    max_depth=["max_depth"]
-    n_estimator=["n_estimators"]
-    sample_split=["min_samples_split"]
+   
     if request.method == 'POST':
-      
+        # **************************Data Reading****************
         pred_col=request.POST["predcol"]
         end=int(request.POST["size1"])
         maxdepth_value=request.POST["slidervalue"] #mnot
@@ -1604,22 +1415,24 @@ def interface_download_randomforest_classification(request):
         n_estimator_value=request.POST["n_estimator"]
         n_estimator_value=int(n_estimator_value)
         end=int(end)
-        # ucriteion=request.POST["criteion"]
+        
         criterion_list= request.POST['criteion']
         maxfeature_list= request.POST['maxfeature']
+        usampling=request.POST["sampling"]
         datafi=request.FILES['datafile']
         print(pred_col,end)
-   
+        # *******************Appending Parameters******************
         parameter_list.append( end)
         parameter_list.append(criterion_list)
         parameter_list.append(maxfeature_list)
         parameter_list.append( sample_split_value)
         parameter_list.append(n_estimator_value)
         parameter_list.append(maxdepth_value)
+        parameter_list.append(usampling)
        
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
-        # print(df.head())
+        
         try:
 
             X=df.drop(columns=pred_col)
@@ -1642,17 +1455,13 @@ def interface_download_randomforest_classification(request):
                 download_status=1
             
             else:
-                error="Max Column Exceed"
+                messages.error(request,"Max Column Exceed")
 
         except Exception as ep:
-            error="Wrong Prediction Columns"
-            print("etro")
-            print(ep)
-            print(ep)
-            print(ep)
+            messages.error(request,ep)
             print(ep)
         # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status,"listing":Listing,"id_generator":id_generator}
+    d={'data': df.to_html() ,"download":download_status,"listing":Listing,"id_generator":id_generator}
     return render(request,"download_random_forest_classification.html",d)
 
 def interface_download_knn_classfier(request):
@@ -1660,15 +1469,11 @@ def interface_download_knn_classfier(request):
     id_generator=0
     parameter_list=[]
     Listing=[]
-    error=""
+    
     df = pd.DataFrame()
-    # sample_split=["min_samples_split"]
+    
     if request.method == 'POST':
-        # print(type(parms))
-      
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
+        # **************************Data Reading****************
 
         pred_col=request.POST["predcol"]
         end=request.POST["size1"]
@@ -1676,26 +1481,22 @@ def interface_download_knn_classfier(request):
         uweight=request.POST["weights"] #mnot
        
         ualgorith=request.POST["algorithm"]
-       
-        # solver_list=request.POST["solver"]
-       
-        # ucriteion=request.POST["criteion"]
         kvalue= int(request.POST['kvalue'])
   
-       
+        usampling=request.POST["sampling"]
         datafi=request.FILES['datafile']
-        print(pred_col,end)
-   
+
+        # *******************Appending Parameters******************
         parameter_list.append( end)
         parameter_list.append(uweight)
         parameter_list.append(ualgorith)
         parameter_list.append(kvalue)
-        # parameter_list.append(sample_split_value)
-        # parameter_list.append(maxdepth_value)
+        parameter_list.append(usampling)
+       
        
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
-        # print(df.head())
+      
         try:
 
             X=df.drop(columns=pred_col)
@@ -1712,39 +1513,30 @@ def interface_download_knn_classfier(request):
                 download_status=1
             
             else:
-                error="Max Column Exceed"
+                messages.error(request,"Max Column Exceed")
 
         except Exception as ep:
-            error="Wrong Prediction Columns"
-            print("etro")
-            print(ep)
-            print(ep)
-            print(ep)
+            messages.error(request,ep)
             print(ep)
         # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status, "listing":Listing,"id_generator":id_generator}
+    d={'data': df.to_html(),"download":download_status, "listing":Listing,"id_generator":id_generator}
     return render(request,"download_knn_classfier.html",d)
 
 
+# *************************************************************************** download Logistic Regression****************************************************
 
 def interface_download_logistic_classfier(request):
     download_status=0
     parameter_list=[]
     id_generator=0
     Listing=[]
-    error=""
+   
     df = pd.DataFrame()
-    # upenalty=["penalty"]
-    # umulti_class=["multi_class"]
-    # usolver=["solver"]
-    # ucvalue=["cvalue"]
-    # sample_split=["min_samples_split"]
+    
     if request.method == 'POST':
-        # print(type(parms))
+        # **************************Data Reading****************)
       
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
+       
 
         pred_col=request.POST["predcol"]
         end=int(request.POST["size1"])
@@ -1755,18 +1547,20 @@ def interface_download_logistic_classfier(request):
        
         solver_list=request.POST["solver"]
        
-        # ucriteion=request.POST["criteion"]
+        
         c_value= int(request.POST['cvalue'])
+        usampling=request.POST["sampling"]
        
         datafi=request.FILES['datafile']
-        print(pred_col,end)
+        # *******************Appending Parameters******************
    
         parameter_list.append( end)
         parameter_list.append(penalty_list)
         parameter_list.append(umulti_class_list)
         parameter_list.append( solver_list)
         parameter_list.append(c_value)
-        # parameter_list.append(maxdepth_value)
+        parameter_list.append(usampling)
+        
        
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
@@ -1778,7 +1572,7 @@ def interface_download_logistic_classfier(request):
             y=le.fit_transform(df[pred_col]) 
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
-            #  Listing=download_logistic_regresion(X,y,parameter_list)
+           
                 model_name=LogisticRegression()
                 Listing,model=download_logistic_classifier(X,y,parameter_list)
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
@@ -1786,46 +1580,37 @@ def interface_download_logistic_classfier(request):
            
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
 
-            #  print(Listing)
-            #  request.session['trp'] = Listing
-
+       
                 download_status=1
             
             else:
-                error="Max Column Exceed"
+                messages.error(request,"Max Column Exceed")
 
         except Exception as ep:
-            error="Wrong Prediction Columns"
-            print("etro")
-            print(ep)
-            print(ep)
-            print(ep)
+            messages.error(request,ep)
             print(ep)
         # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status,"id_generator":id_generator,"listing":Listing}
+    d={'data': df.to_html() ,"download":download_status,"id_generator":id_generator,"listing":Listing}
     return render(request,"download_logistic_classfier.html",d)
-     
+    #  *****************************************************Download SVCClassifier***************************************************
 def interface_download_svc(request):
     download_status=0
     parameter_list=[]
     id_generator=0
     Listing=[]
-    error=""
+  
     df = pd.DataFrame()
-    # sample_split=["min_samples_split"]
+  
     if request.method == 'POST':
-        # print(type(parms))
-      
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-
+        # **************************Data Reading****************)
+    
         pred_col=request.POST["predcol"]
         end=request.POST["size1"]
         end=int(end)
         ukernal=request.POST["kernal"] #mnot
        
         ugamma=request.POST["gamma"]
+        usampling=request.POST["sampling"]
        
         # solver_list=request.POST["solver"]
        
@@ -1840,12 +1625,12 @@ def interface_download_svc(request):
         parameter_list.append(ukernal)
         parameter_list.append(ugamma)
         parameter_list.append(degreevalue)
-        # parameter_list.append(sample_split_value)
-        # parameter_list.append(maxdepth_value)
+        parameter_list.append(usampling)
+      
        
         # **************************Data Reading****************
         df=pd.read_csv(datafi)
-        # print(df.head())
+        
         try:
 
             X=df.drop(columns=pred_col)
@@ -1863,17 +1648,13 @@ def interface_download_svc(request):
                 download_status=1
             
             else:
-                error="Max Column Exceed"
+                messages.error(request,"Max Column Exceed")
 
         except Exception as ep:
-            error="Wrong Prediction Columns"
-            print("etro")
-            print(ep)
-            print(ep)
-            print(ep)
+            messages.error(request,ep)
             print(ep)
         # print()
-    d={'data': df.to_html(),"error":error ,"download":download_status, "listing":Listing,"id_generator":id_generator}
+    d={'data': df.to_html(),"download":download_status, "listing":Listing,"id_generator":id_generator}
 
     return render(request,"download_svc_classfier.html",d)
 
@@ -1925,11 +1706,13 @@ def interface_logistic_regression(request):
         pred_col=request.POST["predcol"]
         end=request.POST["size1"]
         end=int(end)
+        sampling_list= request.POST.getlist('sampling')
         
         penalty_list=request.POST.getlist("penalty")
         C_value=int(request.POST.get("cvalue"))
         solver_list= request.POST.getlist('solver')
         multi_class_list= request.POST.getlist('multi_class')
+        
      
         datafi=request.FILES['datafile']
         # *********************Creating Parameter************************
@@ -1939,10 +1722,7 @@ def interface_logistic_regression(request):
         print(penalty_list,C_value,solver_list,multi_class_list)
         for i in range(1,C_value,1):
                         uc.append(i)
-        # for i in range(1,n_estimator_value,5):
-        #                 n_estimator.append(i)
-        # for i in range(1,sample_split_value,1):
-        #                 sample_split.append(i)
+       
         creating_hyper_paramerter(parms,upenalty)
         creating_hyper_paramerter(parms,usolver)
         creating_hyper_paramerter(parms,umulti_class)
@@ -1963,7 +1743,7 @@ def interface_logistic_regression(request):
             maxcol=df.shape[1]-2
             if parameter_checkup(end,maxcol,X,y):
                 model_name=LogisticRegression()
-                Listing,model=all_classification_model(X,y,1,end,parms,model_name)
+                Listing,model=all_classification_model(X,y,1,end,parms,model_name,sampling_list)
                 remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
                 savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
                 id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
@@ -1976,91 +1756,7 @@ def interface_logistic_regression(request):
     d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status, "chosendparameter":parms,"id_generator":id_generator}
     return render(request,"Logistic_regression.html",d)
 
-def interface_Knn_regressor(request):
-    parms={}
-    Listing=[]
-    id_generator=0
-    download_status=0
-    error=""
-    df = pd.DataFrame()
-    uweights=["weights"]
-    un_neighbors=["n_neighbors"]
-    ualgorithm=["algorithm"]
-    # umulti_class=["multi_class"]
-    # n_estimator=["n_estimators"]
-    # sample_split=["min_samples_split"]
-    if request.method == 'POST':
-        print(type(parms))
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        print("inside post methid of randomforest class")
-        pred_col=request.POST["predcol"]
-        end=request.POST["size1"]
-        end=int(end)
-        weights_list=request.POST.getlist("weights")
-        alogorith_list= request.POST.getlist('algorithm')
-        n_neighnour_value=request.POST["kvalue"]
-        # n_neighnour_value2=request.POST.get("sample_split")
-        print("Print nneighbor")
-        print("Print nneighbor")
-        print("Print nneighbor")
-        print(n_neighnour_value)
-        n_neighnour_value=int(n_neighnour_value)
-        # mullist= request.POST.getlist('multi_class')
-     
-        datafi=request.FILES['datafile']
-        # *********************Creating Parameter************************
-        uweights=uweights+weights_list
-        ualgorithm=ualgorithm + alogorith_list
-        # umulti_class=multi_class_list+umulti_class
-        # print(penalty_list,C_value,solver_list,multi_class_list)
-        for i in range(1,n_neighnour_value,1):
-                        un_neighbors.append(i)
-        # for i in range(1,n_estimator_value,5):
-        #                 n_estimator.append(i)
-        # for i in range(1,sample_split_value,1):
-        #                 sample_split.append(i)
-        creating_hyper_paramerter(parms,uweights)
-        creating_hyper_paramerter(parms,ualgorithm)
-        creating_hyper_paramerter(parms,un_neighbors)
-        # creating_hyper_paramerter(parms,uc)
-        # creating_hyper_paramerter(parms,sample_split)
-        # print(type(parms))
-        parms=dict(parms)
-        # print(type(parms))
-        print("inside view",parms)
-        # **************************Data Reading****************
-        df=pd.read_csv(datafi)
-        try:
 
-            X=df.drop(columns=pred_col)
-            # y=le.fit_transform(df[pred_col]) 
-            y=df[pred_col]
-            maxcol=df.shape[1]-2
-            if parameter_checkup(end,maxcol,X,y):
-                model_name=KNeighborsRegressor()
-                print("hyperparameter")
-                print("hyperparameter")
-                print("hyperparameter")
-                print("hyperparameter")
-                print(parms)
-                Listing,model=all_regression(X,y,1,end,parms,model_name)
-                remaining_url=(str(model_name))[0:-2]+str(pred_col[:3])+str(end)+str(request.user.id)+request.user.username[:3]
-                savemodelname=(str(model_name)[0:-2])+"-"+str(pred_col)
-                id_generator=model_saving(model,remaining_url,request.user.username,savemodelname)
-                download_status=1
-            else:
-                    error="Max Column Exceed"
-
-        except Exception as ep:
-                print("eroor ocusing in running")
-                print("eroor ocusing in running")
-                print(ep)
-                error="Wrong Prediction Columns"
-
-        # print()
-    d={'data': df.to_html(),"listing":Listing,"error":error ,"download":download_status, "chosenparameter":parms,"id_generator":id_generator}
-    return render(request,"knn_regressor.html",d)
 
 
 def interface_download_dataset(request):

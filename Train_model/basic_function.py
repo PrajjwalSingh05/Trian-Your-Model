@@ -34,6 +34,7 @@ from bs4 import BeautifulSoup
 
 from imblearn.under_sampling import NearMiss,RandomUnderSampler
 from imblearn.over_sampling import SMOTE,ADASYN,RandomOverSampler
+from imblearn.pipeline import Pipeline 
 def data_preprocessor(X,y):
         """Function to Prepocess the data """
         numeric_transformer = Pipeline(
@@ -83,7 +84,32 @@ def result_evaluator_classfication(model,xtest,ytest,temp,hyper=""):
          clrep=classification_report(ytest,ypred)
          return clrep,round((acuracy*100),2)
 
+def dataSampling(sampling,X,y):
+        preprocessor= data_preprocessor(X,y)
 
+        if sampling=="SMOTE":
+                pipeline = Pipeline(steps=[
+                        ('preprocessor', preprocessor),
+                        ('oversampler', SMOTE())
+                         ])
+        elif sampling=="NearMiss":
+                pipeline = Pipeline(steps=[
+                        ('preprocessor', preprocessor),
+                        ('oversampler', NearMiss())
+                         ])
+        elif sampling=="RandomOverSampler":
+                 pipeline = Pipeline(steps=[
+                ('preprocessor', preprocessor),
+                 ('oversampler', RandomOverSampler())
+                                ])
+        elif sampling=="RandomUnderSampler":
+                 pipeline = Pipeline(steps=[
+                ('preprocessor', preprocessor),
+                 ('oversampler', RandomUnderSampler())
+                                ])
+        X_resampled, y_resampled = pipeline.fit_resample(X, y)
+        X_resampled=pd.DataFrame(X_resampled,columns=X.columns)
+        return X_resampled,y_resampled
 
 
 # import streamlit as st

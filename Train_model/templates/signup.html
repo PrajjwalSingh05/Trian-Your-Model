@@ -15,19 +15,20 @@
     {% csrf_token %}
     <!-- First name -->
     <div class="username">
-      <input autocomplete="off" spellcheck="false" class="control" type="text" placeholder="Firstname" name="uname" value="Pra"/>
+      <input autocomplete="off" spellcheck="false" class="control" type="text" placeholder="Firstname" name="uname" />
       <div id="spinner" class="spinner"></div>
     </div>
     <!-- LAst name -->
     <div class="username">
-      <input autocomplete="off" spellcheck="false" class="control" type="text" placeholder="Lastname"  name="lname" value="jjwal"/>
+      <input autocomplete="off" spellcheck="false" class="control" type="text" placeholder="Lastname"  name="lname"   />
       <div id="spinner" class="spinner"></div>
     </div>
     <!--  Email  -->
-    <div class="username">
-      <input autocomplete="off" spellcheck="false" class="control" type="email" placeholder="Email"        value="joe@gmail.com" name="emailid" />
+    <div class="">
+      <input autocomplete="off" spellcheck="false" class="control" type="email" placeholder="Email"         name="emailid" />
       <div id="spinner" class="spinner"></div>
     </div>
+ 
     <!-- gender -->
     <!-- <div class="username">
           <input
@@ -42,11 +43,11 @@
         </div> -->
     <input spellcheck="false" class="control" id="password" type="password" placeholder="Password" onkeyup="handleChange()" name="passwrd"/>
     <div id="bars">
-      <div></div>
+     
     </div>
     <div class="strength" id="strength"></div>
     <!-- <button class="control" type="button">JOIN NOW</button> -->
-    <input type="submit" value="Submit">
+    <input type="submit" value="Submit" class="submit-btn">
   </form>
 </div>
 <!-- Conttent -->

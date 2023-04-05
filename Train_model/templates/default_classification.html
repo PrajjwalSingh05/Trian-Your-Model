@@ -3,57 +3,120 @@
 
 {% block css %}
 <!-- CSS -->
+<link rel="stylesheet" href="{% static 'Css/basicstyle.css' %}">
 {% endblock %}
 
 {% block content %}
 <h2>Default Classification</h2>
-    <form  method="post" enctype="multipart/form-data">
+<form  method="post" enctype="multipart/form-data">
+      {% csrf_token %}
       <div>
-        <label for="">Enter The Prediction Column</label>
-        <input type="text" name="predcol" id="" placeholder="Enter Prediction COlumn Name" required>
+        <label for="" class="label_heading">Enter The Prediction Column</label>
+        <input type="text" name="predcol" id="" placeholder="Enter Prediction COlumn Name"  class="inp_class" required>
       </div>
       <div>
-        <label for="">Enter Number Of Input Column</label>
+        <label for="" class="label_heading">Enter Number Of Input Column</label>
         <input type="number" name="size1" id="" placeholder="Enter Prediction COlumn Name" required>
       </div>
       <div>
-        <label for="">Model To Be Used </label>
-        <select class="form-control" name="mtype" required>
-          <option value="RandomForestClassifier">RandomForestClassifier</option>
-          <option value="ExtraTreeClassifier">ExtraTreeClassifier</option>
+        <label for="" class="label_heading">Model To Be Used </label>
+        <select multiple data-select class="form-control" name="mtype" required>
+          <option value="GradientBoosting">GradientBoosting</option>
+          <option value="RandomForestClassifier">RandomForestRegressor</option>
+          <option value="LogisticRegression">LogisticRegression</option>
+          <option value="KNeighbors">KNeighbors</option>
+          <option value="DecisionTree">DecisionTree</option>
       </select>
       </div>
-        {% csrf_token %}
-        <input type="file" name="datafile">
-        <input type="submit" value="Upload">
+        <div>
+          <label for="formFileLg" class="form-label label_heading">Large file input example</label>
+          <input class="form-control form-control inputfile" id="formFileLg" type="file" name="datafile"/>
+          <input type="submit" value="Submit" id="upload"  data-bs-toggle="modal" class="submit-btn"data-bs-target="#staticBackdrop">
+      </div>
         
       </form>
-      <div style="overflow: scroll; max-height: 500px;">
-        <table border="5px">
-          {{ data|safe }}
-          <!-- <h1>Next</h1> -->
-          {{ xdata|safe }}
-          <!-- <h1>Next</h1> -->
-          <!-- <p>Listing the value</p> -->
-          
-          <!-- <p> Doing By poop</p> -->
-          {% for item in listing %}
-         
-          <tr>
-
-           <td> {{ item.i|safe }}</td><br>
-          
-          <td>{{ item.columns|safe }}</td><br>
-          
-        <td>{{ item.parameter|safe }}</td><br>
-        </tr>
-          {% endfor %}
-
-        </table>
-      </div>
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Model Training Started</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="lead">Please wait until model is train, drink some 🍵 coffee in the meantime</p>
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+      
+                </div>
+             </div>
+            </div>
+        </div>
+      
+          <div class="table-responsive">
+              <table class="table table-striped table-hover	table-borderless table-primaryalign-middle">
+                <thead class="table-light">
+                    <caption>Table Name</caption>
+                    <tr>
+                        {% if download == 1 %}
+               
+                      <th>S.no</th>
+                      <th>Accuracy score without para</th>
+                      <th>Accuracy with para</th>
+                      <!-- <th>Mae without</th>
+                      <th>Mae with</th> -->
+                      <th>Column</th>
+                      <th>parameter</th>
+                      <th>Sampling</th>
+                      <th>Model</th>
+                      <th>Confusion Matrix parameter</th>
+                      <th>Confusion Matrix without parameter</th>
+                    
+                  </tr>
+              </thead>
+              {% endif %}
+              <tbody class="table-group-divider">
+                
+                {% for item in listing %}
+                
+                
+                
+                    <tr class="table-primary" >
+                      <td scope="row">{{ forloop.counter}}</td>
+                      <td>{{ item.accuracypara|safe }}</td>
+                      <td>{{ item.accuracy|safe }}</td>
+                      <!-- <td>{{ item.accuracy|safe }}</td> -->
+                      <!-- <td>{{ item.mae_parameter|safe }}</td> -->
+                      <td>{{ item.columns|safe }}</td>
+                      <td>{{ item.parameter|safe }}</td>
+                      <td>{{ item.sampler|safe }}</td>
+                      <td>{{ item.model|safe }}</td>
+                      <td><img src="media\Confusion Matrix\prajjwalp{{forloop.counter}}.png" alt="" srcset="" style=" width:22rem ;height:17rem;"></td>
+                      <td><img src="media\Confusion Matrix\prajjwal{{forloop.counter}}.png" alt="" srcset="" style=" width:22rem ;height:17rem;"></td>
+                    </tr>
+                    
+                    {% endfor %}
+                    
+                  </tbody>
+                  <tfoot>
+                    
+                  </tfoot>
+              </table>
+                 
+            <div>
+              <center>
+              
+                  {% if download == 1 %}
+                  <a class="button" href="{% url 'download_model' id_generator %}" style="margin-top: 30px;"><!---->Download Model<!----></a>
+              </center>
+              </div>
+      {% endif %}
       <!-- Conttent -->
     {% endblock %}
 
     {% block js %}
+    <script src="{% static 'js/random_forest_classification.js' %}" type="module"></script>
     <!-- javascript -->
     {% endblock %}

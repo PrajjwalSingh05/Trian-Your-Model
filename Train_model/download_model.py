@@ -1,8 +1,9 @@
 
 from .basic_function import *
-
+from imblearn.pipeline import Pipeline 
 
 def download_random_forest_regressor(X,y,paramlist):
+        Listing=[]
         #****************************Unpacking Tuple **************************************************
         input_col,Icriterion,Imaxfeature,Isamples_split,In_estimator,Imaxdepth_value=paramlist
         #****************************Data Preprocessing******************* ******************************
@@ -17,23 +18,27 @@ def download_random_forest_regressor(X,y,paramlist):
                     n_estimators=In_estimator, max_depth=Imaxdepth_value))]
                 )
         model_selector.fit(xtrain,ytrain)
+        result_parameter,mae_parameter=result_evaluator_regressor(model_selector,xtest,ytest)
         #*********************************************Result Generation ***************************************
-        ypred=model_selector.predict(xtest)
-        result=r2_score(ytest,ypred)
-        print("donload Model")
-        print("donload Model")
-        print("donload Model")
-        print("donload Model")
-        print(result)
-        return result,model_selector
-def download_random_forest_classification(X,y,paramlist):
+        
+        Listing.append({
+                      
+                    "result_parameter":result_parameter,
+                    "mae_parameter":mae_parameter,
+                #     "Error_model":result_model,
+                    
+                })
+        return Listing,model_selector
+def download_random_forest_classification(X,y,paramlist,testsize=0.2,randomstate=45):
         Listing=[]
         temp=1
         #****************************Unpacking Tuple **************************************************
-        input_col,Icriterion,Imaxfeature,Isamples_split,In_estimator,Imaxdepth_value=paramlist
+        input_col,Icriterion,Imaxfeature,Isamples_split,In_estimator,Imaxdepth_value,sampling=paramlist
         #****************************Data Preprocessing******************* ******************************
         preprocessor= data_preprocessor(X,y)
-        xtrain,xtest,ytrain,ytest=train_test_split(X,y,test_size=0.2,random_state=45)
+        X_resampled,y_resampled=dataSampling(sampling,X,y)
+        
+        xtrain,xtest,ytrain,ytest=train_test_split(X_resampled,y_resampled,test_size=testsize,random_state=randomstate)
        
         #*********************************************Creating Model***************************************
         model_selector = Pipeline(
@@ -71,14 +76,15 @@ def download_logistic_regresion(X,y,paramlist):
                     C=ic_value, ))]
                 )
         model_selector.fit(xtrain,ytrain)
+        result_parameter,mae_parameter=result_evaluator_regressor(model_selector,xtest,ytest)
         #*********************************************Result Generation ***************************************
-        ypred=model_selector.predict(xtest)
-        result=r2_score(ytest,ypred)
-        print("donload Model")
-        print("donload Model")
-        print("donload Model")
-        print("donload Model")
-        print(result)
+        Listing.append({
+                      
+                    "result_parameter":result_parameter,
+                    "mae_parameter":mae_parameter,
+                #     "Error_model":result_model,
+                    
+                })
         
 
         return model_selector
@@ -108,6 +114,7 @@ def download_logistic_regresion(X,y,paramlist):
         
 #         return model_selector
 def download_decision_regression(X,y,paramlist):
+        Listing=[]
         #****************************Unpacking Tuple **************************************************
         input_col,ispliter,ucriterion,imaxfeature,iminsamplevalue,imaxdepthvalue=paramlist
 
@@ -126,17 +133,20 @@ def download_decision_regression(X,y,paramlist):
                 )
         model_selector.fit(xtrain,ytrain)
         #*********************************************Result Generation ***************************************
-        ypred=model_selector.predict(xtest)
-        result=r2_score(ytest,ypred)
-        print("donload Model")
-        print("donload Model")
-        print("donload Model")
-        print("donload Model")
-        print(result)
+        result_parameter,mae_parameter=result_evaluator_regressor(model_selector,xtest,ytest)
+        #*********************************************Result Generation ***************************************
         
+        Listing.append({
+                      
+                    "result_parameter":result_parameter,
+                    "mae_parameter":mae_parameter,
+                #     "Error_model":result_model,
+                    
+                })
+        return Listing,model_selector
 
-        return result,model_selector
 def download_knn_regression(X,y,paramlist):
+        Listing=[]
         #****************************Unpacking Tuple **************************************************
         input_col,iweight,ialgorithm,kvalue=paramlist
         #****************************Data Preprocessing******************* ******************************
@@ -152,24 +162,27 @@ def download_knn_regression(X,y,paramlist):
                 )
         model_selector.fit(xtrain,ytrain)
         #*********************************************Result Generation ***************************************
-        ypred=model_selector.predict(xtest)
-        result=r2_score(ytest,ypred)
-        print("donload Model")
-        print("donload Model")
-        print("donload Model")
-        print("donload Model")
-        print(result)
+        result_parameter,mae_parameter=result_evaluator_regressor(model_selector,xtest,ytest)
+        #*********************************************Result Generation ***************************************
         
-
-        return result,model_selector
-def download_knn_classfier(X,y,paramlist):
+        Listing.append({
+                      
+                    "result_parameter":result_parameter,
+                    "mae_parameter":mae_parameter,
+                #     "Error_model":result_model,
+                    
+                })
+        return Listing,model_selector
+def download_knn_classfier(X,y,paramlist,testsize=0.2,randomstate=45):
         Listing=[]
         temp=1
         #****************************Unpacking Tuple **************************************************
-        input_col,iweight,ialgorithm,kvalue=paramlist
+        input_col,iweight,ialgorithm,kvalue,sampling=paramlist
         #****************************Data Preprocessing******************* ******************************
         preprocessor= data_preprocessor(X,y)
-        xtrain,xtest,ytrain,ytest=train_test_split(X,y,test_size=0.2,random_state=45)
+        X_resampled,y_resampled=dataSampling(sampling,X,y)
+        
+        xtrain,xtest,ytrain,ytest=train_test_split(X_resampled,y_resampled,test_size=testsize,random_state=randomstate)
        
         #*********************************************Creating Model***************************************
         model_selector = Pipeline(
@@ -193,14 +206,21 @@ def download_knn_classfier(X,y,paramlist):
         })
         
         return Listing,model_selector
-def download_decision_classfier(X,y,paramlist):
+
+def download_decision_classfier(X,y,paramlist,testsize=0.3,randomstate=45):
+
         Listing=[]
         temp=1
         #****************************Unpacking Tuple **************************************************
-        input_col,ispliter,ucriterion,imaxfeature,iminsamplevalue,imaxdepthvalue=paramlist
+        input_col,ispliter,ucriterion,imaxfeature,iminsamplevalue,imaxdepthvalue,sampling=paramlist
         #****************************Data Preprocessing******************* ******************************
         preprocessor= data_preprocessor(X,y)
-        xtrain,xtest,ytrain,ytest=train_test_split(X,y,test_size=0.2,random_state=45)
+        print("********************")
+        print(sampling)
+        
+        X_resampled,y_resampled=dataSampling(sampling,X,y)
+        
+        xtrain,xtest,ytrain,ytest=train_test_split(X_resampled,y_resampled,test_size=testsize,random_state=randomstate)
        
         #*********************************************Creating Model***************************************
         model_selector = Pipeline(
@@ -225,15 +245,17 @@ def download_decision_classfier(X,y,paramlist):
         
         return Listing,model_selector
 
-def download_logistic_classifier(X,y,paramlist):
+def download_logistic_classifier(X,y,paramlist,testsize=0.2,randomstate=45):
         Listing=[]
         temp=1
         temp=1
         #****************************Unpacking Tuple **************************************************
-        input_col,ipenalty,imulti_class,isolver,ic_value=paramlist
+        input_col,ipenalty,imulti_class,isolver,ic_value,sampling=paramlist
         #****************************Data Preprocessing******************* ******************************
         preprocessor= data_preprocessor(X,y)
-        xtrain,xtest,ytrain,ytest=train_test_split(X,y,test_size=0.2,random_state=45)
+        X_resampled,y_resampled=dataSampling(sampling,X,y)
+        
+        xtrain,xtest,ytrain,ytest=train_test_split(X_resampled,y_resampled,test_size=testsize,random_state=randomstate)
        
         #*********************************************Creating Model***************************************
         model_selector = Pipeline(
@@ -258,14 +280,16 @@ def download_logistic_classifier(X,y,paramlist):
         
 
         return Listing,model_selector
-def download_svc_classfier(X,y,paramlist):
+def download_svc_classfier(X,y,paramlist,testsize=0.2,randomstate=45):
         temp=1
         Listing=[]
         #****************************Unpacking Tuple **************************************************
-        input_col,ikernal,igamma,degreevalue=paramlist
+        input_col,ikernal,igamma,degreevalue,sampling=paramlist
         #****************************Data Preprocessing******************* ******************************
         preprocessor= data_preprocessor(X,y)
-        xtrain,xtest,ytrain,ytest=train_test_split(X,y,test_size=0.2,random_state=45)
+        X_resampled,y_resampled=dataSampling(sampling,X,y)
+        
+        xtrain,xtest,ytrain,ytest=train_test_split(X_resampled,y_resampled,test_size=testsize,random_state=randomstate)
        
         #*********************************************Creating Model***************************************
         model_selector = Pipeline(
@@ -289,6 +313,7 @@ def download_svc_classfier(X,y,paramlist):
 
         return Listing,model_selector
 def download_svr_regression(X,y,paramlist):
+        Listing=[]
         #****************************Unpacking Tuple **************************************************
         input_col,ikernal,igamma,degreevalue=paramlist
         #****************************Data Preprocessing******************* ******************************
@@ -303,13 +328,42 @@ def download_svr_regression(X,y,paramlist):
                 )
         model_selector.fit(xtrain,ytrain)
         #*********************************************Result Generation ***************************************
-        ypred=model_selector.predict(xtest)
-        result=r2_score(ytest,ypred)
-        print("donload Model")
-        print("donload Model")
-        print("donload Model")
-        print("donload Model")
-        print(result)
+        result_parameter,mae_parameter=result_evaluator_regressor(model_selector,xtest,ytest)
+        #*********************************************Result Generation ***************************************
         
-
-        return result,model_selector
+        Listing.append({
+                      
+                    "result_parameter":result_parameter,
+                    "mae_parameter":mae_parameter,
+                #     "Error_model":result_model,
+                    
+                })
+        return Listing,model_selector
+def download_gradientboosting_regression(X,y,paramlist):
+        Listing=[]
+        #****************************Unpacking Tuple **************************************************
+        input_col,icritrion,imaxfeature,ilearningrate,inestimator,imaxdepth,isamplesplit=paramlist
+       
+        #****************************Data Preprocessing******************* ******************************
+        preprocessor= data_preprocessor(X,y)
+        xtrain,xtest,ytrain,ytest=train_test_split(X,y,test_size=0.2,random_state=45)
+       
+        #*********************************************Creating Model***************************************
+        model_selector = Pipeline(
+                    steps=[("preprocessor", preprocessor),
+                    ("feature", SelectKBest(f_regression,k=input_col)),
+                    ("classifier", GradientBoostingRegressor(criterion=icritrion,max_features=imaxfeature,learning_rate=ilearningrate,n_estimators=inestimator,max_depth=imaxdepth,min_samples_split=isamplesplit ))]
+                )
+        model_selector.fit(xtrain,ytrain)
+        #*********************************************Result Generation ***************************************
+        result_parameter,mae_parameter=result_evaluator_regressor(model_selector,xtest,ytest)
+        #*********************************************Result Generation ***************************************
+        
+        Listing.append({
+                      
+                    "result_parameter":result_parameter,
+                    "mae_parameter":mae_parameter,
+                #     "Error_model":result_model,
+                    
+                })
+        return Listing,model_selector

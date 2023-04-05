@@ -32,6 +32,7 @@
                 <th>Mae with</th> -->
                 <th>Column</th>
                 <th>parameter</th>
+                <th>Sampling</th>
                 <th>Confusion Matrix parameter</th>
                 <th>Confusion Matrix without parameter</th>
               
@@ -45,13 +46,14 @@
           
           
               <tr class="table-primary" >
-                <td scope="row">{{ item.i|safe }}</td>
+                <td scope="row">{{ forloop.counter}}</td>
                 <td>{{ item.accuracypara|safe }}</td>
                 <td>{{ item.accuracy|safe }}</td>
                 <!-- <td>{{ item.accuracy|safe }}</td> -->
                 <!-- <td>{{ item.mae_parameter|safe }}</td> -->
                 <td>{{ item.columns|safe }}</td>
                 <td>{{ item.parameter|safe }}</td>
+                <td>{{ item.sampler|safe }}</td>
                 <td><img src="media\Confusion Matrix\prajjwalp{{forloop.counter}}.png" alt="" srcset="" style=" width:22rem ;height:17rem;"></td>
                 <td><img src="media\Confusion Matrix\prajjwal{{forloop.counter}}.png" alt="" srcset="" style=" width:22rem ;height:17rem;"></td>
               </tr>

@@ -59,6 +59,17 @@
         </select>
     </div>
     <div>
+        <label class="label_heading">Sampling</label>
+        <select multiple data-select name="sampling">
+            <!-- <optgroup label="Alaskan/Hawaiian Time Zone"> -->
+            <option value="SMOTE">Smote</option>
+            <option value="NearMiss">NearMiss</option>
+            <option value="RandomOverSampler">RandomOverSampler</option>
+            <option value="RandomUnderSampler">RandomUnderSampler</option>
+    
+        </select>
+    </div>
+    <div>
         <label class="label_heading"> Max DepthSlider Value: <span id="ranged">50</span></label>
         <input type="range" min="2" max="100" value="50" onchange="showValuedepth(this.value)" name="slidervalue">
     </div>

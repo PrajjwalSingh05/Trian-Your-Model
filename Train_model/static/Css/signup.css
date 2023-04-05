@@ -56,7 +56,7 @@
     width: 40%;
     padding: 100px 30px 32px;
     border-radius: 1.25rem;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(48 36 36 / 54%);
     backdrop-filter: blur(26px);
     text-align: center;
   }
@@ -132,7 +132,13 @@
     opacity: 0;
     animation: spin 1s infinite linear;
   }
-  
+  .submit-btn{
+    height: 3rem;
+    border-radius: 2rem;
+    font-family: ui-sans-serif;
+    font-size: bold;
+    font-size: 2rem;
+  }
   .spinner.visible {
     opacity: 1;
   }

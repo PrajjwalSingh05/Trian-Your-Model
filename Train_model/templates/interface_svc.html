@@ -71,6 +71,17 @@
         </select>
     </div>
     <div>
+        <label class="label_heading">Sampling</label>
+        <select multiple data-select name="sampling">
+            <!-- <optgroup label="Alaskan/Hawaiian Time Zone"> -->
+            <option value="SMOTE">Smote</option>
+            <option value="NearMiss">NearMiss</option>
+            <option value="RandomOverSampler">RandomOverSampler</option>
+            <option value="RandomUnderSampler">RandomUnderSampler</option>
+    
+        </select>
+    </div>
+    <div>
         <label class="label_heading">degree: <span id="ranged">3</span></label>
         <input type="range" min="1" max="100" value="3" onchange="showValuedepth(this.value)" name="degreevalue">
     </div>

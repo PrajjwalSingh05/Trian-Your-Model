@@ -1,222 +1,125 @@
 {% extends 'layout/base.html' %}
-
+{% load static %}
 {% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      font-family: "Open Sans";
-
-      color: #ecf0f1;
-      line-height: 1.618em;
-    }
-    .tabs {
-      position: relative;
-      margin: 3rem 0;
-      background: #1abc9c;
-      height: 34.75rem;
-      width:80%
-    }
-    .tabs::before,
-    .tabs::after {
-      content: "";
-      display: table;
-    }
-    .tabs::after {
-      clear: both;
-    }
-    .tab {
-      float: left;
-    }
-    .tab-switch {
-      display: none;
-    }
-    .tab-label {
-      position: relative;
-      display: block;
-      line-height: 2.75em;
-      height: 3em;
-      padding: 0 1.618em;
-      background: #1abc9c;
-      border-right: 0.125rem solid #16a085;
-      color: #fff;
-      cursor: pointer;
-      top: 0;
-      transition: all 0.25s;
-    }
-    .tab-label:hover {
-      top: -0.25rem;
-      transition: top 0.25s;
-    }
-    .tab-content {
-      height: 80%;
-      position: absolute;
-      z-index: 1;
-      top: 2.75em;
-      left: 0;
-      padding: 1.618rem;
-      background: #fff;
-      color: #2c3e50;
-      border-bottom: 0.25rem solid #bdc3c7;
-      opacity: 0;
-      transition: all 0.35s;
-    }
-    .tab-switch:checked + .tab-label {
-      background: #df9d9d;
-      color: #2c3e50;
-      border-bottom: 0;
-      border-right: 0.125rem solid #fff;
-      transition: all 0.35s;
-      z-index: 1;
-      top: -0.0625rem;
-    }
-    .tab-switch:checked + label + .tab-content {
-      z-index: 2;
-      opacity: 1;
-      transition: all 0.35s;
-    }
+  img{
+    width: 24%;
+  }
+  .image-icon{
+    width: 25%;
+    aspect-ratio: 4/1;
+  }
+  p{
+    font-family: sans-serif;
+    line-height: 1.5rem;
+    text-transform: capitalize;
+  }
 </style>
-    <!-- CSS -->
+<!-- CSS -->
 {% endblock %}
-{% block content %}
-<div class="wrapper1">
-    <h2 style="color:black">Regression Model</h2>
-      <div class="tabs">
-        <div class="tab">
-          <input type="radio" name="css-tabs-1" id="tab-1" checked class="tab-switch">
-          <label for="tab-1" class="tab-label">Desciprion </label>
-          <div class="tab-content">This Module Can be Used to train model which have predicution column as numerical </div>
-        </div>
-        <div class="tab">
-          <input type="radio" name="css-tabs-1" id="tab-2" checked class="tab-switch">
-          <label for="tab-2" class="tab-label">Model Avialabe </label>
-          <div class="tab-content"><ul>
-            <li><h5> Random FOrest Regression </h5> <p>Random Forest Regression combines multiple decision trees using a random subset of data and features.</p>  </li>
-            <li><h5> KnearestNeighbor <p>K-Nearest Neighbors Regression is a non-parametric model that predicts by averaging the values of the k-nearest data points.</p> </h5>     </li>
-            <li><h5> SVM Regressor    <p>upport Vector Regression finds the hyperplane that maximizes the margin between the training data and predicted values, while allowing some error.</p>   </li>
-            <li><h5> Gradient Boosting </h5>   <p>Gradient Boosting Regression combines multiple weak learners (usually decision trees) by training them sequentially on the residuals of the previous learners. </p>   </li>
-            <li><h5> Decision Tree   <p>Decision Tree Regression builds a tree-like structure to recursively split the data based on the feature that maximizes the reduction in variance. </p></h5> </li>
-          </ul> </div>
-        </div>
-        <div class="tab">
-          <input type="radio" name="css-tabs-1" id="tab-3" class="tab-switch">
-          <label for="tab-3" class="tab-label">Various Option</label>
-          <div class="tab-content"><ul>
-            <li><h5>max_depth</h5><p>The maximum depth of the decision tree, controlling the maximum number of levels in the tree.</p></li>
-            <li><h5>min_samples_split </h5><p>he minimum number of samples required to split an internal node.</p></li>
-            <li><h5>max_featurest </h5><p>he maximum number of features to consider when looking for the best split..</p></li>
-            <li><h5>Criteriont </h5><p>The function to measure the quality of a split (either "gini" for the Gini impurity or "entropy" for the information gain)..</p></li>
-          </ul>
-             </div>
-        </div>
-       </div>
-      </div>
-      <div class="wrapper2">
-        <h2 style="color:black">Classification Model</h2>
-          <div class="tabs">
-            <div class="tab">
-              <input type="radio" name="css-tabs-2" id="tab-4" checked class="tab-switch">
-              <label for="tab-4" class="tab-label">Desription</label>
-              <div class="tab-content">This model can be used to train classification model</div>
-            </div>
-            <div class="tab">
-              <input type="radio" name="css-tabs-2" id="tab-5" class="tab-switch">
-                <label for="tab-5" class="tab-label">Models</label>
-                <div class="tab-content"><ul>
-                  <li><h5> Random FOrest Regression </h5> <p>Random Forest Regression combines multiple decision trees using a random subset of data and features.</p>  </li>
-                  <li><h5> KnearestNeighbor <p>K-Nearest Neighbors Regression is a non-parametric model that predicts by averaging the values of the k-nearest data points.</p> </h5>     </li>
-                  <li><h5> SVM Regressor    <p>upport Vector Regression finds the hyperplane that maximizes the margin between the training data and predicted values, while allowing some error.</p>   </li>
-                  <li><h5> Gradient Boosting </h5>   <p>Gradient Boosting Regression combines multiple weak learners (usually decision trees) by training them sequentially on the residuals of the previous learners. </p>   </li>
-                  <li><h5> Decision Tree   <p>Decision Tree Regression builds a tree-like structure to recursively split the data based on the feature that maximizes the reduction in variance. </p></h5> </li>
-                </ul> </div>
-            </div>
-            <div class="tab">
-              <input type="radio" name="css-tabs-2" id="tab-6" class="tab-switch">
-              <label for="tab-6" class="tab-label">Option</label>
-              <div class="tab-content"><ul>
-                <li><h5>max_depth</h5><p>The maximum depth of the decision tree, controlling the maximum number of levels in the tree.</p></li>
-                <li><h5>min_samples_split </h5><p>he minimum number of samples required to split an internal node.</p></li>
-                <li><h5>max_featurest </h5><p>he maximum number of features to consider when looking for the best split..</p></li>
-                <li><h5>Criteriont </h5><p>The function to measure the quality of a split (either "gini" for the Gini impurity or "entropy" for the information gain)..</p></li>
-              </ul>
-                 </div>>
-            </div>
-
-      </div>
+{% block content %} 
+<div class="container">
+  <div class="row">
+    <div class="col p-2 mb-3">
+      <label class="lab2">Welcome<a href=""><i class="fa-solid fa-user-pen"></i></a></label>
+    </div>
   </div>
-
-
-  <div class="wrapper3">
-    <h2 style="color:black">Download Classification Model</h2>
-      <div class="tabs">
-        <div class="tab">
-          <input type="radio" name="css-tabs-3" id="tab-7" checked class="tab-switch">
-          <label for="tab-7" class="tab-label">Desciprion </label>
-          <div class="tab-content">This Module Can be Used to train model which have predicution column as numerical </div>
-        </div>
-        <div class="tab">
-          <input type="radio" name="css-tabs-3" id="tab-8" checked class="tab-switch">
-          <label for="tab-8" class="tab-label">Model Avialabe </label>
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <div class="row g-0  rounded overflow-hidden flex-md-row mb-4  h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <!-- <strong class="d-inline-block mb-2 text-primary">Regression</strong> -->
+          <h3 class="mb-0">Regression Modeule</h3>
+          <!-- <div class="mb-1 text-body-secondary">Nov 12</div> -->
+          <ul>
+            <li><h6>This Model can assist you in developing a machine learning model that predicts a numerical column. Just provide me with the necessary data and requirements.</h6></li>
+            <li><p>It can assist in hyperparameter tuning to optimize your model's performance by trying various hyperparameters. Just provide me with the necessary information.</p></li>
+            <li><p>It can provide you with the R2 score and mean absolute error in percentage, along with the column used to build the model and the optimized hyperparameters used for training.</p></li>
+          </ol>
+          <!-- <p class="card-text mb-auto">This Model would help you to bulid a Machine Learning Model Which has an numerical olumn as prediction COlumn.
+          </p>
+          <p>This Module would help you to Choose Various Hyperparemtnmter which triang your model</p>
+          <p>This Modlue would Return Your The r2Score(i  percentage) And Mean ABourselter Error alsomg with COlumn which has been used to bulid up the model and hyperparameter</p> -->
           
-          <div class="tab-content"><ul>
-            <li><h5> Random FOrest Regression </h5> <p>Random Forest Regression combines multiple decision trees using a random subset of data and features.</p>  </li>
-            <li><h5> KnearestNeighbor <p>K-Nearest Neighbors Regression is a non-parametric model that predicts by averaging the values of the k-nearest data points.</p> </h5>     </li>
-            <li><h5> SVM Regressor    <p>upport Vector Regression finds the hyperplane that maximizes the margin between the training data and predicted values, while allowing some error.</p>   </li>
-            <li><h5> Gradient Boosting </h5>   <p>Gradient Boosting Regression combines multiple weak learners (usually decision trees) by training them sequentially on the residuals of the previous learners. </p>   </li>
-            <li><h5> Decision Tree   <p>Decision Tree Regression builds a tree-like structure to recursively split the data based on the feature that maximizes the reduction in variance. </p></h5> </li>
-          </ul> </div>
         </div>
-        <div class="tab">
-          <input type="radio" name="css-tabs-3" id="tab-9" class="tab-switch">
-          <label for="tab-9" class="tab-label">Various Option</label>
-          <div class="tab-content"><ul>
-            <li><h5>max_depth</h5><p>The maximum depth of the decision tree, controlling the maximum number of levels in the tree.</p></li>
-            <li><h5>min_samples_split </h5><p>he minimum number of samples required to split an internal node.</p></li>
-            <li><h5>max_featurest </h5><p>he maximum number of features to consider when looking for the best split..</p></li>
-            <li><h5>Criteriont </h5><p>The function to measure the quality of a split (either "gini" for the Gini impurity or "entropy" for the information gain)..</p></li>
+        <img src="{% static 'images/userregression.png' %}" class="image-icon" alt="">
+      </div>
+    </div>
+    
+    <!-- Download Dataset  AND Traing -->
+    <div class="col-md-6">
+      <div class="row g-0  rounded overflow-hidden flex-md-row mb-4  h-md-250 position-relative">
+        <div class="col p-4 d-flex flex-column position-static">
+          <!-- <strong class="d-inline-block mb-2 text-success">Design</strong> -->
+          <h3 class="mb-0">Classfication Modelu</h3>
+          <!-- <div class="mb-1 text-body-secondary">Nov 11</div> -->
+          <ul>
+            <li>
+              <p>I can assist you in developing a machine learning model that predicts a categorical column using appropriate algorithms and data preprocessing techniques. Just provide me with the necessary data and requirements.</p>
+            </li>
+            <li><p>It can assist in hyperparameter tuning to optimize your model's performance by trying various hyperparameters. Just provide me with the necessary information.</p></li>
+            <li><p>It can provide you with the average score, columns used, optimized hyperparameters, and a heat map graph made up of a confusion matrix for evaluating the model's performance on the categorical prediction column.</p></li>
           </ul>
-             </div>
-        </div>
-       </div>
-      </div>  
-
-
-      <div class="wrapper4">
-        <h2 style="color:black">Dwonload Regression Model</h2>
-          <div class="tabs">
-            <div class="tab">
-              <input type="radio" name="css-tabs-4" id="tab-10" checked class="tab-switch">
-              <label for="tab-10" class="tab-label">Desciprion </label>
-              <div class="tab-content">This Module Can be Used to train model which have predicution column as numerical </div>
-            </div>
-            <div class="tab">
-              <input type="radio" name="css-tabs-4" id="tab-11" checked class="tab-switch">
-              <label for="tab-11" class="tab-label">Model Avialabe </label>
-              
-              <div class="tab-content"><ul>
-                <li><h5> Random FOrest Regression </h5> <p>Random Forest Regression combines multiple decision trees using a random subset of data and features.</p>  </li>
-                <li><h5> KnearestNeighbor <p>K-Nearest Neighbors Regression is a non-parametric model that predicts by averaging the values of the k-nearest data points.</p> </h5>     </li>
-                <li><h5> SVM Regressor    <p>upport Vector Regression finds the hyperplane that maximizes the margin between the training data and predicted values, while allowing some error.</p>   </li>
-                <li><h5> Gradient Boosting </h5>   <p>Gradient Boosting Regression combines multiple weak learners (usually decision trees) by training them sequentially on the residuals of the previous learners. </p>   </li>
-                <li><h5> Decision Tree   <p>Decision Tree Regression builds a tree-like structure to recursively split the data based on the feature that maximizes the reduction in variance. </p></h5> </li>
-              </ul> </div>
-            </div>
-            <div class="tab">
-              <input type="radio" name="css-tabs-4" id="tab-12" class="tab-switch">
-              <label for="tab-12" class="tab-label">Various Option</label>
-              <div class="tab-content"><ul>
-                <li><h5>max_depth</h5><p>The maximum depth of the decision tree, controlling the maximum number of levels in the tree.</p></li>
-                <li><h5>min_samples_split </h5><p>he minimum number of samples required to split an internal node.</p></li>
-                <li><h5>max_featurest </h5><p>he maximum number of features to consider when looking for the best split..</p></li>
-                <li><h5>Criteriont </h5><p>The function to measure the quality of a split (either "gini" for the Gini impurity or "entropy" for the information gain)..</p></li>
-              </ul>
-                 </div>
-            </div>
-           </div>
+          <!-- <p class="mb-auto">This Modelue Which Help You to build Machine Learnig Model Whch COntain an Caterorical data as Prediction COlumn</p>
+            <p>THis Modelue Also Allows the User to choose The Hypermetre on There Own While Trtianing there model</p>
+            <p>This Modlue would Return Your The r2Score(i  percentage) And Mean ABourselter Error alsomg with COlumn which has been used to bulid up the model and hyperparameter</p> -->
+            <!-- <a href="#" class="stretched-link">Continue reading</a> -->
           </div>
+          <img src="{% static 'images/user_classifcation.png' %}" class="image-icon" alt="">
+        </div>
+      </div>
+    </div>  
+    
+    
     <!-- COntent -->
-{% endblock %}
-{% block js %}
-    <!-- Js -->
-{% endblock %}
+    <div class="row mb-2">
+      <div class="col-md-6">
+        <div class="row g-0  rounded overflow-hidden flex-md-row mb-4  h-md-250 position-relative">
+          <div class="col p-4 d-flex flex-column position-static">
+            <!-- <strong class="d-inline-block mb-2 text-primary">Regression</strong> -->
+            <h3 class="mb-0">Download Dataset</h3>
+            <!-- <div class="mb-1 text-body-secondary">Nov 11</div> -->
+            <ul>
+              <li><p>I can provide a module that allows users to download pre-defined datasets by specifying the required number of records. It contains 10-15 pre-loaded datasets that can be used for building machine learning models.</p></li>
+              <li><p>You can use this module to download a specific number of records in a CSV file format. Simply provide the required number of records as input, and the module will return the data in a CSV(Comma Sepratred Value ) file.</p></li>
+            </ul>
+            <!-- <p>This Module Allows the user to download Some Predefine Dataset </p>
+              <p>It contain 10-15 Pre Loaded Dtaset On which you can bulid Your moel</p> -->
+              <!-- <a href="#" class="stretched-link">Continue reading</a> -->
+              
+            </div>
+            
+            <img src="{% static 'images/dataset.png' %}" class="image-icon" alt="">
+            
+            
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="row g-0  rounded overflow-hidden flex-md-row mb-4  h-md-250 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+              <!-- <strong class="d-inline-block mb-2 text-success">Design</strong> -->
+              <h3 class="mb-0">Trained  Modelu</h3>
+              <!-- <div class="mb-1 text-body-secondary">Nov 11</div> -->
+              <ul>
+                <li>
+                  <p>The module keeps track of all the models trained by the user and allows them to be re-downloaded at a later time.</p>
+                </li>
+              </ul>
+              <!-- <p class="mb-auto">This Modlue Allow You To download Already Trianed Module </p>
+                <p></p> -->
+                
+              </div>
+              <img src="{% static 'images/download.png' %}" class="image-icon" alt="">
+              
+            </div>
+          </div>
+        </div> 
+      </div>
+     
+      
+      {% endblock %}
+      {% block js %}
+      <!-- Js -->
+      {% endblock %}

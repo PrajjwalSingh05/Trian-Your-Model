@@ -1,3 +1,4 @@
+@import url(//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css);
  /* Creating Loader */
  [hidden] {
     display: none !important;
@@ -151,16 +152,46 @@ margin-bottom: 2rem;
 
 
 body {
-    background: linear-gradient(353deg, #39ed978f, #28f52759);
-        background-size: 400% 400%;
-        animation: gradient 10s ease infinite;
-}
+    animation: 15s linear 0s 10 normal none running fsqKHW;
+    background: linear-gradient(-45deg, rgb(238, 119, 82), rgb(231, 60, 126), rgb(35, 166, 213), rgb(35, 213, 171)) 0% 0% / 300% 300%;
+    animation: gradient 10s ease infinite;}
 
-    @keyframes gradient {
+@keyframes gradient {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
 }
 .submit-btn{
     border-radius: 1rem;
+}
+a:link{text-decoration:none}
+
+.vn-wisteria a{
+background-color:#8e44ad;
+  display:inline-block;
+  position:relative;
+  margin:30px 5px;
+  padding:20px 20px 20px 80px;
+  color:#fff;
+  transition:all 0.4s ease;
+  border-radius:3px
+}
+.vn-wisteria a:before{
+  content:"\f019";
+  font-family:fontAwesome;
+  position:absolute;
+  font-style: normal;
+  font-weight: normal;
+  text-decoration: inherit;
+  font-size:28px;
+  border-radius:0 20px 0 0;
+  color:#000;
+  background-color:#fff;
+  opacity:0.3;
+  padding:20px;
+  top:0;
+  left:0
+}
+.vn-wisteria a:hover{
+  background:#7f8c8d
 }

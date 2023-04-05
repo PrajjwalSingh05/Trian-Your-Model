@@ -1,0 +1,128 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'Css/download_option.css' %}">
+
+<!-- CSS -->
+{% endblock %}
+
+{% block content %}
+<h2>Gradient Regression  regression</h2>
+</div>
+
+
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="container">
+
+
+    
+
+    <div>
+        <label for="" class="label_heading">Input Prediction column</label>
+        <input type="text" placeholder="Enter the prediction column" name="predcol" class="inp_col">
+    </div>
+
+    <div>
+        <label for="" class="label_heading">Input Number of columns</label>
+        <input type="number" placeholder="Enter the prediction column" name="size1" class="inp_col">
+    </div>
+    <div>
+        <label for="" class="label_heading">Test Size</label>
+        <input type="number" placeholder="Enter the Test Size" value="0.4" name="ptestsize" class="inp_col">
+    </div>
+    <div>
+        <label for="" class="label_heading">Random State</label>
+        <input type="number" placeholder="Enter the Ramdom state" value="32" name="randomstate" class="inp_col">
+    </div>
+ 
+    <div>
+
+        <label class="label_heading">Loss</label>
+        <select  name="loss" class="inp_col">
+            <!-- <optgroup label="Alaskan/Hawaiian Time Zone"> -->
+            <option value="squared_error" class="inp_col">squared_error</option>
+            <option value="absolute_error" class="inp_col">absolute_error</option>
+            <option value="huber" class="inp_col">huber</option>
+            <option value="quantile" class="inp_col">quantile</option>
+            <!-- <option value="precomputed" class="inp_col">precomputed</option> -->
+            <!-- <option value="log_loss">log loss</option> -->
+
+            <!-- </optgroup> -->
+
+        </select>
+    </div>
+    <div>
+
+        <label class="label_heading">criterion</label>
+
+
+        <select  name="criterion">
+            <!-- <optgroup label="Alaskan/Hawaiian Time Zone"> -->
+            <option value="friedman_mse">friedman_mse</option>
+            <option value="squared_error">squared_error</option>
+
+        </select>
+    </div>
+    <div>
+
+        <label class="label_heading">max_features</label>
+
+
+        <select  name="max_features">
+            <!-- <optgroup label="Alaskan/Hawaiian Time Zone"> -->
+            <option value="auto">auto</option>
+            <option value="sqrt">sqrt</option>
+            <option value="log2">log2</option>
+
+        </select>
+    </div>
+    <div>
+        <label class="label_heading">learning_rate: <span id="ranged">1</span></label>
+        <input type="number" min="0" max="100" value="1" step="0.1" onchange="showValuedepth(this.value)" name="learingvalue">
+    </div>
+   
+    <div>
+        <label class="label_heading"> nestimators : <span id="rangesp">100</span></label>
+        <input type="number" min="90" max="500" value="4" step="50" onchange="showValuesplit(this.value)" name="nestimatorsvalue">
+    </div>
+    
+    <div>
+        <label class="label_heading">Min Max Split: <span id="rangen">3</span></label>
+        <input type="number" min="2" max="100" value="3" onchange="showValuen(this.value)" name="minsamplevalue">
+    </div>
+    <div>
+        <label class="label_heading">Min Depth: <span id="rangedepth">15</span></label>
+        <input type="number" min="0" max="100" value="15" onchange="showValuedepth(this.value)" name="maxdepthvalue">
+    </div>
+    <div>
+        <label for="formFileLg" class="form-label label_heading">Large file input example</label>
+        <input class="form-control form-control inputfile" id="formFileLg" type="file" name="datafile"/>
+        <input type="submit" value="Submit" id="upload"  data-bs-toggle="modal" class="submit-btn"data-bs-target="#staticBackdrop">
+    </div>
+    <!-- <input type="submit" value="submit"> -->
+</form>
+
+{% include 'includes/download_regression.html' %}
+
+</body>
+<!-- Conttent -->
+{% endblock %}
+
+{% block js %}
+<script src="{% static 'js/random_forest_classification.js' %}" type="module"></script>
+<script>
+  
+    $(document).ready(function() {
+    $('upload').click(function() {
+        $('#staticBackdrop').modal('show');
+        // submit the form
+        $(this).closest('form').submit();
+    });
+});
+</script>
+<!-- java -->
+{% endblock %}
