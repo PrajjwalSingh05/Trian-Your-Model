@@ -4,7 +4,7 @@
 
 # How The Machine Learning Model Work
 This is dataset Of Donation Of blood Ny peope in March Moth 
-![step1](https://user-images.githubusercontent.com/83647407/230238610-1f3d659e-993a-46b8-8b16-348acb98ed5a.png)
+![step1](https://user-images.githubusercontent.com/83647407/230299722-dea98073-88dd-467d-9b30-10c230940773.png)
 ## Step1-:Convert All the column of the data into Numbercial Format since A machine learning alogirthm is based on numerical formula 
 #### After COnverting the datset into Numercial column it is visible something like this
 ![step2](https://user-images.githubusercontent.com/83647407/230238910-469ea71c-e4f2-4e51-a2b1-08e82594bb3e.png)
@@ -15,7 +15,7 @@ This is dataset Of Donation Of blood Ny peope in March Moth
 
 ## Step3-Choose a Model From The List of various Model
 #### This is a List of Various Option Of machine leraning Model
-![step4](https://user-images.githubusercontent.com/83647407/230240378-a88d8b6e-f0bc-409c-b50e-865fff2c6f32.png)
+![step4](https://user-images.githubusercontent.com/83647407/230300193-53fd6dc9-211d-446a-b638-077535b46c20.png)
 
 ## Step4-:Evaluate The Model 
 #### In Regression Model we check The mean Squarred Error Of the model Lower is the value Higger is the accuracy,We can also Check r2 Score Higher the value of r2Score Higher is accuracy
