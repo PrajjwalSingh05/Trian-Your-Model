@@ -17,6 +17,11 @@ class TrainedModel(models.Model):
     modelname=models.CharField(max_length=40)
     date=models.CharField(max_length=30,null=True)
     time=models.TimeField(max_length=200)
+
+class Feedback(models.Model):
+    name=models.CharField(max_length=40,null=True)
+    email=models.CharField(max_length=40,null=True)
+    feedback=models.CharField(max_length=40,null=True)
 # Create your models here.
 class FlipkartMobileModel(models.Model):
     brand = models.CharField(max_length=100)

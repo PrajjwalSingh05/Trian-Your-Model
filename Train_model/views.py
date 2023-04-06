@@ -66,7 +66,39 @@ def login(request):
 # **********************************************************************User Home Page***************************************************************
 def user_home(request):
     return render(request,"user_home.html")
+
+# *****************************************************************Feedback Page***************************************************************
+def feedback(request):
+    user=request.user
+    data=Signup.objects.get(user=user)
+    if request.method=='POST':
+        firstname=request.POST['fname']
+
+        emaiid=request.POST['femail']
+        ucomment=request.POST['fcomment']
+        try:
+            result=Feedback(name=firstname,email=emaiid,feedback=ucomment)
+            result.save()
+            messages.success(request,"Feedback Submitted")
+          
+        except:
+            messages.error(request,"Some error occurred")
+           
+    d={'data':data}
+
+    return render(request,"feedback.html",d)
+# **********************************************************************View Feedback Page***************************************************************
+def view_feedback(request):
+    data=Feedback.objects.all()
+    d={'data':data}
+    return render(request,'view_feedback.html',d)
+# **********************************************************************Delete Feedback Page***************************************************************                         
+def delete_feedback(request,id):
+    data=Feedback.objects.get(id=id)
+    data.delete()
+    return redirect('view_feedback')
 # **********************************************************************Default Regression Page***************************************************************
+
 def default_regression(request):
     Listing=[]
     id_generator=0

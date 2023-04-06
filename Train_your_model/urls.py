@@ -27,6 +27,9 @@ urlpatterns = [
     path("logout",logout,name="logout"),
     path("feature",feature,name="feature"),
     path("contact_us",contact_us,name="contact_us"),
+    path("feedback",feedback,name="feedback"),
+    path("view_feedback",view_feedback,name="view_feedback"),
+    path("delete_feedback/<int:id>",delete_feedback,name="delete_feedback"),
     
     path("admin_home",admin_home,name="admin_home"),
     path("user_home",user_home,name="user_home"),

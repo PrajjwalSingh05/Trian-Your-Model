@@ -3,6 +3,7 @@ from .models import *
 # Register your models here.
 admin.site.register(Signup)
 admin.site.register(TrainedModel)
+admin.site.register(Feedback)
 admin.site.register(FlipkartMobileModel)
 admin.site.register(FlipkartLaptopModel)
 admin.site.register(FlipkartTelivisionModel)

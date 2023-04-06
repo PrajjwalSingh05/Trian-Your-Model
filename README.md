@@ -24,7 +24,30 @@ This is dataset Of Donation Of blood Ny peope in March Moth
 
 
 
-## Step 5-: After Choosing The Model We Do Hyperparamertering Of the Choosen Model To increase the Accury Of the Model As Heighest as Possible
+## Step 5-: Choosing Hyperparemeter
+#### After Choosing The Model We Do Hyperparamertering Of the Choosen Model To increase the Accury Of the Model As Heighest as Possible
+
+![pipeline](https://user-images.githubusercontent.com/83647407/230295224-e7f3c5d7-ba2d-4881-9744-345bb5d950df.png)
+
+
+
+
+### Features: 
+#### 1. Provide Graphic User Interface To the User To train and download there model
+#### 2.
+
+## Files Information:
+
+
+#### 1.all_model.py-:
+###### Contain The Custom Regression And Classification function 
+
+#### 2.basic_function.py
+#### COntain The basic function such as preprocessor,result Evaluator
+
+#### 3 Download_model.py-:
+##### Contain The Function That are Requred VY the Download Modelue Of the Project
+
 
 
 

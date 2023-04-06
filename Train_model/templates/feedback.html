@@ -1,0 +1,42 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'Css/basicstyle.css' %}">
+<style>
+    .inp_col    {
+        width:80%
+    }
+</style>
+<!-- CSS -->
+{% endblock %}
+
+
+{% block content %}
+<marquee behavior="alternate" style="font-family: 'Monotype Corsiva'; font-size:35px; color:darkcyan; background-color:bisque; font-weight:bold;">
+   FeedBack Form
+     </marquee>
+<hr>
+
+<form class="container mt-5" method="post">
+    {% csrf_token %}
+    <label class="label_heading"><b>Full Name:</b></label>
+    <input type="text" class="form-control inp_col" name="fname" readonly value="{{request.user.first_name}} {{request.user.last_name}}" required="true">
+
+
+
+    <label  class="label_heading"><b>Email Address:</b></label>
+    <input type="email" class="form-control inp_col" name="femail" value="{{request.user.username}}" required="true" readonly>
+
+    <label class="label_heading"><b>Experience:</b></label>
+    <input type="text" class="form-control inp_col" name="fcomment" required="true">
+<center>
+    <input type="submit" class="btn btn-primary submit-btn" style="margin-top:2%; color:darkcyan; background-color:black ; height:50px; font-size:25px">
+</center>
+</form>
+
+
+{% endblock %}
+{% block js %}
+<!-- java -->
+{% endblock %}
