@@ -1,6 +1,6 @@
 # Train Your Model -Website
-## A Website that is used to train your machine learning model,provide graphic user interface to User
-## In this project, I start by preprocessing the data by cleaning, transforming, and normalizing it. Then, I add a feature selection step to identify the most relevant features for the machine learning model. Next, I choose a machine learning algorithm based on the nature of the problem and the available data. Finally, I use hyperparameter tuning techniques, such as grid search or randomized search, to optimize the model's performance by selecting the best combination of hyperparameters
+### A Website that is used to train your machine learning model,provide graphic user interface to User
+### In this project, I start by preprocessing the data by cleaning, transforming, and normalizing it. Then, I add a feature selection step to identify the most relevant features for the machine learning model. Next, I choose a machine learning algorithm based on the nature of the problem and the available data. Finally, I use hyperparameter tuning techniques, such as grid search or randomized search, to optimize the model's performance by selecting the best combination of hyperparameters
 
 
 ###  How The Machine Learning Model Work
