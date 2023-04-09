@@ -82,7 +82,7 @@ Defualt Regression
                   <tbody class="table-group-divider">
                       {% for item in listing %}
                       <tr class="table-primary">
-                          <td scope="row">{{ item.i|safe }}</td>
+                          <td scope="row">{{ forloop.counter }}</td>
                           <td>{{ item.result|safe }}</td>
                           <td>{{ item.result_parameter|safe }}</td>
                           <td>{{ item.mae|safe }}</td>
@@ -103,7 +103,9 @@ Defualt Regression
       <center>
       
           {% if download == 1 %}
-          <a class="button" href="{% url 'download_model' id_generator %}" style="margin-top: 30px;"><!---->Download Model<!----></a>
+          <div class="vn-wisteria" style="text-align: center;">
+            <a href="{% url 'download_model' id_generator %} " class="btn-wrap">Download<i class="fa fa-rocket fa-lg fa-spin"></i></a>
+            </div>
       </center>
       </div>
           <!-- <button type="button" >Download</button> -->

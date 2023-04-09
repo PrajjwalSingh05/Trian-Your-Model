@@ -951,10 +951,11 @@ def signup(request):
         try:
             user=User.objects.create_user(first_name=first_name,last_name=lastname,username=email,password=password)
             Signup.objects.create(user=user)
-            error="no"
+            messages.success(request,"User Created Successfully")
         except Exception as ep:
             print(ep)
-            error="yes"
+            messages.error(request,"User Already Exist")
+        
     print("no in if condiotn")
     return render(request,"signup.html")
 # ******************************************************************User Profile***********************************************

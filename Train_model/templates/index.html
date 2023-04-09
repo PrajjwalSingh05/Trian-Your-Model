@@ -51,12 +51,17 @@ p {
 .block{
     width: calc(100% / 14 * 4);
 }
-h2 {
+h2,h4 {
     font-family: 'BoingSemiBold', Helvetica, Arial, sans-serif;
     font-weight: normal;
     font-size: 48px;
     margin: 70px 0;
     text-align: center;
+}
+.image{
+    width: 37%;
+    
+    align-self: center;
 }
 
 </style>
@@ -119,6 +124,21 @@ h2 {
             <p><!---->Export your model for your projects: sites, apps, and more. You can download your model or host it online.<!----></p>
 
         </div>
+    </div>
+</div>
+<div>
+    <h2>Some Example of MAchine Learning</h2>
+</div>
+<div>
+    <div class="card text-start" style=" text-align: center;">
+        <h4 class="card-title">Object Dection System</h4>
+      <img class="card-img-top image" src="{% static  'images/object_dection.png' %}" class="image" alt="Title">
+      <div class="card-body">
+        <p class="card-text">Object Dection System is a Image Classification Project That can detect the object in the image and can classify the object in the image.</p>
+            <a href="https://prajjwalsingh05-object-detection-app-new-app-jbaaqp.streamlit.app/" target="_blank"> Streamlit Link</a>
+        </p>
+        <img class="card-img-top image"  style="align-self: center;"src="{% static  'images/object_detection_code.png' %}" class="image" alt="Title">
+      </div>
     </div>
 </div>
     {{user.is_authenticated}}

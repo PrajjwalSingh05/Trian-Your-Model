@@ -2,11 +2,14 @@
 ## A Website that is used to train your machine learning model,provide graphic user interface to User
 
 
-# How The Machine Learning Model Work
+###  How The Machine Learning Model Work
+For Better Understanding How the Machine Learnibng model is Being Created .I am gona use a dataset Of blood Donation Campeign
 This is dataset Of Donation Of blood Ny peope in March Moth 
 ![step1](https://user-images.githubusercontent.com/83647407/230299722-dea98073-88dd-467d-9b30-10c230940773.png)
+
 ## Step1-:Convert All the column of the data into Numbercial Format since A machine learning alogirthm is based on numerical formula 
-#### After COnverting the datset into Numercial column it is visible something like this
+#### After COnverting the datset into Numercial column it is visible something like this-:
+
 ![step2](https://user-images.githubusercontent.com/83647407/230238910-469ea71c-e4f2-4e51-a2b1-08e82594bb3e.png)
 
 ## Step 2-:Feature Selection-:In this step we Remove Unwanted Column from the Dataset 

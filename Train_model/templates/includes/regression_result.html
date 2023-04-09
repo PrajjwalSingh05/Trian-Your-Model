@@ -27,7 +27,7 @@
 
                     <h2 class="idgen">Genertaed id is :{{ id_generator |safe }}</h2>
                 </center>
-                <caption>Table Name</caption>
+              
                 <tr>
 
                     <th>S.no</th>
@@ -44,7 +44,7 @@
             <tbody class="table-group-divider">
                 {% for item in listing %}
                 <tr class="table-primary">
-                    <td scope="row">{{ item.i|safe }}</td>
+                    <td scope="row">{{ forloop.counter|safe }}</td>
                     <td>{{ item.result|safe }}</td>
                     <td>{{ item.result_parameter|safe }}</td>
                     <td>{{ item.mae|safe }}</td>
