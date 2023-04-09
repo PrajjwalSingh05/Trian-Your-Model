@@ -51,7 +51,11 @@ This is dataset Of Donation Of blood Ny peope in March Moth
 #### 3 Download_model.py-:
 ##### Contain The Function That are Requred VY the Download Modelue Of the Project
 
+#### 4 default_model.py
+#### This Python File COnatain The Feaflut menu bar tab Function
 
 
-
-
+#### 5.Models.py-:
+#### This File Contain data regrading the database of the Project 
+#### 6 Views.py-:
+It contain the Business Logic of the Project Like How data is being Fetched,saved and shown to the end user
