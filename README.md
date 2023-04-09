@@ -1,5 +1,6 @@
 # Train Your Model -Website
 ## A Website that is used to train your machine learning model,provide graphic user interface to User
+## In this project, I start by preprocessing the data by cleaning, transforming, and normalizing it. Then, I add a feature selection step to identify the most relevant features for the machine learning model. Next, I choose a machine learning algorithm based on the nature of the problem and the available data. Finally, I use hyperparameter tuning techniques, such as grid search or randomized search, to optimize the model's performance by selecting the best combination of hyperparameters
 
 
 ###  How The Machine Learning Model Work
@@ -29,6 +30,9 @@ This is dataset Of Donation Of blood Ny peope in March Moth
 
 ## Step 5-: Choosing Hyperparemeter
 #### After Choosing The Model We Do Hyperparamertering Of the Choosen Model To increase the Accury Of the Model As Heighest as Possible
+#### Hyperparameter tuning is the process of selecting optimal values for parameters that cannot be learned by the model during training. It involves selecting values for model architecture, learning rates, regularization, and other settings to optimize performance on a specific task.
+
+
 
 ![pipeline](https://user-images.githubusercontent.com/83647407/230295224-e7f3c5d7-ba2d-4881-9744-345bb5d950df.png)
 
@@ -36,26 +40,28 @@ This is dataset Of Donation Of blood Ny peope in March Moth
 
 
 ### Features: 
-#### 1. Provide Graphic User Interface To the User To train and download there model
-#### 2.
+#### 1.A user-friendly interface to train a model with adjustable parameters and display training progress.
+#### 2. Anyone Can train and Export Thier Machine Learning Model Without any prior Knowledge of MAchine Learning
+#### 3. Provide Some default Database Which can be extracted by the user by specifying the number of records you need
+#### 4.An option to download the trained model with a click of a button.
 
 ## Files Information:
 
 
 #### 1.all_model.py-:
-###### Contain The Custom Regression And Classification function 
+###### This Python file contains custom functions for regression and classification, which can be used for machine learning tasks to build predictive models.
 
-#### 2.basic_function.py
-#### COntain The basic function such as preprocessor,result Evaluator
+#### 2.basic_function.py-:
+###### This Python FIle Contain some of the  basic function such as preprocessor,result Evaluator
 
 #### 3 Download_model.py-:
-##### Contain The Function That are Requred VY the Download Modelue Of the Project
+###### This Python File Contain The Function That are Requred to Download Machine Learning  Modelue by a single click
 
-#### 4 default_model.py
-#### This Python File COnatain The Feaflut menu bar tab Function
+#### 4 default_model.py-:
+###### This Python File COnatain The Feaflut menu bar tab Function
 
 
 #### 5.Models.py-:
-#### This File Contain data regrading the database of the Project 
+###### This File Contain data regrading the database of the Project 
 #### 6 Views.py-:
-It contain the Business Logic of the Project Like How data is being Fetched,saved and shown to the end user
+###### It contain the Business Logic of the Project Like How data is being Fetched,saved and shown to the end user
